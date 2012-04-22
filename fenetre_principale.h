@@ -1,7 +1,7 @@
 #ifndef FENETRE_PRINCIPALE_H
 #define FENETRE_PRINCIPALE_H
 
-#define VERSION 22
+#define VERSION 23
 #define WIN32
 //#define LINUX
 
@@ -20,11 +20,14 @@
 #include <Windows.h>
 #include <QMessageBox>
 #include <QProcess>
+#include <QMainWindow>
+#include <QMenuBar>
+#include <QAction>
 
 #pragma comment(lib, "shell32.lib")
 
 
-class Fenetre_principale : public QWidget
+class Fenetre_principale : public QMainWindow
 {
     Q_OBJECT
 public :
@@ -44,13 +47,18 @@ private :
 
     CheckUpdate *check;
 
+    QWidget *widget;
+
     int version;
+
+    bool userAction;
 
 public slots :
     void open_window();
     void open_window(int nbr);
     void answer(bool update);
     void erreurSocket(QAbstractSocket::SocketError erreur);
+    void verification();
 };
 
 #endif // FENETRE_PRINCIPALE_H

@@ -6,7 +6,9 @@
 Fenetre_principale::Fenetre_principale()
 {
     version = VERSION;
+    userAction = false;
 
+    widget = new QWidget();
     check = new CheckUpdate(this, version);
 
     texte = new QLabel("Choisissez la table que vous voulez travailler !");
@@ -14,6 +16,14 @@ Fenetre_principale::Fenetre_principale()
 
     quit = new QPushButton("Quitter");
     custom = new QPushButton("Table personnalisée");
+
+    QMenu *fichier = menuBar()->addMenu("&Fichier");
+    QAction *actionQuitter = new QAction("&Quitter", this);
+    fichier->addAction(actionQuitter);
+
+    QMenu *outils = menuBar()->addMenu("&Outils");
+    QAction *actionUpdate = new QAction("Vérifiez les mise à jours", this);
+    outils->addAction(actionUpdate);
 
     bouton1 = new Bouton("Table de 1", 1);
     bouton2 = new Bouton("Table de 2 ", 2);
@@ -28,7 +38,7 @@ Fenetre_principale::Fenetre_principale()
 
     layout = new QGridLayout();
     glayout = new QGridLayout();
-    vlayout = new QVBoxLayout(this);
+    vlayout = new QVBoxLayout();
 
     layout->addWidget(texte, 0, 0, 1, 2);
 
@@ -50,7 +60,8 @@ Fenetre_principale::Fenetre_principale()
     vlayout->addLayout(layout);
     vlayout->addLayout(glayout);
 
-    this->setLayout(vlayout);
+    widget->setLayout(vlayout);
+    this->setCentralWidget(widget);
 
     check->sendRequest();
 
@@ -90,6 +101,8 @@ Fenetre_principale::Fenetre_principale()
     connect(check, SIGNAL(updateNeeded(bool)), this, SLOT(answer(bool)));
 
     connect(check, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(erreurSocket(QAbstractSocket::SocketError)));
+    connect(actionQuitter, SIGNAL(triggered()), qApp, SLOT(quit()));
+    connect(actionUpdate, SIGNAL(triggered()), this, SLOT(verification()));
 }
 void Fenetre_principale::open_window()
 {
@@ -114,6 +127,11 @@ void Fenetre_principale::answer(bool update)
 {
     if(!update)
     {
+        if(userAction)
+        {
+            QMessageBox::information(this, "Vérification de mise à jour", "Il n'y a pour le moment aucune mise à jour disponible.");
+            userAction = false;
+        }
         check->disconnectFromHost();
         return;
     }
@@ -153,4 +171,9 @@ void Fenetre_principale::erreurSocket(QAbstractSocket::SocketError erreur)
     default:
         QMessageBox::information(this, "Erreur", "<em>ERREUR : " + check->errorString() + "</em>.");
     }
+}
+void Fenetre_principale::verification()
+{
+    check->sendRequest();
+    userAction = true;
 }
