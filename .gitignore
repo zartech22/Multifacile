@@ -1,0 +1,7 @@
+
+Debug/*
+Release/*
+Icon.aps
+*.user
+*.vcxproj
+*.vcxproj.*
