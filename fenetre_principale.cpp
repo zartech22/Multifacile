@@ -1,13 +1,13 @@
 #include "fenetre_principale.h"
 #include "bouton.h"
 #include "fen_secondaire.h"
+#include "CheckUpdate.h"
 
 Fenetre_principale::Fenetre_principale()
 {
-    tailleMessage = 0;
     version = VERSION;
 
-    socket = new QTcpSocket(this);
+    check = new CheckUpdate(this, version);
 
     texte = new QLabel("Choisissez la table que vous voulez travailler !");
     espace = new QLabel("<hr />");
@@ -52,7 +52,7 @@ Fenetre_principale::Fenetre_principale()
 
     this->setLayout(vlayout);
 
-    RequestUpdate();
+    check->sendRequest();
 
     connect(bouton1, SIGNAL(clicked()), bouton1, SLOT(clique()));
     connect(bouton1, SIGNAL(cliquer(int)), this, SLOT(open_window(int)));
@@ -87,9 +87,9 @@ Fenetre_principale::Fenetre_principale()
     connect(quit, SIGNAL(clicked()), qApp, SLOT(quit()));
     connect(custom, SIGNAL(clicked()), this, SLOT(open_window()));
 
-    connect(socket, SIGNAL(readyRead()), this, SLOT(updater()));
+    connect(check, SIGNAL(updateNeeded(bool)), this, SLOT(answer(bool)));
 
-    connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(erreurSocket(QAbstractSocket::SocketError)));
+    connect(check, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(erreurSocket(QAbstractSocket::SocketError)));
 }
 void Fenetre_principale::open_window()
 {
@@ -110,42 +110,18 @@ void Fenetre_principale::open_window(int nbr)
     fen->resize(300, 200);
     fen->show();
 }
-void Fenetre_principale::RequestUpdate()
+void Fenetre_principale::answer(bool update)
 {
-    socket->abort();
-    socket->connectToHost("multifacile.no-ip.org", 8087);
-    QByteArray paquet;
-    QDataStream out(&paquet, QIODevice::WriteOnly);
-    out << (quint16) 0;
-    out << version;
-    out.device()->seek(0);
-    out << (quint16) (paquet.size() - sizeof(quint16));
-    socket->write(paquet);
-
-}
-void Fenetre_principale::updater()
-{
-    QDataStream in(socket);
-    if(tailleMessage == 0)
+    if(!update)
     {
-        if(socket->bytesAvailable() < (int)sizeof(quint16))
-            return;
-        in >> tailleMessage;
-    }
-    if(socket->bytesAvailable() < tailleMessage)
-        return;
-    QString response;
-    in >> response;
-    if(response == "ok")
-    {
-        socket->disconnectFromHost();
+        check->disconnectFromHost();
         return;
     }
-    else if(response == "update needed")
+    else if(update)
     {
-        int reponse = QMessageBox::question(this, "Mise à jour disponible", "Une version plus récente de multifacile est disponible, voulez-vous la télécharger ?", QMessageBox::Yes | QMessageBox::No);
-        socket->disconnectFromHost();
-        if(reponse == QMessageBox::Yes)
+        check->disconnectFromHost();
+        int userAnswer = QMessageBox::question(this, "Mise à jour disponible", "Une version plus récente de multifacile est disponible, voulez-vous la télécharger ?", QMessageBox::Yes | QMessageBox::No);
+        if(userAnswer == QMessageBox::Yes)
         {
 #ifdef WIN32
             ShellExecute(NULL, L"open", L"updater.exe", NULL, NULL, SW_SHOWNORMAL);
@@ -155,13 +131,11 @@ void Fenetre_principale::updater()
 #endif
             this->close();
         }
-        else if(reponse == QMessageBox::No)
+        else if(userAnswer == QMessageBox::No)
             return;
         else
             return;
     }
-
-    tailleMessage = 0;
 }
 void Fenetre_principale::erreurSocket(QAbstractSocket::SocketError erreur)
 {
@@ -177,6 +151,6 @@ void Fenetre_principale::erreurSocket(QAbstractSocket::SocketError erreur)
         QMessageBox::information(this, "Erreur", "<em>ERREUR : le serveur a coupé la connexion.</em>");
         break;
     default:
-        QMessageBox::information(this, "Erreur", "<em>ERREUR : " + socket->errorString() + "</em>.");
+        QMessageBox::information(this, "Erreur", "<em>ERREUR : " + check->errorString() + "</em>.");
     }
 }

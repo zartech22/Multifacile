@@ -11,6 +11,7 @@
 #include <QGridLayout>
 #include "bouton.h"
 #include "fen_secondaire.h"
+#include "CheckUpdate.h"
 #include <QLabel>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -41,18 +42,14 @@ private :
 
     Fen_secondaire *fen;
 
-    QTcpSocket *socket;
+    CheckUpdate *check;
 
     int version;
-
-    quint16 tailleMessage;
-
-    void RequestUpdate();
 
 public slots :
     void open_window();
     void open_window(int nbr);
-    void updater();
+    void answer(bool update);
     void erreurSocket(QAbstractSocket::SocketError erreur);
 };
 
