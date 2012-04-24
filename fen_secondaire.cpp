@@ -5,9 +5,13 @@ Fen_secondaire::Fen_secondaire()
 {
 
 }
-Fen_secondaire::Fen_secondaire(const int multiplicateur)
+Fen_secondaire::Fen_secondaire(const int multiplicateur, bool shuffle)
 {
     m_multiplicateur = multiplicateur;
+
+    Shuffle tab(shuffle);
+
+    tab.getNumbers(array);
 
     this->setWindowTitle("Table de "+QString::number(m_multiplicateur));
 
@@ -22,16 +26,16 @@ Fen_secondaire::Fen_secondaire(const int multiplicateur)
 
     layout = new QFormLayout();
 
-    layout->addRow(QString::number(m_multiplicateur)+" x 1", reponses[0]);
-    layout->addRow(QString::number(m_multiplicateur)+" x 2", reponses[1]);
-    layout->addRow(QString::number(m_multiplicateur)+" x 3", reponses[2]);
-    layout->addRow(QString::number(m_multiplicateur)+" x 4", reponses[3]);
-    layout->addRow(QString::number(m_multiplicateur)+" x 5", reponses[4]);
-    layout->addRow(QString::number(m_multiplicateur)+" x 6", reponses[5]);
-    layout->addRow(QString::number(m_multiplicateur)+" x 7", reponses[6]);
-    layout->addRow(QString::number(m_multiplicateur)+" x 8", reponses[7]);
-    layout->addRow(QString::number(m_multiplicateur)+" x 9", reponses[8]);
-    layout->addRow(QString::number(m_multiplicateur)+" x 10", reponses[9]);
+    layout->addRow(QString::number(m_multiplicateur)+" x "+QString::number(array[0]), reponses[0]);
+    layout->addRow(QString::number(m_multiplicateur)+" x "+QString::number(array[1]), reponses[1]);
+    layout->addRow(QString::number(m_multiplicateur)+" x "+QString::number(array[2]), reponses[2]);
+    layout->addRow(QString::number(m_multiplicateur)+" x "+QString::number(array[3]), reponses[3]);
+    layout->addRow(QString::number(m_multiplicateur)+" x "+QString::number(array[4]), reponses[4]);
+    layout->addRow(QString::number(m_multiplicateur)+" x "+QString::number(array[5]), reponses[5]);
+    layout->addRow(QString::number(m_multiplicateur)+" x "+QString::number(array[6]), reponses[6]);
+    layout->addRow(QString::number(m_multiplicateur)+" x "+QString::number(array[7]), reponses[7]);
+    layout->addRow(QString::number(m_multiplicateur)+" x "+QString::number(array[8]), reponses[8]);
+    layout->addRow(QString::number(m_multiplicateur)+" x "+QString::number(array[9]), reponses[9]);
 
 
     vlayout = new QVBoxLayout();
@@ -46,7 +50,7 @@ Fen_secondaire::Fen_secondaire(const int multiplicateur)
 
 void Fen_secondaire::open()
 {
-    fen = new Fen_correction(m_multiplicateur, reponses);
+    fen = new Fen_correction(m_multiplicateur, reponses, array);
     fen->resize(200, 200);
     fen->show();
     this->close();

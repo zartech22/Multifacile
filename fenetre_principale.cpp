@@ -9,6 +9,7 @@ Fenetre_principale::Fenetre_principale()
     userAction = false;
 
     widget = new QWidget();
+
     check = new CheckUpdate(this, version);
 
     texte = new QLabel("Choisissez la table que vous voulez travailler !");
@@ -17,13 +18,19 @@ Fenetre_principale::Fenetre_principale()
     quit = new QPushButton("Quitter");
     custom = new QPushButton("Table personnalisée");
 
-    QMenu *fichier = menuBar()->addMenu("&Fichier");
-    QAction *actionQuitter = new QAction("&Quitter", this);
-    fichier->addAction(actionQuitter);
+    file = menuBar()->addMenu("&Fichier");
+    tools = menuBar()->addMenu("&Outils");
+    options = menuBar()->addMenu("&Options");
 
-    QMenu *outils = menuBar()->addMenu("&Outils");
-    QAction *actionUpdate = new QAction("Vérifiez les mise à jours", this);
-    outils->addAction(actionUpdate);
+    quitAction = new QAction("&Quitter", this);
+    updateAction = new QAction("Vérifiez les mise à jours", this);
+    shuffleAction = new QAction("Table en désordre", this);
+
+    shuffleAction->setCheckable(true);
+
+    file->addAction(quitAction);
+    tools->addAction(updateAction);
+    options->addAction(shuffleAction);
 
     bouton1 = new Bouton("Table de 1", 1);
     bouton2 = new Bouton("Table de 2 ", 2);
@@ -101,8 +108,8 @@ Fenetre_principale::Fenetre_principale()
     connect(check, SIGNAL(updateNeeded(bool)), this, SLOT(answer(bool)));
 
     connect(check, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(erreurSocket(QAbstractSocket::SocketError)));
-    connect(actionQuitter, SIGNAL(triggered()), qApp, SLOT(quit()));
-    connect(actionUpdate, SIGNAL(triggered()), this, SLOT(verification()));
+    connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
+    connect(updateAction, SIGNAL(triggered()), this, SLOT(verification()));
 }
 void Fenetre_principale::open_window()
 {
@@ -110,7 +117,7 @@ void Fenetre_principale::open_window()
     int nbr = QInputDialog::getInteger(this, "Choix de la table", "Indiquer la table sur laquelle vous voulez travailler", 0, -2147483647, 2147483647, 1, &ok);
     if(ok)
     {
-        fen = new Fen_secondaire(nbr);
+        fen = new Fen_secondaire(nbr, shuffleAction->isChecked());
         fen->resize(300, 200);
         fen->show();
         //this->hide();
@@ -119,7 +126,7 @@ void Fenetre_principale::open_window()
 
 void Fenetre_principale::open_window(int nbr)
 {
-    fen = new Fen_secondaire(nbr);
+    fen = new Fen_secondaire(nbr, shuffleAction->isChecked());
     fen->resize(300, 200);
     fen->show();
 }

@@ -6,11 +6,13 @@ Fen_correction::Fen_correction()
 {
 
 }
-Fen_correction::Fen_correction(const int multiple, QSpinBox *reponses[])
+Fen_correction::Fen_correction(const int multiple, QSpinBox *reponses[], int *order)
 {
     this->setWindowTitle("Correction");
     m_multiple = multiple;
     note = 10;
+
+    tab = order;
 
     for(int i = 0; i < 10; i++)
     {
@@ -19,7 +21,7 @@ Fen_correction::Fen_correction(const int multiple, QSpinBox *reponses[])
     for(int i = 0; i < 10; i++)
     {
         multiplication[i] = new QLabel();
-        multiplication[i]->setText(QString::number(m_multiple)+ " x " + QString::number(i+1) + " = "+QString::number(reponse[i]));
+        multiplication[i]->setText(QString::number(m_multiple)+ " x " + QString::number(tab[i]) + " = "+QString::number(reponse[i]));
     }
 
     notation();
@@ -89,8 +91,7 @@ void Fen_correction::notation()
 {
     for(int i = 0; i < 10; i++)
     {
-        int multiplicateur = i + 1;
-        resultat[i] = m_multiple*multiplicateur;
+        resultat[i] = m_multiple*tab[i];
     }
 
     for(int i = 0; i < 10; i++)

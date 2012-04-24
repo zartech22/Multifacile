@@ -1,7 +1,7 @@
 #ifndef FENETRE_PRINCIPALE_H
 #define FENETRE_PRINCIPALE_H
 
-#define VERSION 23
+#define VERSION 24
 #define WIN32
 //#define LINUX
 
@@ -33,6 +33,11 @@ class Fenetre_principale : public QMainWindow
 public :
     Fenetre_principale();
 private :
+
+    QMenu *file, *tools, *options;
+
+    QAction *quitAction, *updateAction, *shuffleAction;
+
     Bouton *bouton1, *bouton2, *bouton3, *bouton4, *bouton5, *bouton6, *bouton7, *bouton8, *bouton9, *bouton10;
 
     QPushButton *quit, *custom;

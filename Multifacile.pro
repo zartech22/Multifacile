@@ -4,14 +4,16 @@ SOURCES += \
     bouton.cpp \
     fen_secondaire.cpp \
     fen_correction.cpp \
-    CheckUpdate.cpp
+    CheckUpdate.cpp \
+    Shuffle.cpp
 
 HEADERS += \
     fenetre_principale.h \
     bouton.h \
     fen_secondaire.h \
     fen_correction.h \
-    CheckUpdate.h
+    CheckUpdate.h \
+    Shuffle.h
 RC_FILE = Icon.rc
 
 QT += network

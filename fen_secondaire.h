@@ -10,16 +10,19 @@
 #include <QString>
 #include <QMessageBox>
 #include "fen_correction.h"
+#include "Shuffle.h"
 
 class Fen_secondaire : public QWidget
 {
     Q_OBJECT
 public :
     Fen_secondaire();
-    Fen_secondaire(const int multiplicateur);
+    Fen_secondaire(const int multiplicateur, bool shuffle);
     ~Fen_secondaire();
 private :
     int m_multiplicateur;
+
+    int array[10];
 
     QVBoxLayout *vlayout;
 
