@@ -120,7 +120,6 @@ void Fenetre_principale::open_window()
         fen = new Fen_secondaire(nbr, shuffleAction->isChecked());
         fen->resize(300, 200);
         fen->show();
-        //this->hide();
     }
 }
 
@@ -148,7 +147,7 @@ void Fenetre_principale::answer(bool update)
         int userAnswer = QMessageBox::question(this, "Mise à jour disponible", "Une version plus récente de multifacile est disponible, voulez-vous la télécharger ?", QMessageBox::Yes | QMessageBox::No);
         if(userAnswer == QMessageBox::Yes)
         {
-#ifdef WIN32
+#ifdef _WIN32
             ShellExecute(NULL, L"open", L"updater.exe", NULL, NULL, SW_SHOWNORMAL);
 #endif
 #ifdef LINUX

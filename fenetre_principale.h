@@ -1,30 +1,34 @@
 #ifndef FENETRE_PRINCIPALE_H
 #define FENETRE_PRINCIPALE_H
 
-#define VERSION 24
-#define WIN32
+#define VERSION 25
+#define _WIN32
 //#define LINUX
 
-#include <QWidget>
 #include <QApplication>
+#include <QWidget>
 #include <QPushButton>
 #include <QGridLayout>
-#include "bouton.h"
-#include "fen_secondaire.h"
-#include "CheckUpdate.h"
 #include <QLabel>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QInputDialog>
-#include <QtNetwork>
-#include <Windows.h>
+#include <QAbstractSocket>
 #include <QMessageBox>
-#include <QProcess>
 #include <QMainWindow>
 #include <QMenuBar>
 #include <QAction>
+#include "bouton.h"
+#include "fen_secondaire.h"
+#include "CheckUpdate.h"
 
-#pragma comment(lib, "shell32.lib")
+#ifdef _WIN32
+    #pragma comment(lib, "shell32.lib")
+    #include <Windows.h>
+#endif
+#ifdef LINUX
+    #include <QProcess>
+#endif
 
 
 class Fenetre_principale : public QMainWindow

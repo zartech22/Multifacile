@@ -1,7 +1,7 @@
 #ifndef CHECKUPDATE_H
 #define CHECKUPDATE_H
 
-#include <QtNetwork>
+#include <QTcpSocket>
 
 class CheckUpdate : public QTcpSocket
 {

@@ -1,10 +1,6 @@
 #include "fen_secondaire.h"
 #include "fen_correction.h"
 
-Fen_secondaire::Fen_secondaire()
-{
-
-}
 Fen_secondaire::Fen_secondaire(const int multiplicateur, bool shuffle)
 {
     m_multiplicateur = multiplicateur;
@@ -16,6 +12,12 @@ Fen_secondaire::Fen_secondaire(const int multiplicateur, bool shuffle)
     this->setWindowTitle("Table de "+QString::number(m_multiplicateur));
 
     corriger = new QPushButton("corriger");
+    melanger = new QPushButton("Mélanger");
+
+    hlayout = new QHBoxLayout;
+
+    hlayout->addWidget(melanger);
+    hlayout->addWidget(corriger);
 
     for(int i = 0; i < 10; i++)
     {
@@ -24,28 +26,23 @@ Fen_secondaire::Fen_secondaire(const int multiplicateur, bool shuffle)
         reponses[i]->setMinimum(0);
     }
 
+    for(int i = 0; i < 10; i++)
+        label[i] = new QLabel(QString::number(m_multiplicateur)+" x "+QString::number(array[i]));
+
     layout = new QFormLayout();
 
-    layout->addRow(QString::number(m_multiplicateur)+" x "+QString::number(array[0]), reponses[0]);
-    layout->addRow(QString::number(m_multiplicateur)+" x "+QString::number(array[1]), reponses[1]);
-    layout->addRow(QString::number(m_multiplicateur)+" x "+QString::number(array[2]), reponses[2]);
-    layout->addRow(QString::number(m_multiplicateur)+" x "+QString::number(array[3]), reponses[3]);
-    layout->addRow(QString::number(m_multiplicateur)+" x "+QString::number(array[4]), reponses[4]);
-    layout->addRow(QString::number(m_multiplicateur)+" x "+QString::number(array[5]), reponses[5]);
-    layout->addRow(QString::number(m_multiplicateur)+" x "+QString::number(array[6]), reponses[6]);
-    layout->addRow(QString::number(m_multiplicateur)+" x "+QString::number(array[7]), reponses[7]);
-    layout->addRow(QString::number(m_multiplicateur)+" x "+QString::number(array[8]), reponses[8]);
-    layout->addRow(QString::number(m_multiplicateur)+" x "+QString::number(array[9]), reponses[9]);
-
+    for(int i = 0; i < 10; i++)
+        layout->addRow(label[i], reponses[i]);
 
     vlayout = new QVBoxLayout();
     vlayout->addLayout(layout);
-    vlayout->addWidget(corriger);
+    vlayout->addLayout(hlayout);
 
 
     this->setLayout(vlayout);
 
     connect(corriger, SIGNAL(clicked()), this, SLOT(open()));
+    connect(melanger, SIGNAL(clicked()), this, SLOT(Melange()));
 }
 
 void Fen_secondaire::open()
@@ -70,4 +67,11 @@ Fen_secondaire::~Fen_secondaire()
         delete reponses[i];
         reponses[i] = 0;
     }
+}
+void Fen_secondaire::Melange()
+{
+    Shuffle shuffle(true);
+    shuffle.getNumbers(array);
+    for(int i = 0; i < 10; i++)
+        label[i]->setText(QString::number(m_multiplicateur)+" x "+QString::number(array[i]));
 }

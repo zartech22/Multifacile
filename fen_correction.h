@@ -4,13 +4,12 @@
 #include <QWidget>
 #include <QLabel>
 #include <QSpinBox>
-#include <QString>
 #include <QGridLayout>
 #include <QString>
-#include <QPixmap>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QPushButton>
+
 
 class Fen_correction : public QWidget
 {

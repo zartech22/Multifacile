@@ -2,10 +2,6 @@
 //#include "fen_secondaire.h"
 #include "fenetre_principale.h"
 
-Fen_correction::Fen_correction()
-{
-
-}
 Fen_correction::Fen_correction(const int multiple, QSpinBox *reponses[], int *order)
 {
     this->setWindowTitle("Correction");
@@ -27,7 +23,12 @@ Fen_correction::Fen_correction(const int multiple, QSpinBox *reponses[], int *or
     notation();
 
     texte = new QLabel("<h3><strong>Voici la correction : </strong></h3>");
-    total = new QLabel("Vous avez eu <strong>"+QString::number(note)+"/10</strong>");
+    if(note >= 7)
+        total = new QLabel("Vous avez eu <strong><span style=\"color: green;\">"+QString::number(note)+"/10</span></strong>");
+    else if(note <= 2)
+        total = new QLabel("Vous avez eu <strong><span style=\"color: red;\">"+QString::number(note)+"/10</span></strong>");
+    else
+        total = new QLabel("Vous avez eu <strong><span style=\"color: orange;\">"+QString::number(note)+"/10</span></strong>");
 
     layout = new QGridLayout();
 
