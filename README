@@ -1,4 +1,4 @@
-Multifacile is a little program which want to help the children to learn their multiplication tables.
+Multifacile is a little project in C++ based on Qt framework which want to help the children to learn their multiplication tables.
 
 For this moment Multifacile don't work on Linux.
 
