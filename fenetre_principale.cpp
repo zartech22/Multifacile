@@ -183,3 +183,8 @@ void Fenetre_principale::verification()
     check->sendRequest();
     userAction = true;
 }
+void Fenetre_principale::closeEvent(QCloseEvent *event)
+{
+    qApp->quit();
+    event->accept();
+}

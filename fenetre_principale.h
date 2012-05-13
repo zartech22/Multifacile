@@ -1,7 +1,7 @@
 #ifndef FENETRE_PRINCIPALE_H
 #define FENETRE_PRINCIPALE_H
 
-#define VERSION 25
+#define VERSION 26
 #define _WIN32
 //#define LINUX
 
@@ -18,6 +18,7 @@
 #include <QMainWindow>
 #include <QMenuBar>
 #include <QAction>
+#include <QCloseEvent>
 #include "bouton.h"
 #include "fen_secondaire.h"
 #include "CheckUpdate.h"
@@ -61,6 +62,8 @@ private :
     int version;
 
     bool userAction;
+
+    void closeEvent(QCloseEvent * event);
 
 public slots :
     void open_window();
