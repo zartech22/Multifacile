@@ -2,8 +2,6 @@
 #define FENETRE_PRINCIPALE_H
 
 #define VERSION 26
-#define _WIN32
-//#define LINUX
 
 #include <QApplication>
 #include <QWidget>
@@ -23,11 +21,11 @@
 #include "fen_secondaire.h"
 #include "CheckUpdate.h"
 
-#ifdef _WIN32
+#ifdef Q_OS_WIN32
     #pragma comment(lib, "shell32.lib")
     #include <Windows.h>
 #endif
-#ifdef LINUX
+#ifdef Q_OS_LINUX
     #include <QProcess>
 #endif
 
