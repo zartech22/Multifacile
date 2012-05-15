@@ -22,8 +22,9 @@ Fen_secondaire::Fen_secondaire(const int multiplicateur, bool shuffle)
     for(int i = 0; i < 10; i++)
     {
         reponses[i] = new QSpinBox;
-        reponses[i]->setMaximum(10000);
-        reponses[i]->setMinimum(0);
+        reponses[i]->setMaximum(2147483647);
+        reponses[i]->setMinimum(-2147483647);
+        reponses[i]->setValue(0);
     }
 
     for(int i = 0; i < 10; i++)

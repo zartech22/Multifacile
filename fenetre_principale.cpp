@@ -5,12 +5,11 @@
 
 Fenetre_principale::Fenetre_principale()
 {
-    version = VERSION;
     userAction = false;
 
     widget = new QWidget();
 
-    check = new CheckUpdate(this, version);
+    check = new CheckUpdate(this, VERSION);
 
     texte = new QLabel("Choisissez la table que vous voulez travailler !");
     espace = new QLabel("<hr />");
@@ -143,14 +142,16 @@ void Fenetre_principale::answer(bool update)
     }
     else if(update)
     {
+        if(userAction)
+            userAction = false;
         check->disconnectFromHost();
         int userAnswer = QMessageBox::question(this, "Mise à jour disponible", "Une version plus récente de multifacile est disponible, voulez-vous la télécharger ?", QMessageBox::Yes | QMessageBox::No);
         if(userAnswer == QMessageBox::Yes)
         {
-#ifdef _WIN32
+#ifdef Q_OS_WIN32
             ShellExecute(NULL, L"open", L"updater.exe", NULL, NULL, SW_SHOWNORMAL);
 #endif
-#ifdef LINUX
+#ifdef Q_OS_LINUX
             QProcess::startDetached("updater.exe");
 #endif
             this->close();
