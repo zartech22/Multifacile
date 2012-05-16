@@ -3,19 +3,18 @@
 
 #include <QWidget>
 #include <QLabel>
-#include <QSpinBox>
 #include <QGridLayout>
 #include <QString>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QPushButton>
+#include "spinBox.h"
 
 
 class Fen_correction : public QWidget
 {
 public :
-    Fen_correction();
-    Fen_correction(const int multiple, QSpinBox *reponses[], int *order);
+    Fen_correction(const int multiple, SpinBox *reponses[], int *order);
     ~Fen_correction();
 private :
 

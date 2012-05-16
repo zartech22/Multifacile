@@ -164,24 +164,11 @@ void Fenetre_principale::answer(bool update)
 }
 void Fenetre_principale::erreurSocket(QAbstractSocket::SocketError erreur)
 {
-    switch(erreur)
-    {
-    case QAbstractSocket::HostNotFoundError:
-        QMessageBox::information(this, "Erreur", "<em>ERREUR : le serveur n'a pas pu être trouvé. Vérifiez l'IP et le port.</em>");
-        break;
-    case QAbstractSocket::ConnectionRefusedError:
-        QMessageBox::information(this, "Erreur", "<em>ERREUR : le serveur a refusé la connexion. Vérifier si le programme \"serveur\" a bien été lancé. Vérifiez aussi l'IP et le port.</em>");
-        break;
-    case QAbstractSocket::RemoteHostClosedError:
-        QMessageBox::information(this, "Erreur", "<em>ERREUR : le serveur a coupé la connexion.</em>");
-        break;
-    default:
-        QMessageBox::information(this, "Erreur", "<em>ERREUR : " + check->errorString() + "</em>.");
-    }
+    QMessageBox::information(this, "Erreur de connexion", "Impossible de vérifier les mise à jour");
 }
 void Fenetre_principale::verification()
 {
-    check->sendRequest();
+    check->tryConnection();
     userAction = true;
 }
 void Fenetre_principale::closeEvent(QCloseEvent *event)

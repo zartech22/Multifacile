@@ -2,7 +2,7 @@
 //#include "fen_secondaire.h"
 #include "fenetre_principale.h"
 
-Fen_correction::Fen_correction(const int multiple, QSpinBox *reponses[], int *order)
+Fen_correction::Fen_correction(const int multiple, SpinBox *reponses[], int *order)
 {
     this->setWindowTitle("Correction");
     m_multiple = multiple;
@@ -38,7 +38,7 @@ Fen_correction::Fen_correction(const int multiple, QSpinBox *reponses[], int *or
     hlayout[1] = new QHBoxLayout();
     hlayout[2] = new QHBoxLayout();
 
-    quit = new QPushButton("Quitter");
+    quit = new QPushButton("Fermer");
 
     layout->addWidget(multiplication[0], 1, 0);
     layout->addWidget(correction[0], 1, 1);

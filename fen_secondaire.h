@@ -6,12 +6,12 @@
 #include <QFormLayout>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-#include <QSpinBox>
 #include <QPushButton>
 #include <QString>
 #include <QLabel>
 #include "fen_correction.h"
 #include "Shuffle.h"
+#include "spinBox.h"
 
 
 class Fen_secondaire : public QWidget
@@ -35,7 +35,7 @@ private :
 
     QPushButton *corriger, *melanger;
 
-    QSpinBox *reponses[10];
+    SpinBox *reponses[10];
 
     Fen_correction *fen;
 
@@ -43,6 +43,7 @@ private :
 public slots:
     void open();
     void Melange();
+    void newSetFocus(int number);
 
 };
 

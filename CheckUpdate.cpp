@@ -5,19 +5,20 @@ CheckUpdate::CheckUpdate(QObject *parent, int version) : QTcpSocket(parent)
     actualVersion = version;
     messageSize = 0;
 
+    tryConnection();
+
     connect(this, SIGNAL(readyRead()), this, SLOT(dataReceived()));
+    connect(this, SIGNAL(connected()), this , SLOT(sendRequest()));
 }
 void CheckUpdate::sendRequest()
 {
-    this->abort();
-    this->connectToHost("multifacile.no-ip.org", 8087);
-    QByteArray paquet;
-    QDataStream out(&paquet, QIODevice::WriteOnly);
-    out << (quint16) 0;
-    out << actualVersion;
-    out.device()->seek(0);
-    out << (quint16) (paquet.size() - sizeof(quint16));
-    this->write(paquet);
+        QByteArray paquet;
+        QDataStream out(&paquet, QIODevice::WriteOnly);
+        out << (quint16) 0;
+        out << actualVersion;
+        out.device()->seek(0);
+        out << (quint16) (paquet.size() - sizeof(quint16));
+        this->write(paquet);
 }
 void CheckUpdate::dataReceived()
 {
@@ -33,10 +34,16 @@ void CheckUpdate::dataReceived()
     QString answer;
     in >> answer;
 
+    qDebug("ok");
     if(answer == "ok")
         emit updateNeeded(false);
     else if(answer == "update needed")
         emit updateNeeded(true);
 
     messageSize = 0;
+}
+void CheckUpdate::tryConnection()
+{
+    this->abort();
+    this->connectToHost("multifacile.no-ip.org", 8087);
 }

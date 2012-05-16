@@ -11,7 +11,7 @@ Fen_secondaire::Fen_secondaire(const int multiplicateur, bool shuffle)
 
     this->setWindowTitle("Table de "+QString::number(m_multiplicateur));
 
-    corriger = new QPushButton("corriger");
+    corriger = new QPushButton("Corriger");
     melanger = new QPushButton("Mélanger");
 
     hlayout = new QHBoxLayout;
@@ -21,10 +21,16 @@ Fen_secondaire::Fen_secondaire(const int multiplicateur, bool shuffle)
 
     for(int i = 0; i < 10; i++)
     {
-        reponses[i] = new QSpinBox;
+        reponses[i] = new SpinBox();
         reponses[i]->setMaximum(2147483647);
         reponses[i]->setMinimum(-2147483647);
         reponses[i]->setValue(0);
+        reponses[i]->setNumero(i);
+        if(i == 0)
+        {
+            reponses[i]->setFocus();
+            reponses[i]->selectAll();
+        }
     }
 
     for(int i = 0; i < 10; i++)
@@ -44,6 +50,17 @@ Fen_secondaire::Fen_secondaire(const int multiplicateur, bool shuffle)
 
     connect(corriger, SIGNAL(clicked()), this, SLOT(open()));
     connect(melanger, SIGNAL(clicked()), this, SLOT(Melange()));
+
+    connect(reponses[0], SIGNAL(enterKeyPressed(int)), this, SLOT(newSetFocus(int)));
+    connect(reponses[1], SIGNAL(enterKeyPressed(int)), this, SLOT(newSetFocus(int)));
+    connect(reponses[2], SIGNAL(enterKeyPressed(int)), this, SLOT(newSetFocus(int)));
+    connect(reponses[3], SIGNAL(enterKeyPressed(int)), this, SLOT(newSetFocus(int)));
+    connect(reponses[4], SIGNAL(enterKeyPressed(int)), this, SLOT(newSetFocus(int)));
+    connect(reponses[5], SIGNAL(enterKeyPressed(int)), this, SLOT(newSetFocus(int)));
+    connect(reponses[6], SIGNAL(enterKeyPressed(int)), this, SLOT(newSetFocus(int)));
+    connect(reponses[7], SIGNAL(enterKeyPressed(int)), this, SLOT(newSetFocus(int)));
+    connect(reponses[8], SIGNAL(enterKeyPressed(int)), this, SLOT(newSetFocus(int)));
+    connect(reponses[9], SIGNAL(enterKeyPressed(int)), this, SLOT(newSetFocus(int)));
 }
 
 void Fen_secondaire::open()
@@ -53,6 +70,27 @@ void Fen_secondaire::open()
     fen->show();
     this->close();
 }
+void Fen_secondaire::Melange()
+{
+    Shuffle shuffle(true);
+    shuffle.getNumbers(array);
+    for(int i = 0; i < 10; i++)
+        label[i]->setText(QString::number(m_multiplicateur)+" x "+QString::number(array[i]));
+    reponses[0]->setFocus();
+    reponses[0]->selectAll();
+}
+void Fen_secondaire::newSetFocus(int number)
+{
+    if(number < 9)
+    {
+        int num = number+1;
+        reponses[num]->setFocus();
+        reponses[num]->selectAll();
+    }
+    else
+        open();
+}
+
 Fen_secondaire::~Fen_secondaire()
 {
     delete corriger;
@@ -68,11 +106,4 @@ Fen_secondaire::~Fen_secondaire()
         delete reponses[i];
         reponses[i] = 0;
     }
-}
-void Fen_secondaire::Melange()
-{
-    Shuffle shuffle(true);
-    shuffle.getNumbers(array);
-    for(int i = 0; i < 10; i++)
-        label[i]->setText(QString::number(m_multiplicateur)+" x "+QString::number(array[i]));
 }

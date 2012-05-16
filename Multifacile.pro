@@ -5,7 +5,8 @@ SOURCES += \
     fen_secondaire.cpp \
     fen_correction.cpp \
     CheckUpdate.cpp \
-    Shuffle.cpp
+    Shuffle.cpp \
+    spinBox.cpp
 
 HEADERS += \
     fenetre_principale.h \
@@ -13,7 +14,8 @@ HEADERS += \
     fen_secondaire.h \
     fen_correction.h \
     CheckUpdate.h \
-    Shuffle.h
+    Shuffle.h \
+    spinBox.h
 RC_FILE = Icon.rc
 
 QT += network
