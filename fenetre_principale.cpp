@@ -69,7 +69,7 @@ Fenetre_principale::Fenetre_principale()
     widget->setLayout(vlayout);
     this->setCentralWidget(widget);
 
-    check->sendRequest();
+    check->tryConnection();
 
     connect(bouton1, SIGNAL(clicked()), bouton1, SLOT(clique()));
     connect(bouton1, SIGNAL(cliquer(int)), this, SLOT(open_window(int)));
