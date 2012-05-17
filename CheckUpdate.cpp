@@ -34,7 +34,6 @@ void CheckUpdate::dataReceived()
     QString answer;
     in >> answer;
 
-    qDebug("ok");
     if(answer == "ok")
         emit updateNeeded(false);
     else if(answer == "update needed")

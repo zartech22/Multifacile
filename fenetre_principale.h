@@ -1,7 +1,7 @@
 #ifndef FENETRE_PRINCIPALE_H
 #define FENETRE_PRINCIPALE_H
 
-#define VERSION 26
+#define VERSION 27
 
 #include <QApplication>
 #include <QWidget>
