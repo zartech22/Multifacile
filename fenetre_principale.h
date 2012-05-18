@@ -41,9 +41,9 @@ private :
 
     QAction *quitAction, *updateAction, *shuffleAction;
 
-    Bouton *bouton1, *bouton2, *bouton3, *bouton4, *bouton5, *bouton6, *bouton7, *bouton8, *bouton9, *bouton10;
+    Bouton *bouton[10];
 
-    QPushButton *quit, *custom;
+    QPushButton *quit, *customTable;
 
     QLabel *texte, *espace;
 

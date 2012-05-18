@@ -15,7 +15,7 @@ Fenetre_principale::Fenetre_principale()
     espace = new QLabel("<hr />");
 
     quit = new QPushButton("Quitter");
-    custom = new QPushButton("Table personnalisée");
+    customTable = new QPushButton("Table personnalisée");
 
     file = menuBar()->addMenu("&Fichier");
     tools = menuBar()->addMenu("&Outils");
@@ -31,16 +31,8 @@ Fenetre_principale::Fenetre_principale()
     tools->addAction(updateAction);
     options->addAction(shuffleAction);
 
-    bouton1 = new Bouton("Table de 1", 1);
-    bouton2 = new Bouton("Table de 2 ", 2);
-    bouton3 = new Bouton("Table de 3 ", 3);
-    bouton4 = new Bouton("Table de 4 ", 4);
-    bouton5 = new Bouton("Table de 5 ", 5);
-    bouton6 = new Bouton("Table de 6 ", 6);
-    bouton7 = new Bouton("Table de 7 ", 7);
-    bouton8 = new Bouton("Table de 8 ", 8);
-    bouton9 = new Bouton("Table de 9 ", 9);
-    bouton10 = new Bouton("Table de 10 ", 10);
+    for(int i = 0; i < 10; i++)
+        bouton[i] = new Bouton("Table de "+QString::number(i+1), i+1);
 
     layout = new QGridLayout();
     glayout = new QGridLayout();
@@ -48,19 +40,19 @@ Fenetre_principale::Fenetre_principale()
 
     layout->addWidget(texte, 0, 0, 1, 2);
 
-    layout->addWidget(bouton1, 1, 0);
-    layout->addWidget(bouton2, 1, 1);
-    layout->addWidget(bouton3, 2, 0);
-    layout->addWidget(bouton4, 2, 1);
-    layout->addWidget(bouton5, 3, 0);
-    layout->addWidget(bouton6, 3, 1);
-    layout->addWidget(bouton7, 4, 0);
-    layout->addWidget(bouton8, 4, 1);
-    layout->addWidget(bouton9, 5, 0);
-    layout->addWidget(bouton10, 5, 1);
+    layout->addWidget(bouton[0], 1, 0);
+    layout->addWidget(bouton[1], 1, 1);
+    layout->addWidget(bouton[2], 2, 0);
+    layout->addWidget(bouton[3], 2, 1);
+    layout->addWidget(bouton[4], 3, 0);
+    layout->addWidget(bouton[5], 3, 1);
+    layout->addWidget(bouton[6], 4, 0);
+    layout->addWidget(bouton[7], 4, 1);
+    layout->addWidget(bouton[8], 5, 0);
+    layout->addWidget(bouton[9], 5, 1);
 
     glayout->addWidget(espace, 0, 1, 1, 2);
-    glayout->addWidget(custom, 1, 1);
+    glayout->addWidget(customTable, 1, 1);
     glayout->addWidget(quit, 1, 2);
 
     vlayout->addLayout(layout);
@@ -71,42 +63,18 @@ Fenetre_principale::Fenetre_principale()
 
     check->tryConnection();
 
-    connect(bouton1, SIGNAL(clicked()), bouton1, SLOT(clique()));
-    connect(bouton1, SIGNAL(cliquer(int)), this, SLOT(open_window(int)));
-
-    connect(bouton2, SIGNAL(clicked()), bouton2, SLOT(clique()));
-    connect(bouton2, SIGNAL(cliquer(int)), this, SLOT(open_window(int)));
-
-    connect(bouton3, SIGNAL(clicked()), bouton3, SLOT(clique()));
-    connect(bouton3, SIGNAL(cliquer(int)), this, SLOT(open_window(int)));
-
-    connect(bouton4, SIGNAL(clicked()), bouton4, SLOT(clique()));
-    connect(bouton4, SIGNAL(cliquer(int)), this, SLOT(open_window(int)));
-
-    connect(bouton5, SIGNAL(clicked()), bouton5, SLOT(clique()));
-    connect(bouton5, SIGNAL(cliquer(int)), this, SLOT(open_window(int)));
-
-    connect(bouton6, SIGNAL(clicked()), bouton6, SLOT(clique()));
-    connect(bouton6, SIGNAL(cliquer(int)), this, SLOT(open_window(int)));
-
-    connect(bouton7, SIGNAL(clicked()), bouton7, SLOT(clique()));
-    connect(bouton7, SIGNAL(cliquer(int)), this, SLOT(open_window(int)));
-
-    connect(bouton8, SIGNAL(clicked()), bouton8, SLOT(clique()));
-    connect(bouton8, SIGNAL(cliquer(int)), this, SLOT(open_window(int)));
-
-    connect(bouton9, SIGNAL(clicked()), bouton9, SLOT(clique()));
-    connect(bouton9, SIGNAL(cliquer(int)), this, SLOT(open_window(int)));
-
-    connect(bouton10, SIGNAL(clicked()), bouton10, SLOT(clique()));
-    connect(bouton10, SIGNAL(cliquer(int)), this, SLOT(open_window(int)));
+    for(int i = 0; i < 10; i++)
+    {
+        connect(bouton[i], SIGNAL(clicked()), bouton[i], SLOT(clique()));
+        connect(bouton[i], SIGNAL(cliquer(int)), this, SLOT(open_window(int)));
+    }
 
     connect(quit, SIGNAL(clicked()), qApp, SLOT(quit()));
-    connect(custom, SIGNAL(clicked()), this, SLOT(open_window()));
+    connect(customTable, SIGNAL(clicked()), this, SLOT(open_window()));
 
     connect(check, SIGNAL(updateNeeded(bool)), this, SLOT(answer(bool)));
-
     connect(check, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(erreurSocket(QAbstractSocket::SocketError)));
+
     connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
     connect(updateAction, SIGNAL(triggered()), this, SLOT(verification()));
 }
