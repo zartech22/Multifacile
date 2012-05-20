@@ -6,3 +6,7 @@ Icon.aps
 *.user
 *.vcxproj
 *.vcxproj.*
+Makefile
+Makefile.*
+vc100.pdb
+Multifacile.pro.*
