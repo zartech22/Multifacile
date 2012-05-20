@@ -9,6 +9,7 @@ class Shuffle
 public:
     Shuffle(bool shuffle);
     void getNumbers(int tab[]);
+    void getNumbers(int tab[], int array[]);
 private:
     bool needShuffle;
     int numbers[10];

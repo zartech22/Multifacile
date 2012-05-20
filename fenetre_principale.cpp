@@ -1,11 +1,12 @@
 #include "fenetre_principale.h"
 #include "bouton.h"
-#include "fen_secondaire.h"
 #include "CheckUpdate.h"
+#include "Shuffle.h"
 
 Fenetre_principale::Fenetre_principale()
 {
     userAction = false;
+    mode = EASY;
 
     widget = new QWidget();
 
@@ -19,17 +20,34 @@ Fenetre_principale::Fenetre_principale()
 
     file = menuBar()->addMenu("&Fichier");
     tools = menuBar()->addMenu("&Outils");
-    options = menuBar()->addMenu("&Options");
+    modes = menuBar()->addMenu("&Mode");
+    actionGroup = new QActionGroup(this);
 
-    quitAction = new QAction("&Quitter", this);
-    updateAction = new QAction("Vérifiez les mise à jours", this);
+    quitAction = new QAction(QIcon("sortie.png"), "&Quitter", this);
+    updateAction = new QAction(QIcon("update.png"), "Vérifiez les mise à jours", this);
     shuffleAction = new QAction("Table en désordre", this);
+    easyMode = new QAction("Facile", this);
+    mediumMode = new QAction("Moyen", this);
+    hardMode = new QAction("Difficile", this);
+
+    easyMode->setCheckable(true);
+    mediumMode->setCheckable(true);
+    hardMode->setCheckable(true);
+
+    easyMode->setChecked(true);
+
+    actionGroup->addAction(easyMode);
+    actionGroup->addAction(mediumMode);
+    actionGroup->addAction(hardMode);
+    actionGroup->setExclusive(true);
 
     shuffleAction->setCheckable(true);
 
     file->addAction(quitAction);
     tools->addAction(updateAction);
-    options->addAction(shuffleAction);
+    modes->addActions(actionGroup->actions());
+    modes->addSeparator();
+    modes->addAction(shuffleAction);
 
     for(int i = 0; i < 10; i++)
         bouton[i] = new Bouton("Table de "+QString::number(i+1), i+1);
@@ -73,10 +91,12 @@ Fenetre_principale::Fenetre_principale()
     connect(customTable, SIGNAL(clicked()), this, SLOT(open_window()));
 
     connect(check, SIGNAL(updateNeeded(bool)), this, SLOT(answer(bool)));
-    connect(check, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(erreurSocket(QAbstractSocket::SocketError)));
+    connect(check, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(erreurSocket()));
 
     connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
     connect(updateAction, SIGNAL(triggered()), this, SLOT(verification()));
+    connect(actionGroup, SIGNAL(triggered(QAction*)), this, SLOT(setMode(QAction*)));
+    connect(actionGroup, SIGNAL(triggered(QAction*)), this, SLOT(resetLabel(QAction*)));
 }
 void Fenetre_principale::open_window()
 {
@@ -84,17 +104,47 @@ void Fenetre_principale::open_window()
     int nbr = QInputDialog::getInteger(this, "Choix de la table", "Indiquer la table sur laquelle vous voulez travailler", 0, -2147483647, 2147483647, 1, &ok);
     if(ok)
     {
-        fen = new Fen_secondaire(nbr, shuffleAction->isChecked());
-        fen->resize(300, 200);
-        fen->show();
+        if(mode == EASY)
+        {
+            fen = new EasyModeWindow(nbr, shuffleAction->isChecked());
+            fen->resize(300, 200);
+            fen->show();
+        }
+        else if(mode == MEDIUM)
+        {
+            fen = new MediumModeWindow(nbr);
+            fen->resize(300, 200);
+            fen->show();
+        }
+        else if(mode == HARD)
+        {
+            fen = new HardModeWindow();
+            fen->resize(300, 200);
+            fen->show();
+        }
     }
 }
 
 void Fenetre_principale::open_window(int nbr)
 {
-    fen = new Fen_secondaire(nbr, shuffleAction->isChecked());
-    fen->resize(300, 200);
-    fen->show();
+    if(mode == EASY)
+    {
+        fen = new EasyModeWindow(nbr, shuffleAction->isChecked());
+        fen->resize(300, 200);
+        fen->show();
+    }
+    else if(mode == MEDIUM)
+    {
+        fen = new MediumModeWindow(nbr);
+        fen->resize(300, 200);
+        fen->show();
+    }
+    else if(mode == HARD)
+    {
+        fen = new HardModeWindow();
+        fen->resize(300, 200);
+        fen->show();
+    }
 }
 void Fenetre_principale::answer(bool update)
 {
@@ -130,7 +180,41 @@ void Fenetre_principale::answer(bool update)
             return;
     }
 }
-void Fenetre_principale::erreurSocket(QAbstractSocket::SocketError erreur)
+void Fenetre_principale::setMode(QAction *action)
+{
+    if(action == easyMode)
+    {
+        mode = EASY;
+        if(!shuffleAction->isEnabled())
+        {
+            shuffleAction->setEnabled(true);
+            shuffleAction->setChecked(false);
+        }
+    }
+    else if(action == mediumMode)
+    {
+        mode = MEDIUM;
+        shuffleAction->setChecked(true);
+        shuffleAction->setDisabled(true);
+    }
+    else if(action == hardMode)
+    {
+        mode = HARD;
+        shuffleAction->setChecked(true);
+        shuffleAction->setDisabled(true);
+    }
+}
+void Fenetre_principale::resetLabel(QAction *action)
+{
+    if(action == easyMode || action == mediumMode)
+        for(int i = 0; i < 10; i++)
+            bouton[i]->setText("Table de "+QString::number(i+1));
+    else if(action == hardMode)
+        for(int i = 0; i < 10; i++)
+            bouton[i]->setText("Table aléatoire");
+}
+
+void Fenetre_principale::erreurSocket()
 {
     QMessageBox::information(this, "Erreur de connexion", "Impossible de vérifier les mise à jour");
 }

@@ -1,7 +1,7 @@
 #ifndef FENETRE_PRINCIPALE_H
 #define FENETRE_PRINCIPALE_H
 
-#define VERSION 27
+#define VERSION 28
 
 #include <QApplication>
 #include <QWidget>
@@ -17,9 +17,13 @@
 #include <QMenuBar>
 #include <QAction>
 #include <QCloseEvent>
+#include <QActionGroup>
 #include "bouton.h"
-#include "fen_secondaire.h"
+#include "EasyModeWindow.h"
+#include "MediumModeWindow.h"
+#include "HardModeWindow.h"
 #include "CheckUpdate.h"
+#include "modeEnum.h"
 
 #ifdef Q_OS_WIN32
     #pragma comment(lib, "shell32.lib")
@@ -37,9 +41,12 @@ public :
     Fenetre_principale();
 private :
 
-    QMenu *file, *tools, *options;
+    Mode mode;
 
-    QAction *quitAction, *updateAction, *shuffleAction;
+    QMenu *file, *tools, *modes;
+
+    QAction *quitAction, *updateAction, *shuffleAction, *easyMode, *mediumMode, *hardMode;
+    QActionGroup *actionGroup;
 
     Bouton *bouton[10];
 
@@ -51,11 +58,11 @@ private :
 
     QVBoxLayout *vlayout;
 
-    Fen_secondaire *fen;
-
     CheckUpdate *check;
 
     QWidget *widget;
+
+    MediumModeWindow *fen;
 
     int version;
 
@@ -67,8 +74,10 @@ public slots :
     void open_window();
     void open_window(int nbr);
     void answer(bool update);
-    void erreurSocket(QAbstractSocket::SocketError erreur);
+    void erreurSocket();
     void verification();
+    void setMode(QAction *action);
+    void resetLabel(QAction *action);
 };
 
 #endif // FENETRE_PRINCIPALE_H

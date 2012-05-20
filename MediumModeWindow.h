@@ -10,18 +10,19 @@
 #include <QString>
 #include <QLabel>
 #include "fen_correction.h"
-#include "Shuffle.h"
 #include "spinBox.h"
+#include "Shuffle.h"
 
 
-class Fen_secondaire : public QWidget
+class MediumModeWindow : public QWidget
 {
     Q_OBJECT
 public :
-    Fen_secondaire(const int multiplicateur, bool shuffle);
-    ~Fen_secondaire();
-private :
-    int m_multiplicateur;
+    MediumModeWindow();
+    MediumModeWindow(const int multiplicateur);
+    ~MediumModeWindow();
+protected :
+    int m_multiple;
 
     int array[10];
 
@@ -33,7 +34,7 @@ private :
 
     QFormLayout *layout;
 
-    QPushButton *corriger, *melanger;
+    QPushButton *corriger;
 
     SpinBox *reponses[10];
 
@@ -41,8 +42,7 @@ private :
 
 
 public slots:
-    void open();
-    void Melange();
+    virtual void open();
     void newSetFocus(int number);
 
 };

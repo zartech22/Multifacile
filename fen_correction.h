@@ -15,19 +15,25 @@ class Fen_correction : public QWidget
 {
 public :
     Fen_correction(const int multiple, SpinBox *reponses[], int *order);
+    Fen_correction(SpinBox *reponses[], int *multipleOrder, int *order);
     ~Fen_correction();
 private :
 
-    void notation();
+    void notation(const int m_multiple);
+    void notation(int *m_multiple);
 
-    int m_multiple;
+    void setWindowLayout(int multiple);
+    void setWindowLayout(int tabOrder[]);
+
     int reponse[10], resultat[10];
     int *tab;
+    int *orderTab;
     int note;
     QLabel *multiplication[10];
-    QLabel *correction[10];
+    QLabel *correction[2][10];
     QLabel *texte;
     QLabel *total;
+    QLabel *pngTotal;
 
     QPushButton *quit;
 
