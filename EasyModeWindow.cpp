@@ -13,8 +13,8 @@ EasyModeWindow::EasyModeWindow(const int m_multiplicateur, bool shuffleNeeded)
 
     hlayout = new QHBoxLayout;
 
-    hlayout->addWidget(corriger);
     hlayout->addWidget(melanger);
+    hlayout->addWidget(corriger);
 
 
     for(int i = 0; i < 10; i++)

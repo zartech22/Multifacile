@@ -56,3 +56,6 @@ void HardModeWindow::open()
     fen->show();
     this->close();
 }
+HardModeWindow::~HardModeWindow()
+{
+}

@@ -7,6 +7,7 @@ class HardModeWindow : public MediumModeWindow
 {
 public:
     HardModeWindow();
+    ~HardModeWindow();
 private:
     int multiple[10];
     void open();

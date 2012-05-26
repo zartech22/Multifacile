@@ -18,6 +18,7 @@
 #include <QAction>
 #include <QCloseEvent>
 #include <QActionGroup>
+#include <QList>
 #include "bouton.h"
 #include "EasyModeWindow.h"
 #include "MediumModeWindow.h"
@@ -39,6 +40,7 @@ class Fenetre_principale : public QMainWindow
     Q_OBJECT
 public :
     Fenetre_principale();
+    ~Fenetre_principale();
 private :
 
     Mode mode;
@@ -62,7 +64,10 @@ private :
 
     QWidget *widget;
 
+    QList<MediumModeWindow *> fenList;
+
     MediumModeWindow *fen;
+
 
     int version;
 

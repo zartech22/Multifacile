@@ -8,6 +8,7 @@ class Bouton : public QPushButton
     Q_OBJECT
 public :
     Bouton(const QString &text, int nombre);
+    ~Bouton();
 public slots :
     void clique();
 signals :

@@ -12,7 +12,8 @@ Fenetre_principale::Fenetre_principale()
 
     check = new CheckUpdate(this, VERSION);
 
-    texte = new QLabel("Choisissez la table que vous voulez travailler !");
+
+    texte = new QLabel("Choisis la table que tu veux travailler !");
     espace = new QLabel("<hr />");
 
     quit = new QPushButton("Quitter");
@@ -24,7 +25,7 @@ Fenetre_principale::Fenetre_principale()
     actionGroup = new QActionGroup(this);
 
     quitAction = new QAction(QIcon("sortie.png"), "&Quitter", this);
-    updateAction = new QAction(QIcon("update.png"), "Vérifiez les mise à jours", this);
+    updateAction = new QAction(QIcon("update.png"), "Vérifier les mise à jours", this);
     shuffleAction = new QAction("Table en désordre", this);
     easyMode = new QAction("Facile", this);
     mediumMode = new QAction("Moyen", this);
@@ -109,18 +110,21 @@ void Fenetre_principale::open_window()
             fen = new EasyModeWindow(nbr, shuffleAction->isChecked());
             fen->resize(300, 200);
             fen->show();
+            fenList.append(fen);
         }
         else if(mode == MEDIUM)
         {
             fen = new MediumModeWindow(nbr);
             fen->resize(300, 200);
             fen->show();
+            fenList.append(fen);
         }
         else if(mode == HARD)
         {
             fen = new HardModeWindow();
             fen->resize(300, 200);
             fen->show();
+            fenList.append(fen);
         }
     }
 }
@@ -132,18 +136,21 @@ void Fenetre_principale::open_window(int nbr)
         fen = new EasyModeWindow(nbr, shuffleAction->isChecked());
         fen->resize(300, 200);
         fen->show();
+        fenList.append(fen);
     }
     else if(mode == MEDIUM)
     {
         fen = new MediumModeWindow(nbr);
         fen->resize(300, 200);
         fen->show();
+        fenList.append(fen);
     }
     else if(mode == HARD)
     {
         fen = new HardModeWindow();
         fen->resize(300, 200);
         fen->show();
+        fenList.append(fen);
     }
 }
 void Fenetre_principale::answer(bool update)
@@ -163,7 +170,7 @@ void Fenetre_principale::answer(bool update)
         if(userAction)
             userAction = false;
         check->disconnectFromHost();
-        int userAnswer = QMessageBox::question(this, "Mise à jour disponible", "Une version plus récente de multifacile est disponible, voulez-vous la télécharger ?", QMessageBox::Yes | QMessageBox::No);
+        int userAnswer = QMessageBox::question(this, "Mise à jour disponible", "Une version plus récente de multifacile est disponible, veux-tu la télécharger ?", QMessageBox::Yes | QMessageBox::No);
         if(userAnswer == QMessageBox::Yes)
         {
 #ifdef Q_OS_WIN32
@@ -227,4 +234,39 @@ void Fenetre_principale::closeEvent(QCloseEvent *event)
 {
     qApp->quit();
     event->accept();
+}
+Fenetre_principale::~Fenetre_principale()
+{
+    delete file, tools, modes;
+    delete quitAction, updateAction, shuffleAction, easyMode, mediumMode, hardMode;
+    delete actionGroup;
+    delete quit, customTable;
+    delete layout, glayout, vlayout;
+    delete check;
+    delete widget;
+
+
+    for(int i = 0; i < fenList.size(); i++)
+    {
+        delete fenList[i];
+        fenList[i] = 0;
+    }
+
+    file =0;
+    tools = 0;
+    modes = 0;
+    quitAction = 0;
+    updateAction = 0;
+    shuffleAction = 0;
+    easyMode = 0;
+    mediumMode = 0;
+    hardMode = 0;
+    actionGroup = 0;
+    quit = 0;
+    customTable = 0;
+    layout = 0;
+    glayout = 0;
+    vlayout = 0;
+    check = 0;
+    widget = 0;
 }

@@ -20,7 +20,7 @@ class MediumModeWindow : public QWidget
 public :
     MediumModeWindow();
     MediumModeWindow(const int multiplicateur);
-    ~MediumModeWindow();
+    virtual ~MediumModeWindow();
 protected :
     int m_multiple;
 
