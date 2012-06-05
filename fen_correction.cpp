@@ -29,10 +29,8 @@ Fen_correction::Fen_correction(SpinBox *reponses[], int *multipleOrder, int *ord
 {
     if(t != 0)
     {
-        int secondes = t->elapsed()/1000;
-        int minutes = secondes/60;
-        QMessageBox::information(this, "Temps de réponses", "Vous avez mis "+QString::number(minutes)+" minute(s) et "+QString::number(secondes)+" secondes.");
-        delete t;
+        returnTime(t);
+        QMessageBox::information(0, "Temps de réponses", "Vous avez mis "+QString::number(timeTab[1])+" minute(s) et "+QString::number(timeTab[0])+" secondes.");
     }
 
     this->setWindowTitle("Correction");
