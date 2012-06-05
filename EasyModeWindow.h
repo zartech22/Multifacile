@@ -8,7 +8,7 @@ class EasyModeWindow : public MediumModeWindow
 {
     Q_OBJECT
 public:
-    EasyModeWindow(const int m_multiplicateur, bool shuffleNeeded);
+    EasyModeWindow(const int m_multiplicateur, bool shuffleNeeded, bool chrono);
     ~EasyModeWindow();
 protected:
     QPushButton *melanger;

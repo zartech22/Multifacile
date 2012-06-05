@@ -2,8 +2,9 @@
 //#include "fen_secondaire.h"
 #include "fenetre_principale.h"
 
-Fen_correction::Fen_correction(const int multiple, SpinBox *reponses[], int *order)
+Fen_correction::Fen_correction(const int multiple, SpinBox *reponses[], int *order, QTime *t)
 {
+
     this->setWindowTitle("Correction");
     note = 10;
 
@@ -16,10 +17,24 @@ Fen_correction::Fen_correction(const int multiple, SpinBox *reponses[], int *ord
 
     this->setLayout(vlayout);
 
+    if(t != 0)
+    {
+        returnTime(t);
+        QMessageBox::information(0, "Temps de réponses", "Vous avez mis "+QString::number(timeTab[1])+" minute(s) et "+QString::number(timeTab[0])+" secondes.");
+    }
+
     connect(quit, SIGNAL(clicked()), this, SLOT(close()));
 }
-Fen_correction::Fen_correction(SpinBox *reponses[], int *multipleOrder, int *order)
+Fen_correction::Fen_correction(SpinBox *reponses[], int *multipleOrder, int *order, QTime *t)
 {
+    if(t != 0)
+    {
+        int secondes = t->elapsed()/1000;
+        int minutes = secondes/60;
+        QMessageBox::information(this, "Temps de réponses", "Vous avez mis "+QString::number(minutes)+" minute(s) et "+QString::number(secondes)+" secondes.");
+        delete t;
+    }
+
     this->setWindowTitle("Correction");
 
     note = 10;
@@ -51,7 +66,7 @@ void Fen_correction::setWindowLayout(int multiple)
     texte = new QLabel("<h3><strong>Voici la correction : </strong></h3>");
     if(note >= 7)
     {
-        total = new QLabel("Vous avez eu <strong><span style=\"color: green;\">"+QString::number(note)+"/10</span></strong>");
+        total = new QLabel("Tu as eu <strong><span style=\"color: green;\">"+QString::number(note)+"/10</span></strong>");
         pngTotal = new QLabel();
         if(note == 10)
             pngTotal->setPixmap(QPixmap("exelent.png"));
@@ -60,13 +75,13 @@ void Fen_correction::setWindowLayout(int multiple)
     }
     else if(note <= 2)
     {
-        total = new QLabel("Vous avez eu <strong><span style=\"color: red;\">"+QString::number(note)+"/10</span></strong>");
+        total = new QLabel("Tu as eu <strong><span style=\"color: red;\">"+QString::number(note)+"/10</span></strong>");
         pngTotal = new QLabel();
         pngTotal->setPixmap(QPixmap("mauvais.png"));
     }
     else
     {
-        total = new QLabel("Vous avez eu <strong><span style=\"color: orange;\">"+QString::number(note)+"/10</span></strong>");
+        total = new QLabel("Ta as eu <strong><span style=\"color: orange;\">"+QString::number(note)+"/10</span></strong>");
         pngTotal =  new QLabel();
         pngTotal->setPixmap(QPixmap("moyen.png"));
     }
@@ -159,7 +174,7 @@ void Fen_correction::setWindowLayout(int tabOrder[])
     texte = new QLabel("<h3><strong>Voici la correction : </strong></h3>");
     if(note >= 7)
     {
-        total = new QLabel("Vous avez eu <strong><span style=\"color: green;\">"+QString::number(note)+"/10</span></strong>");
+        total = new QLabel("Tu as eu <strong><span style=\"color: green;\">"+QString::number(note)+"/10</span></strong>");
         pngTotal = new QLabel();
         if(note == 10)
             pngTotal->setPixmap(QPixmap("exelent.png"));
@@ -168,13 +183,13 @@ void Fen_correction::setWindowLayout(int tabOrder[])
     }
     else if(note <= 2)
     {
-        total = new QLabel("Vous avez eu <strong><span style=\"color: red;\">"+QString::number(note)+"/10</span></strong>");
+        total = new QLabel("Tu as eu <strong><span style=\"color: red;\">"+QString::number(note)+"/10</span></strong>");
         pngTotal = new QLabel();
         pngTotal->setPixmap(QPixmap("mauvais.png"));
     }
     else
     {
-        total = new QLabel("Vous avez eu <strong><span style=\"color: orange;\">"+QString::number(note)+"/10</span></strong>");
+        total = new QLabel("Tu as eu <strong><span style=\"color: orange;\">"+QString::number(note)+"/10</span></strong>");
         pngTotal =  new QLabel();
         pngTotal->setPixmap(QPixmap("moyen.png"));
     }
@@ -305,7 +320,14 @@ void Fen_correction::notation(int *m_multiple)
         }
     }
 }
-
+void Fen_correction::returnTime(QTime *time)
+{
+    timeTab[0] = time->elapsed()/1000;
+    timeTab[1] = timeTab[0]/60;
+    if(timeTab[1] != 0)
+        timeTab[0] %= 60;
+    delete time;
+}
 Fen_correction::~Fen_correction()
 {
     delete total;
@@ -313,6 +335,7 @@ Fen_correction::~Fen_correction()
     delete vlayout;
     delete quit;
     delete texte;
+    delete pngTotal;
 
     total = 0;
     layout = 0;
@@ -320,16 +343,22 @@ Fen_correction::~Fen_correction()
     quit = 0;
     texte = 0;
 
+    for (int i = 0; i < 10; i++)
+    {
+        delete multiplication[i];
+        multiplication[i] = 0;
+    }
     for (int i = 0; i < 3; i++)
     {
         delete hlayout[i];
         hlayout[i] = 0;
     }
-
-    for(int i = 0; i < 10; i++)
+    for (int i = 0; i < 2; i++)
     {
-        delete multiplication[i];
-
-        multiplication[i] = 0;
+        for ( int j = 0; j < 10; j++)
+        {
+            delete correction[i][j];
+            correction[i][j] = 0;
+        }
     }
 }

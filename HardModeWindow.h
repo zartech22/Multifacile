@@ -6,7 +6,7 @@
 class HardModeWindow : public MediumModeWindow
 {
 public:
-    HardModeWindow();
+    HardModeWindow(bool chrono);
     ~HardModeWindow();
 private:
     int multiple[10];

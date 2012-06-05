@@ -8,14 +8,17 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QPushButton>
+#include <QTime>
+#include <QMessageBox>
+#include <QtDebug>
 #include "spinBox.h"
 
 
 class Fen_correction : public QWidget
 {
 public :
-    Fen_correction(const int multiple, SpinBox *reponses[], int *order);
-    Fen_correction(SpinBox *reponses[], int *multipleOrder, int *order);
+    Fen_correction(const int multiple, SpinBox *reponses[], int *order, QTime *t = 0);
+    Fen_correction(SpinBox *reponses[], int *multipleOrder, int *order, QTime *t = 0);
     ~Fen_correction();
 private :
 
@@ -25,10 +28,13 @@ private :
     void setWindowLayout(int multiple);
     void setWindowLayout(int tabOrder[]);
 
-    int reponse[10], resultat[10];
+    void returnTime(QTime *time);
+
+    int reponse[10], resultat[10], timeTab[2];
     int *tab;
     int *orderTab;
     int note;
+
     QLabel *multiplication[10];
     QLabel *correction[2][10];
     QLabel *texte;
@@ -42,7 +48,6 @@ private :
     QGridLayout *layout;
 
     QHBoxLayout *hlayout[3];
-
 };
 
 #endif // FEN_CORRECTION_H

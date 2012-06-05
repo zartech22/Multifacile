@@ -7,6 +7,3 @@ void Bouton::clique()
 {
     emit cliquer(m_multiplicateur);
 }
-Bouton::~Bouton()
-{
-}

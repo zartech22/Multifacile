@@ -5,8 +5,9 @@ MediumModeWindow::MediumModeWindow()
 {
 }
 
-MediumModeWindow::MediumModeWindow(const int multiplicateur)
+MediumModeWindow::MediumModeWindow(const int multiplicateur, bool chrono)
 {
+    time = chrono;
     m_multiple = multiplicateur;
 
     Shuffle shuffle(true);
@@ -49,6 +50,9 @@ MediumModeWindow::MediumModeWindow(const int multiplicateur)
 
     this->setLayout(vlayout);
 
+    if(time)
+        startTime();
+
     connect(corriger, SIGNAL(clicked()), this, SLOT(open()));
 
     for(int i = 0; i < 10; i++)
@@ -57,7 +61,10 @@ MediumModeWindow::MediumModeWindow(const int multiplicateur)
 
 void MediumModeWindow::open()
 {
-    fen = new Fen_correction(m_multiple, reponses, array);
+    if(time)
+        fen = new Fen_correction(m_multiple, reponses, array, chronometre);
+    else if(!time)
+        fen = new Fen_correction(m_multiple, reponses, array);
     fen->resize(200, 200);
     fen->show();
     this->close();
@@ -72,6 +79,18 @@ void MediumModeWindow::newSetFocus(int number)
     }
     else
         open();
+}
+void MediumModeWindow::startTime()
+{
+    chronometre = new QTime;
+    chronometre->start();
+}
+void MediumModeWindow::closeEvent(QCloseEvent *event)
+{
+    if(time && event->spontaneous())
+        delete chronometre;
+    qDebug() << event->spontaneous();
+    event->accept();
 }
 
 MediumModeWindow::~MediumModeWindow()
@@ -89,4 +108,7 @@ MediumModeWindow::~MediumModeWindow()
         delete reponses[i];
         reponses[i] = 0;
     }
+
+    if(time)
+        chronometre = 0;
 }

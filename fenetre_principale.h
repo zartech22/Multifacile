@@ -47,7 +47,7 @@ private :
 
     QMenu *file, *tools, *modes;
 
-    QAction *quitAction, *updateAction, *shuffleAction, *easyMode, *mediumMode, *hardMode;
+    QAction *quitAction, *updateAction, *shuffleAction, *chrono, *easyMode, *mediumMode, *hardMode;
     QActionGroup *actionGroup;
 
     Bouton *bouton[10];

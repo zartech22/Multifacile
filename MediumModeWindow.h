@@ -9,6 +9,8 @@
 #include <QPushButton>
 #include <QString>
 #include <QLabel>
+#include <QTime>
+#include <QtDebug>
 #include "fen_correction.h"
 #include "spinBox.h"
 #include "Shuffle.h"
@@ -19,7 +21,7 @@ class MediumModeWindow : public QWidget
     Q_OBJECT
 public :
     MediumModeWindow();
-    MediumModeWindow(const int multiplicateur);
+    MediumModeWindow(const int multiplicateur, bool chrono);
     virtual ~MediumModeWindow();
 protected :
     int m_multiple;
@@ -39,6 +41,13 @@ protected :
     SpinBox *reponses[10];
 
     Fen_correction *fen;
+
+    QTime *chronometre;
+
+    void startTime();
+    void closeEvent(QCloseEvent *event);
+
+    bool time;
 
 
 public slots:

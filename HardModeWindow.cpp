@@ -1,7 +1,8 @@
 #include "HardModeWindow.h"
 
-HardModeWindow::HardModeWindow()
+HardModeWindow::HardModeWindow(bool chrono)
 {
+    time = chrono;
     Shuffle shuffle(true);
     shuffle.getNumbers(array, multiple);
     this->setWindowTitle("Table de aléatoire");
@@ -26,8 +27,6 @@ HardModeWindow::HardModeWindow()
         }
     }
 
-    if(multiple[5] == array[5])
-        qDebug("pas bon !");
     for(int i = 0; i < 10; i++)
         label[i] = new QLabel(QString::number(multiple[i])+" x "+QString::number(array[i]));
 
@@ -42,6 +41,7 @@ HardModeWindow::HardModeWindow()
 
 
     this->setLayout(vlayout);
+    startTime();
 
     connect(corriger, SIGNAL(clicked()), this, SLOT(open()));
 
@@ -51,7 +51,10 @@ HardModeWindow::HardModeWindow()
 }
 void HardModeWindow::open()
 {
-    fen = new Fen_correction(reponses, multiple, array);
+    if(time)
+        fen = new Fen_correction(reponses, multiple, array, chronometre);
+    else if(!time)
+        fen = new Fen_correction(reponses, multiple, array);
     fen->resize(200, 200);
     fen->show();
     this->close();

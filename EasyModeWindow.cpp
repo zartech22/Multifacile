@@ -1,7 +1,9 @@
 #include "EasyModeWindow.h"
 
-EasyModeWindow::EasyModeWindow(const int m_multiplicateur, bool shuffleNeeded)
+EasyModeWindow::EasyModeWindow(const int m_multiplicateur, bool shuffleNeeded, bool chrono)
 {
+    time = chrono;
+
     Shuffle shuffle(shuffleNeeded);
     shuffle.getNumbers(array);
     m_multiple = m_multiplicateur;
@@ -45,6 +47,8 @@ EasyModeWindow::EasyModeWindow(const int m_multiplicateur, bool shuffleNeeded)
 
 
     this->setLayout(vlayout);
+
+    startTime();
 
     connect(corriger, SIGNAL(clicked()), this, SLOT(open()));
     connect(melanger, SIGNAL(clicked()), this, SLOT(Melange()));

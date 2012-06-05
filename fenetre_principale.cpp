@@ -26,6 +26,7 @@ Fenetre_principale::Fenetre_principale()
 
     quitAction = new QAction(QIcon("sortie.png"), "&Quitter", this);
     updateAction = new QAction(QIcon("update.png"), "Vérifier les mise à jours", this);
+    chrono = new QAction("Table chronomètré", this);
     shuffleAction = new QAction("Table en désordre", this);
     easyMode = new QAction("Facile", this);
     mediumMode = new QAction("Moyen", this);
@@ -43,12 +44,14 @@ Fenetre_principale::Fenetre_principale()
     actionGroup->setExclusive(true);
 
     shuffleAction->setCheckable(true);
+    chrono->setCheckable(true);
 
     file->addAction(quitAction);
     tools->addAction(updateAction);
     modes->addActions(actionGroup->actions());
     modes->addSeparator();
     modes->addAction(shuffleAction);
+    modes->addAction(chrono);
 
     for(int i = 0; i < 10; i++)
         bouton[i] = new Bouton("Table de "+QString::number(i+1), i+1);
@@ -107,21 +110,21 @@ void Fenetre_principale::open_window()
     {
         if(mode == EASY)
         {
-            fen = new EasyModeWindow(nbr, shuffleAction->isChecked());
+            fen = new EasyModeWindow(nbr, shuffleAction->isChecked(), chrono->isChecked());
             fen->resize(300, 200);
             fen->show();
             fenList.append(fen);
         }
         else if(mode == MEDIUM)
         {
-            fen = new MediumModeWindow(nbr);
+            fen = new MediumModeWindow(nbr, chrono->isChecked());
             fen->resize(300, 200);
             fen->show();
             fenList.append(fen);
         }
         else if(mode == HARD)
         {
-            fen = new HardModeWindow();
+            fen = new HardModeWindow(chrono->isChecked());
             fen->resize(300, 200);
             fen->show();
             fenList.append(fen);
@@ -133,21 +136,21 @@ void Fenetre_principale::open_window(int nbr)
 {
     if(mode == EASY)
     {
-        fen = new EasyModeWindow(nbr, shuffleAction->isChecked());
+        fen = new EasyModeWindow(nbr, shuffleAction->isChecked(), chrono->isChecked());
         fen->resize(300, 200);
         fen->show();
         fenList.append(fen);
     }
     else if(mode == MEDIUM)
     {
-        fen = new MediumModeWindow(nbr);
+        fen = new MediumModeWindow(nbr, chrono->isChecked());
         fen->resize(300, 200);
         fen->show();
         fenList.append(fen);
     }
     else if(mode == HARD)
     {
-        fen = new HardModeWindow();
+        fen = new HardModeWindow(chrono->isChecked());
         fen->resize(300, 200);
         fen->show();
         fenList.append(fen);
@@ -238,7 +241,7 @@ void Fenetre_principale::closeEvent(QCloseEvent *event)
 Fenetre_principale::~Fenetre_principale()
 {
     delete file, tools, modes;
-    delete quitAction, updateAction, shuffleAction, easyMode, mediumMode, hardMode;
+    delete quitAction, updateAction, shuffleAction, chrono, easyMode, mediumMode, hardMode;
     delete actionGroup;
     delete quit, customTable;
     delete layout, glayout, vlayout;
@@ -258,6 +261,7 @@ Fenetre_principale::~Fenetre_principale()
     quitAction = 0;
     updateAction = 0;
     shuffleAction = 0;
+    chrono = 0;
     easyMode = 0;
     mediumMode = 0;
     hardMode = 0;
