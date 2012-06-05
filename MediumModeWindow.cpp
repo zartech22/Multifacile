@@ -89,7 +89,6 @@ void MediumModeWindow::closeEvent(QCloseEvent *event)
 {
     if(time && event->spontaneous())
         delete chronometre;
-    qDebug() << event->spontaneous();
     event->accept();
 }
 
