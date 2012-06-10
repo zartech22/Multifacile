@@ -85,6 +85,8 @@ Fenetre_principale::Fenetre_principale()
 
     check->tryConnection();
 
+    setWindowFlags(Qt::MSWindowsFixedSizeDialogHint);
+
     for(int i = 0; i < 10; i++)
     {
         connect(bouton[i], SIGNAL(clicked()), bouton[i], SLOT(clique()));
