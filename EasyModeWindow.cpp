@@ -65,6 +65,17 @@ void EasyModeWindow::Melange()
     reponses[0]->setFocus();
     reponses[0]->selectAll();
 }
+void EasyModeWindow::open()
+{
+    if(time)
+        fen = new Fen_correction(m_multiple, reponses, array, chronometre, EASY);
+    else if(!time)
+        fen = new Fen_correction(m_multiple, reponses, array);
+    fen->resize(200, 200);
+    fen->show();
+    this->close();
+}
+
 EasyModeWindow::~EasyModeWindow()
 {
     delete melanger;

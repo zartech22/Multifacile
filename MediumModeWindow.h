@@ -11,6 +11,7 @@
 #include <QLabel>
 #include <QTime>
 #include <QtDebug>
+
 #include "fen_correction.h"
 #include "spinBox.h"
 #include "Shuffle.h"

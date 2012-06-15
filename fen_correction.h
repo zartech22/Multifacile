@@ -10,14 +10,21 @@
 #include <QPushButton>
 #include <QTime>
 #include <QMessageBox>
+#include <QSettings>
 #include <QtDebug>
-#include "spinBox.h"
 
+#include <QFile>
+#include <QTextStream>
+
+#include "spinBox.h"
+#include "modeEnum.h"
+
+typedef enum RecordState RecordState;
 
 class Fen_correction : public QWidget
 {
 public :
-    Fen_correction(const int multiple, SpinBox *reponses[], int *order, QTime *t = 0);
+    Fen_correction(const int multiple, SpinBox *reponses[], int *order, QTime *t = 0, Mode mode = EASY);
     Fen_correction(SpinBox *reponses[], int *multipleOrder, int *order, QTime *t = 0);
     ~Fen_correction();
 private :
@@ -28,12 +35,13 @@ private :
     void setWindowLayout(int multiple);
     void setWindowLayout(int tabOrder[]);
 
-    void returnTime(QTime *time);
+    void returnTime(const int msec, RecordState state);
 
-    int reponse[10], resultat[10], timeTab[2];
+    int reponse[10], resultat[10], timeTab[4];
     int *tab;
     int *orderTab;
     int note;
+    int timeElapsed;
 
     QLabel *multiplication[10];
     QLabel *correction[2][10];
@@ -48,6 +56,11 @@ private :
     QGridLayout *layout;
 
     QHBoxLayout *hlayout[3];
+};
+
+enum RecordState
+{
+    RECORD, NORECORD
 };
 
 #endif // FEN_CORRECTION_H

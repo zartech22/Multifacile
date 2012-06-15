@@ -1,7 +1,7 @@
 #ifndef FENETRE_PRINCIPALE_H
 #define FENETRE_PRINCIPALE_H
 
-#define VERSION 29
+#define VERSION 30
 
 #include <QApplication>
 #include <QWidget>
@@ -19,6 +19,7 @@
 #include <QCloseEvent>
 #include <QActionGroup>
 #include <QList>
+
 #include "bouton.h"
 #include "EasyModeWindow.h"
 #include "MediumModeWindow.h"

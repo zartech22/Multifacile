@@ -219,11 +219,17 @@ void Fenetre_principale::setMode(QAction *action)
 void Fenetre_principale::resetLabel(QAction *action)
 {
     if(action == easyMode || action == mediumMode)
+    {
+        customTable->setEnabled(true);
         for(int i = 0; i < 10; i++)
             bouton[i]->setText("Table de "+QString::number(i+1));
+    }
     else if(action == hardMode)
+    {
+        customTable->setEnabled(false);
         for(int i = 0; i < 10; i++)
             bouton[i]->setText("Table aléatoire");
+    }
 }
 
 void Fenetre_principale::erreurSocket()

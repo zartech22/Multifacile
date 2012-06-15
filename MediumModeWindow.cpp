@@ -62,7 +62,7 @@ MediumModeWindow::MediumModeWindow(const int multiplicateur, bool chrono)
 void MediumModeWindow::open()
 {
     if(time)
-        fen = new Fen_correction(m_multiple, reponses, array, chronometre);
+        fen = new Fen_correction(m_multiple, reponses, array, chronometre, MEDIUM);
     else if(!time)
         fen = new Fen_correction(m_multiple, reponses, array);
     fen->resize(200, 200);

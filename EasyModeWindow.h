@@ -14,6 +14,7 @@ protected:
     QPushButton *melanger;
 public slots:
     void Melange();
+    void open();
 };
 
 #endif // SHUFFLEQUESTIONNAIRE_H
