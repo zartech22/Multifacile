@@ -11,7 +11,7 @@ class SpinBox : public QSpinBox
 public:
     SpinBox();
     void keyPressEvent(QKeyEvent *event);
-    void setNumero(int num);
+    void setNumero(const int num);
 private:
     int numero;
 signals:

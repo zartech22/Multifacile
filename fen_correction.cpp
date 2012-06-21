@@ -395,11 +395,6 @@ void Fen_correction::returnTime(const int msec, RecordState state)
     if(state == NORECORD)
     {
         timeTab[0] = msec/1000;
-        QFile file("debug");
-        file.open(QIODevice::WriteOnly | QIODevice::Text);
-        QTextStream stream(&file);
-        stream << QString::number(msec) << "\n" << QString::number(timeTab[0]);
-        file.close();
         timeTab[1] = timeTab[0]/60;
         if(timeTab[1] != 0)
             timeTab[0] %= 60;
@@ -407,12 +402,6 @@ void Fen_correction::returnTime(const int msec, RecordState state)
     else if(state == RECORD)
     {
         timeTab[2] = msec/1000;
-        QFile file("debug_RECORD.txt");
-        file.open(QIODevice::WriteOnly | QIODevice::Text);
-        QTextStream stream(&file);
-        stream << QString::number(msec) << "\n" << QString::number(timeTab[2]);
-        file.close();
-
         timeTab[3] = timeTab[2]/60;
         if(timeTab[3] != 0)
             timeTab[2] %= 60;

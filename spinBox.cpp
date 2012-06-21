@@ -7,14 +7,12 @@ void SpinBox::keyPressEvent(QKeyEvent *event)
 {
     QSpinBox::keyPressEvent(event);
     QKeyEvent key = *event;
-    if(key.key() == Qt::Key_Enter)
-    {
+    if(key.key() == Qt::Key_Enter || key.key() == Qt::Key_Return)
         emit enterKeyPressed(numero);
-    }
     else
         return;
 }
-void SpinBox::setNumero(int num)
+void SpinBox::setNumero(const int num)
 {
     numero = num;
 }
