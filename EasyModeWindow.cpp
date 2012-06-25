@@ -11,11 +11,11 @@ EasyModeWindow::EasyModeWindow(const int m_multiplicateur, bool shuffleNeeded, b
     this->setWindowTitle("Table de "+QString::number(m_multiple));
 
     corriger = new QPushButton("Corriger");
-    melanger = new QPushButton("Mélanger");
+    astuces = new QPushButton("Astuce");
 
     hlayout = new QHBoxLayout;
 
-    hlayout->addWidget(melanger);
+    hlayout->addWidget(astuces);
     hlayout->addWidget(corriger);
 
 
@@ -51,19 +51,15 @@ EasyModeWindow::EasyModeWindow(const int m_multiplicateur, bool shuffleNeeded, b
     startTime();
 
     connect(corriger, SIGNAL(clicked()), this, SLOT(open()));
-    connect(melanger, SIGNAL(clicked()), this, SLOT(Melange()));
+    connect(astuces, SIGNAL(clicked()), this, SLOT(openAstuce()));
 
     for(int i = 0; i < 10; i++)
         connect(reponses[i], SIGNAL(enterKeyPressed(int)), this, SLOT(newSetFocus(int)));
 }
-void EasyModeWindow::Melange()
+void EasyModeWindow::openAstuce()
 {
-    Shuffle shuffle(true);
-    shuffle.getNumbers(array);
-    for(int i = 0; i < 10; i++)
-        label[i]->setText(QString::number(m_multiple)+" x "+QString::number(array[i]));
-    reponses[0]->setFocus();
-    reponses[0]->selectAll();
+    AstuceWindow astuce(m_multiple);
+    astuce.exec();
 }
 void EasyModeWindow::open()
 {
@@ -78,6 +74,6 @@ void EasyModeWindow::open()
 
 EasyModeWindow::~EasyModeWindow()
 {
-    delete melanger;
-    melanger = 0;
+    delete astuces;
+    astuces = 0;
 }

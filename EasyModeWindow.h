@@ -3,6 +3,7 @@
 
 #include "MediumModeWindow.h"
 #include "Shuffle.h"
+#include"AstuceWindow.h"
 
 class EasyModeWindow : public MediumModeWindow
 {
@@ -11,9 +12,9 @@ public:
     EasyModeWindow(const int m_multiplicateur, bool shuffleNeeded, bool chrono);
     ~EasyModeWindow();
 protected:
-    QPushButton *melanger;
+    QPushButton *astuces;
 public slots:
-    void Melange();
+    void openAstuce();
     void open();
 };
 

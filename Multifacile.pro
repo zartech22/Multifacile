@@ -8,7 +8,8 @@ SOURCES += \
     spinBox.cpp \
     MediumModeWindow.cpp \
     EasyModeWindow.cpp \
-    HardModeWindow.cpp
+    HardModeWindow.cpp \
+    AstuceWindow.cpp
 
 HEADERS += \
     fenetre_principale.h \
@@ -20,7 +21,8 @@ HEADERS += \
     modeEnum.h \
     MediumModeWindow.h \
     EasyModeWindow.h \
-    HardModeWindow.h
+    HardModeWindow.h \
+    AstuceWindow.h
 RC_FILE = Icon.rc
 
 QT += network
