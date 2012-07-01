@@ -1,12 +1,10 @@
 #include "fen_correction.h"
-//#include "fen_secondaire.h"
-#include "fenetre_principale.h"
 
-Fen_correction::Fen_correction(const int multiple, SpinBox *reponses[], int *order, QTime *t, Mode mode)
+Fen_correction::Fen_correction(const int multiple, SpinBox *reponses[], int *order, int time, Mode mode)
 {
 
-    if(t != 0)
-        timeElapsed = t->elapsed();
+    if(time != 0)
+        timeElapsed = time;
     this->setWindowTitle("Correction");
     note = 10;
 
@@ -22,7 +20,7 @@ Fen_correction::Fen_correction(const int multiple, SpinBox *reponses[], int *ord
 
     this->setLayout(vlayout);
 
-    if(t != 0)
+    if(time != 0)
     {
         if(note == 10)
         {
@@ -39,6 +37,8 @@ Fen_correction::Fen_correction(const int multiple, SpinBox *reponses[], int *ord
             }
             else
             {
+                if(1000 < settings.value("TableDe"+QString::number(multiple)).toInt())
+                    settings.setValue("TableDe"+QString::number(multiple), (settings.value("TableDe"+QString::number(multiple)).toInt()/1000));
                 if(timeElapsed < settings.value("TableDe"+QString::number(multiple)).toInt())
                 {
                     returnTime(timeElapsed, NORECORD);
@@ -59,15 +59,14 @@ Fen_correction::Fen_correction(const int multiple, SpinBox *reponses[], int *ord
             returnTime(timeElapsed, NORECORD);
             QMessageBox::information(this, "Temps de réponses", "Tu as mis "+QString::number(timeTab[1])+" minute(s) et "+QString::number(timeTab[0])+" secondes.<br />Ce temps ne compte pas pour les records car tu as fait des fautes !");
         }
-        delete t;
     }
 
     connect(quit, SIGNAL(clicked()), this, SLOT(close()));
 }
-Fen_correction::Fen_correction(SpinBox *reponses[], int *multipleOrder, int *order, QTime *t)
+Fen_correction::Fen_correction(SpinBox *reponses[], int *multipleOrder, int *order, int time)
 {
-    if(t != 0)
-        timeElapsed = t->elapsed();
+    if(time != 0)
+        timeElapsed = time;
 
     this->setWindowTitle("Correction");
 
@@ -82,7 +81,7 @@ Fen_correction::Fen_correction(SpinBox *reponses[], int *multipleOrder, int *ord
 
     setWindowLayout(orderTab);
 
-    if(t != 0)
+    if(time != 0)
     {
         if(note == 10)
         {
@@ -96,6 +95,8 @@ Fen_correction::Fen_correction(SpinBox *reponses[], int *multipleOrder, int *ord
 
             else
             {
+                if(1000 < settings.value("HardMode").toInt())
+                    settings.setValue("HardMode", (settings.value("HardMode").toInt()/1000));
                 if(timeElapsed < settings.value("HardMode").toInt())
                 {
                     returnTime(timeElapsed, NORECORD);
@@ -115,7 +116,6 @@ Fen_correction::Fen_correction(SpinBox *reponses[], int *multipleOrder, int *ord
             returnTime(timeElapsed, NORECORD);
             QMessageBox::information(this, "Temps de réponses", "Tu as mis "+QString::number(timeTab[1])+" minute(s) et "+QString::number(timeTab[0])+" secondes.<br />Ce temps ne compte pas pour les records car tu as fait des fautes !");
         }
-        delete t;
     }
 
     this->setLayout(vlayout);
@@ -390,18 +390,18 @@ void Fen_correction::notation(int *m_multiple)
         }
     }
 }
-void Fen_correction::returnTime(const int msec, RecordState state)
+void Fen_correction::returnTime(const int sec, RecordState state)
 {
     if(state == NORECORD)
     {
-        timeTab[0] = msec/1000;
+        timeTab[0] = sec;
         timeTab[1] = timeTab[0]/60;
         if(timeTab[1] != 0)
             timeTab[0] %= 60;
     }
     else if(state == RECORD)
     {
-        timeTab[2] = msec/1000;
+        timeTab[2] = sec;
         timeTab[3] = timeTab[2]/60;
         if(timeTab[3] != 0)
             timeTab[2] %= 60;

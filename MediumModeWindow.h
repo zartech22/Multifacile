@@ -9,8 +9,9 @@
 #include <QPushButton>
 #include <QString>
 #include <QLabel>
-#include <QTime>
+#include <QTimer>
 #include <QtDebug>
+#include <QLCDNumber>
 
 #include "fen_correction.h"
 #include "spinBox.h"
@@ -27,13 +28,13 @@ public :
 protected :
     int m_multiple;
 
-    int array[10];
+    int array[10], secondes;
 
-    QLabel *label[10];
+    QLabel *label[10], *text, *minute, *seconde, *deuxPoint;
 
     QVBoxLayout *vlayout;
 
-    QHBoxLayout *hlayout;
+    QHBoxLayout *hlayoutBottom, *hlayoutTop;
 
     QFormLayout *layout;
 
@@ -43,17 +44,20 @@ protected :
 
     Fen_correction *fen;
 
-    QTime *chronometre;
+    QTimer *chronometre;
 
     void startTime();
     void closeEvent(QCloseEvent *event);
 
     bool time;
 
-
+signals:
+    void addSeconde(int);
 public slots:
     virtual void open();
     void newSetFocus(int number);
+    void newSecond();
+    void updateLabel(int temps);
 
 };
 

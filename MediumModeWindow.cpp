@@ -17,9 +17,25 @@ MediumModeWindow::MediumModeWindow(const int multiplicateur, bool chrono)
 
     corriger = new QPushButton("Corriger");
 
-    hlayout = new QHBoxLayout;
+    hlayoutBottom = new QHBoxLayout;
 
-    hlayout->addWidget(corriger);
+    if(time)
+    {
+        text = new QLabel("Temps : ");
+        minute = new QLabel("00");
+        deuxPoint = new QLabel(":");
+        seconde = new QLabel("00");
+
+        hlayoutTop = new QHBoxLayout;
+        hlayoutTop->setAlignment(Qt::AlignCenter);
+
+        hlayoutTop->addWidget(text);
+        hlayoutTop->addWidget(minute);
+        hlayoutTop->addWidget(deuxPoint);
+        hlayoutTop->addWidget(seconde);
+    }
+
+    hlayoutBottom->addWidget(corriger);
 
     for(int i = 0; i < 10; i++)
     {
@@ -44,8 +60,10 @@ MediumModeWindow::MediumModeWindow(const int multiplicateur, bool chrono)
         layout->addRow(label[i], reponses[i]);
 
     vlayout = new QVBoxLayout();
+    if(time)
+        vlayout->addLayout(hlayoutTop);
     vlayout->addLayout(layout);
-    vlayout->addLayout(hlayout);
+    vlayout->addLayout(hlayoutBottom);
 
 
     this->setLayout(vlayout);
@@ -62,7 +80,10 @@ MediumModeWindow::MediumModeWindow(const int multiplicateur, bool chrono)
 void MediumModeWindow::open()
 {
     if(time)
-        fen = new Fen_correction(m_multiple, reponses, array, chronometre, MEDIUM);
+    {
+        chronometre->stop();
+        fen = new Fen_correction(m_multiple, reponses, array, secondes, MEDIUM);
+    }
     else if(!time)
         fen = new Fen_correction(m_multiple, reponses, array);
     fen->resize(200, 200);
@@ -82,14 +103,40 @@ void MediumModeWindow::newSetFocus(int number)
 }
 void MediumModeWindow::startTime()
 {
-    chronometre = new QTime;
-    chronometre->start();
+    chronometre = new QTimer;
+    chronometre->start(1000);
+    secondes = 0;
+    connect(chronometre, SIGNAL(timeout()), this, SLOT(newSecond()));
+    connect(this, SIGNAL(addSeconde(int)), this, SLOT(updateLabel(int)));
 }
 void MediumModeWindow::closeEvent(QCloseEvent *event)
 {
     if(time && event->spontaneous())
         delete chronometre;
     event->accept();
+}
+void MediumModeWindow::newSecond()
+{
+    secondes++;
+    emit addSeconde(secondes);
+}
+void MediumModeWindow::updateLabel(int temps)
+{
+    if((temps/60) != 0)
+    {
+        minute->setText("0"+QString::number(temps/60));
+        if((temps%60) < 10)
+            seconde->setText("0"+QString::number(temps%60));
+        else
+            seconde->setText(QString::number(temps%60));
+    }
+    else
+    {
+        if(temps < 10)
+            seconde->setText("0"+QString::number(temps));
+        else
+            seconde->setText(QString::number(temps));
+    }
 }
 
 MediumModeWindow::~MediumModeWindow()

@@ -24,8 +24,8 @@ typedef enum RecordState RecordState;
 class Fen_correction : public QWidget
 {
 public :
-    Fen_correction(const int multiple, SpinBox *reponses[], int *order, QTime *t = 0, Mode mode = EASY);
-    Fen_correction(SpinBox *reponses[], int *multipleOrder, int *order, QTime *t = 0);
+    Fen_correction(const int multiple, SpinBox *reponses[], int *order, int time = 0, Mode mode = EASY);
+    Fen_correction(SpinBox *reponses[], int *multipleOrder, int *order, int time = 0);
     ~Fen_correction();
 private :
 
@@ -35,13 +35,14 @@ private :
     void setWindowLayout(int multiple);
     void setWindowLayout(int tabOrder[]);
 
-    void returnTime(const int msec, RecordState state);
+    void returnTime(const int sec, RecordState state);
 
     int reponse[10], resultat[10], timeTab[4];
     int *tab;
     int *orderTab;
     int note;
     int timeElapsed;
+    int timeSeconde;
 
     QLabel *multiplication[10];
     QLabel *correction[2][10];

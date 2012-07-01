@@ -9,9 +9,24 @@ HardModeWindow::HardModeWindow(bool chrono)
 
     corriger = new QPushButton("Corriger");
 
-    hlayout = new QHBoxLayout;
+    hlayoutBottom = new QHBoxLayout;
 
-    hlayout->addWidget(corriger);
+    hlayoutBottom->addWidget(corriger);
+
+    if(time)
+    {
+        text = new QLabel("Temps : ");
+        minute = new QLabel("00");
+        deuxPoint = new QLabel(":");
+        seconde = new QLabel("00");
+
+        hlayoutTop = new QHBoxLayout;
+        hlayoutTop->setAlignment(Qt::AlignCenter);
+        hlayoutTop->addWidget(text);
+        hlayoutTop->addWidget(minute);
+        hlayoutTop->addWidget(deuxPoint);
+        hlayoutTop->addWidget(seconde);
+    }
 
     for(int i = 0; i < 10; i++)
     {
@@ -36,12 +51,15 @@ HardModeWindow::HardModeWindow(bool chrono)
         layout->addRow(label[i], reponses[i]);
 
     vlayout = new QVBoxLayout();
+    if(time)
+        vlayout->addLayout(hlayoutTop);
     vlayout->addLayout(layout);
-    vlayout->addLayout(hlayout);
+    vlayout->addLayout(hlayoutBottom);
 
 
     this->setLayout(vlayout);
-    startTime();
+    if(time)
+        startTime();
 
     connect(corriger, SIGNAL(clicked()), this, SLOT(open()));
 
@@ -52,7 +70,10 @@ HardModeWindow::HardModeWindow(bool chrono)
 void HardModeWindow::open()
 {
     if(time)
-        fen = new Fen_correction(reponses, multiple, array, chronometre);
+    {
+        chronometre->stop();
+        fen = new Fen_correction(reponses, multiple, array, secondes);
+    }
     else if(!time)
         fen = new Fen_correction(reponses, multiple, array);
     fen->resize(200, 200);

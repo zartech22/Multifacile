@@ -13,10 +13,25 @@ EasyModeWindow::EasyModeWindow(const int m_multiplicateur, bool shuffleNeeded, b
     corriger = new QPushButton("Corriger");
     astuces = new QPushButton("Astuce");
 
-    hlayout = new QHBoxLayout;
+    hlayoutBottom = new QHBoxLayout;
 
-    hlayout->addWidget(astuces);
-    hlayout->addWidget(corriger);
+    hlayoutBottom->addWidget(astuces);
+    hlayoutBottom->addWidget(corriger);
+
+    if(time)
+    {
+        text = new QLabel("Temps : ");
+        minute = new QLabel("00");
+        deuxPoint = new QLabel(":");
+        seconde = new QLabel("00");
+
+        hlayoutTop = new QHBoxLayout;
+        hlayoutTop->setAlignment(Qt::AlignCenter);
+        hlayoutTop->addWidget(text);
+        hlayoutTop->addWidget(minute);
+        hlayoutTop->addWidget(deuxPoint);
+        hlayoutTop->addWidget(seconde);
+    }
 
 
     for(int i = 0; i < 10; i++)
@@ -42,13 +57,16 @@ EasyModeWindow::EasyModeWindow(const int m_multiplicateur, bool shuffleNeeded, b
         layout->addRow(label[i], reponses[i]);
 
     vlayout = new QVBoxLayout();
+    if(time)
+        vlayout->addLayout(hlayoutTop);
     vlayout->addLayout(layout);
-    vlayout->addLayout(hlayout);
+    vlayout->addLayout(hlayoutBottom);
 
 
     this->setLayout(vlayout);
 
-    startTime();
+    if(time)
+        startTime();
 
     connect(corriger, SIGNAL(clicked()), this, SLOT(open()));
     connect(astuces, SIGNAL(clicked()), this, SLOT(openAstuce()));
@@ -64,7 +82,7 @@ void EasyModeWindow::openAstuce()
 void EasyModeWindow::open()
 {
     if(time)
-        fen = new Fen_correction(m_multiple, reponses, array, chronometre, EASY);
+        fen = new Fen_correction(m_multiple, reponses, array, secondes, EASY);
     else if(!time)
         fen = new Fen_correction(m_multiple, reponses, array);
     fen->resize(200, 200);
