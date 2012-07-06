@@ -1,7 +1,6 @@
 SOURCES += \
     main.cpp \
     fenetre_principale.cpp \
-    bouton.cpp \
     fen_correction.cpp \
     CheckUpdate.cpp \
     Shuffle.cpp \
@@ -13,7 +12,6 @@ SOURCES += \
 
 HEADERS += \
     fenetre_principale.h \
-    bouton.h \
     fen_correction.h \
     CheckUpdate.h \
     Shuffle.h \
