@@ -13,15 +13,15 @@ MediumModeWindow::MediumModeWindow(const int multiplicateur, bool chrono)
     Shuffle shuffle(true);
     shuffle.getNumbers(array);
 
-    this->setWindowTitle("Table de "+QString::number(m_multiple));
+    this->setWindowTitle(tr("Table de ")+QString::number(m_multiple));
 
-    corriger = new QPushButton("Corriger");
+    corriger = new QPushButton(tr("Corriger"));
 
     hlayoutBottom = new QHBoxLayout;
 
     if(time)
     {
-        text = new QLabel("Temps : ");
+        text = new QLabel(tr("Temps :"));
         minute = new QLabel("00");
         deuxPoint = new QLabel(":");
         seconde = new QLabel("00");

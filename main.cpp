@@ -9,7 +9,7 @@ int main(int argc, char* argv[])
     QApplication app(argc, argv);
 
     QTranslator translator;
-    translator.load(QString("qt_fr"));
+    translator.load("qt_fr");
     app.installTranslator(&translator);
 
 

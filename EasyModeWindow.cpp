@@ -8,10 +8,10 @@ EasyModeWindow::EasyModeWindow(const int m_multiplicateur, bool shuffleNeeded, b
     shuffle.getNumbers(array);
     m_multiple = m_multiplicateur;
 
-    this->setWindowTitle("Table de "+QString::number(m_multiple));
+    this->setWindowTitle(tr("Table de ")+QString::number(m_multiple));
 
-    corriger = new QPushButton("Corriger");
-    astuces = new QPushButton("Astuce");
+    corriger = new QPushButton(tr("Corriger"));
+    astuces = new QPushButton(tr("Astuce"));
 
     hlayoutBottom = new QHBoxLayout;
 
@@ -20,7 +20,7 @@ EasyModeWindow::EasyModeWindow(const int m_multiplicateur, bool shuffleNeeded, b
 
     if(time)
     {
-        text = new QLabel("Temps : ");
+        text = new QLabel(tr("Temps : "));
         minute = new QLabel("00");
         deuxPoint = new QLabel(":");
         seconde = new QLabel("00");

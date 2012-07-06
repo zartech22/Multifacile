@@ -5,9 +5,9 @@ HardModeWindow::HardModeWindow(bool chrono)
     time = chrono;
     Shuffle shuffle(true);
     shuffle.getNumbers(array, multiple);
-    this->setWindowTitle("Table de aléatoire");
+    this->setWindowTitle(tr("Table aléatoire"));
 
-    corriger = new QPushButton("Corriger");
+    corriger = new QPushButton(tr("Corriger"));
 
     hlayoutBottom = new QHBoxLayout;
 
@@ -15,7 +15,7 @@ HardModeWindow::HardModeWindow(bool chrono)
 
     if(time)
     {
-        text = new QLabel("Temps : ");
+        text = new QLabel(tr("Temps : "));
         minute = new QLabel("00");
         deuxPoint = new QLabel(":");
         seconde = new QLabel("00");
