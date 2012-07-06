@@ -19,8 +19,8 @@
 #include <QCloseEvent>
 #include <QActionGroup>
 #include <QList>
+#include <QSignalMapper>
 
-#include "bouton.h"
 #include "EasyModeWindow.h"
 #include "MediumModeWindow.h"
 #include "HardModeWindow.h"
@@ -51,7 +51,9 @@ private :
     QAction *quitAction, *updateAction, *shuffleAction, *chrono, *easyMode, *mediumMode, *hardMode;
     QActionGroup *actionGroup;
 
-    Bouton *bouton[10];
+    QPushButton *bouton[10];
+
+    QSignalMapper *mapper;
 
     QPushButton *quit, *customTable;
 

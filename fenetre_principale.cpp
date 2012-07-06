@@ -13,24 +13,24 @@ Fenetre_principale::Fenetre_principale()
     check = new CheckUpdate(this, VERSION);
 
 
-    texte = new QLabel("Choisis la table que tu veux travailler !");
+    texte = new QLabel(tr("Choisis la table que tu veux travailler !"));
     espace = new QLabel("<hr />");
 
-    quit = new QPushButton("Quitter");
-    customTable = new QPushButton("Table personnalisée");
+    quit = new QPushButton(tr("Quitter"));
+    customTable = new QPushButton(tr("Table personnalisée"));
 
-    file = menuBar()->addMenu("&Fichier");
-    tools = menuBar()->addMenu("&Outils");
-    modes = menuBar()->addMenu("&Mode");
+    file = menuBar()->addMenu(tr("&Fichier"));
+    tools = menuBar()->addMenu(tr("&Outils"));
+    modes = menuBar()->addMenu(tr("&Mode"));
     actionGroup = new QActionGroup(this);
 
-    quitAction = new QAction(QIcon("sortie.png"), "&Quitter", this);
-    updateAction = new QAction(QIcon("update.png"), "Vérifier les mise à jours", this);
-    chrono = new QAction("Table chronomètré", this);
-    shuffleAction = new QAction("Table en désordre", this);
-    easyMode = new QAction("Facile", this);
-    mediumMode = new QAction("Moyen", this);
-    hardMode = new QAction("Difficile", this);
+    quitAction = new QAction(QIcon("sortie.png"), tr("&Quitter"), this);
+    updateAction = new QAction(QIcon("update.png"), tr("Vérifier les mise à jours"), this);
+    chrono = new QAction(tr("Table chronomètré"), this);
+    shuffleAction = new QAction(tr("table en désordre"), this);
+    easyMode = new QAction(tr("Facile"), this);
+    mediumMode = new QAction(tr("Moyen"), this);
+    hardMode = new QAction(tr("Difficile"), this);
 
     easyMode->setCheckable(true);
     mediumMode->setCheckable(true);
@@ -53,8 +53,14 @@ Fenetre_principale::Fenetre_principale()
     modes->addAction(shuffleAction);
     modes->addAction(chrono);
 
+    mapper = new QSignalMapper(this);
+
     for(int i = 0; i < 10; i++)
-        bouton[i] = new Bouton("Table de "+QString::number(i+1), i+1);
+    {
+        bouton[i] = new QPushButton(tr("Table de ")+QString::number(i+1));
+        connect(bouton[i], SIGNAL(clicked()), mapper, SLOT(map()));
+        mapper->setMapping(bouton[i], i+1);
+    }
 
     layout = new QGridLayout();
     glayout = new QGridLayout();
@@ -87,11 +93,7 @@ Fenetre_principale::Fenetre_principale()
 
     setWindowFlags(Qt::MSWindowsFixedSizeDialogHint);
 
-    for(int i = 0; i < 10; i++)
-    {
-        connect(bouton[i], SIGNAL(clicked()), bouton[i], SLOT(clique()));
-        connect(bouton[i], SIGNAL(cliquer(int)), this, SLOT(open_window(int)));
-    }
+    connect(mapper, SIGNAL(mapped(int)), this, SLOT(open_window(int)));
 
     connect(quit, SIGNAL(clicked()), qApp, SLOT(quit()));
     connect(customTable, SIGNAL(clicked()), this, SLOT(open_window()));
@@ -107,7 +109,7 @@ Fenetre_principale::Fenetre_principale()
 void Fenetre_principale::open_window()
 {
     bool ok = false;
-    int nbr = QInputDialog::getInteger(this, "Choix de la table", "Indiquer la table sur laquelle vous voulez travailler", 0, -2147483647, 2147483647, 1, &ok);
+    int nbr = QInputDialog::getInteger(this, tr("Choix de la table"), tr("Indiquer la table sur laquelle vous voulez travailler"), 0, -2147483647, 2147483647, 1, &ok);
     if(ok)
     {
         if(mode == EASY)
@@ -164,7 +166,7 @@ void Fenetre_principale::answer(bool update)
     {
         if(userAction)
         {
-            QMessageBox::information(this, "Vérification de mise à jour", "Il n'y a pour le moment aucune mise à jour disponible.");
+            QMessageBox::information(this, tr("Vérification de mise à jour"), tr("Il n'y a pour le moment aucune mise à jour disponible."));
             userAction = false;
         }
         check->disconnectFromHost();
@@ -175,7 +177,7 @@ void Fenetre_principale::answer(bool update)
         if(userAction)
             userAction = false;
         check->disconnectFromHost();
-        int userAnswer = QMessageBox::question(this, "Mise à jour disponible", "Une version plus récente de multifacile est disponible, veux-tu la télécharger ?", QMessageBox::Yes | QMessageBox::No);
+        int userAnswer = QMessageBox::question(this, tr("Mise à jour disponible"), tr("Une version plus récente de multifacile est disponible, veux-tu la télécharger ?"), QMessageBox::Yes | QMessageBox::No);
         if(userAnswer == QMessageBox::Yes)
         {
 #ifdef Q_OS_WIN32
@@ -222,19 +224,19 @@ void Fenetre_principale::resetLabel(QAction *action)
     {
         customTable->setEnabled(true);
         for(int i = 0; i < 10; i++)
-            bouton[i]->setText("Table de "+QString::number(i+1));
+            bouton[i]->setText(tr("Table de ")+QString::number(i+1));
     }
     else if(action == hardMode)
     {
         customTable->setEnabled(false);
         for(int i = 0; i < 10; i++)
-            bouton[i]->setText("Table aléatoire");
+            bouton[i]->setText(tr("Table aléatoire"));
     }
 }
 
 void Fenetre_principale::erreurSocket()
 {
-    QMessageBox::information(this, "Erreur de connexion", "Impossible de vérifier les mise à jour");
+    QMessageBox::information(this, tr("Erreur de connexion"), tr("Impossible de vérifier les mise à jour"));
 }
 void Fenetre_principale::verification()
 {
@@ -255,7 +257,7 @@ Fenetre_principale::~Fenetre_principale()
     delete layout, glayout, vlayout;
     delete check;
     delete widget;
-
+    delete mapper;
 
     for(int i = 0; i < fenList.size(); i++)
     {
@@ -281,4 +283,5 @@ Fenetre_principale::~Fenetre_principale()
     vlayout = 0;
     check = 0;
     widget = 0;
+    mapper = 0;
 }
