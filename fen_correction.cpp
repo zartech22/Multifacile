@@ -6,7 +6,6 @@ Fen_correction::Fen_correction(const int multiple, SpinBox *reponses[], int *ord
     if(time != 0)
         timeElapsed = time;
     this->setWindowTitle(tr("Correction"));
-    note = 10;
 
     tab = order;
 
@@ -15,51 +14,21 @@ Fen_correction::Fen_correction(const int multiple, SpinBox *reponses[], int *ord
 
     for(int i = 0; i < 10; i++)
         reponse[i] = reponses[i]->value();
+    for(int i = 0; i < 10; i++)
+    {
+        correction[0][i] = new QLabel;
+        correction[1][i] = new QLabel;
+    }
+
+    correct = new Correction(mode, multiple, tab, reponse, timeElapsed);
+
+    connect(correct, SIGNAL(newRecord(RecordState,int)), this, SLOT(openMessageBox(RecordState,int)));
+
+    note = correct->getCorrection(correction);
 
     setWindowLayout(multiple);
 
     this->setLayout(vlayout);
-
-    if(time != 0)
-    {
-        if(note == 10)
-        {
-            QSettings settings(QSettings::IniFormat, QSettings::UserScope, "Multifacile", QString(), this);
-            if(mode == EASY)
-                settings.beginGroup("EasyMode");
-            else if(mode == MEDIUM)
-                settings.beginGroup("MediumMode");
-            if(!settings.contains("TableDe"+QString::number(multiple)))
-            {
-                settings.setValue("TableDe"+QString::number(multiple), timeElapsed);
-                returnTime(timeElapsed, NORECORD);
-                QMessageBox::information(this, tr("Temps de réponses"), tr("Tu as mis ")+QString::number(timeTab[1])+tr(" minute(s) et ")+QString::number(timeTab[0])+tr(" secondes."));
-            }
-            else
-            {
-                if(1000 < settings.value("TableDe"+QString::number(multiple)).toInt())
-                    settings.setValue("TableDe"+QString::number(multiple), (settings.value("TableDe"+QString::number(multiple)).toInt()/1000));
-                if(timeElapsed < settings.value("TableDe"+QString::number(multiple)).toInt())
-                {
-                    returnTime(timeElapsed, NORECORD);
-                    returnTime(settings.value("TableDe"+QString::number(multiple)).toInt(), RECORD);
-                    QMessageBox::information(this, tr("Temps de réponses"), tr("Tu as mis ")+QString::number(timeTab[1])+tr(" minute(s) et ")+QString::number(timeTab[0])+tr(" secondes.<br /><strong>C'est un nouveau record ! Félicitation !</strong><br />L'ancien record était de ")+QString::number(timeTab[3])+tr(" minute(s) et ")+QString::number(timeTab[2])+tr(" secondes."));
-                    settings.setValue("TableDe"+QString::number(multiple), timeElapsed);
-                    settings.endGroup();
-                }
-                else
-                {
-                    returnTime(timeElapsed, NORECORD);
-                    QMessageBox::information(this, tr("Temps de réponses"), tr("Tu as mis ")+QString::number(timeTab[1])+tr(" minute(s) et ")+QString::number(timeTab[0])+tr(" secondes."));
-                }
-            }
-        }
-        else
-        {
-            returnTime(timeElapsed, NORECORD);
-            QMessageBox::information(this, tr("Temps de réponses"), tr("Tu as mis ")+QString::number(timeTab[1])+tr(" minute(s) et ")+QString::number(timeTab[0])+tr(" secondes.<br />Ce temps ne compte pas pour les records car tu as fait des fautes !"));
-        }
-    }
 
     connect(quit, SIGNAL(clicked()), this, SLOT(close()));
 }
@@ -70,53 +39,24 @@ Fen_correction::Fen_correction(SpinBox *reponses[], int *multipleOrder, int *ord
 
     this->setWindowTitle(tr("Correction"));
 
-    note = 10;
-
     tab = order;
 
     orderTab = multipleOrder;
 
     for(int i = 0; i < 10; i++)
         reponse[i] = reponses[i]->value();
+    for(int i = 0; i < 10; i++)
+    {
+        correction[0][i] = new QLabel;
+        correction[1][i] = new QLabel;
+    }
+    correct = new Correction(multipleOrder, order, reponse, time);
+
+    connect(correct, SIGNAL(newRecord(RecordState,int)), this, SLOT(openMessageBox(RecordState,int)));
+
+    note = correct->getCorrection(correction);
 
     setWindowLayout(orderTab);
-
-    if(time != 0)
-    {
-        if(note == 10)
-        {
-            QSettings settings(QSettings::IniFormat, QSettings::UserScope, "Multifacile", QString(), this);
-            if(!settings.contains("HardMode"))
-            {
-                settings.setValue("HardMode", timeElapsed);
-                returnTime(timeElapsed, NORECORD);
-                QMessageBox::information(this, tr("Temps de réponses"), tr("Tu as mis ")+QString::number(timeTab[1])+tr(" minute(s) et ")+QString::number(timeTab[0])+tr(" secondes."));
-            }
-
-            else
-            {
-                if(1000 < settings.value("HardMode").toInt())
-                    settings.setValue("HardMode", (settings.value("HardMode").toInt()/1000));
-                if(timeElapsed < settings.value("HardMode").toInt())
-                {
-                    returnTime(timeElapsed, NORECORD);
-                    returnTime(settings.value("HardMode").toInt(), RECORD);
-                    QMessageBox::information(this, tr("Temps de réponses"), tr("Tu as mis ")+QString::number(timeTab[1])+tr(" minute(s) et ")+QString::number(timeTab[0])+tr(" secondes.<br /><strong>C'est un nouveau record ! Félicitation !</strong><br />L'ancien record était de ")+QString::number(timeTab[3])+tr(" minute(s) et ")+QString::number(timeTab[2])+tr(" secondes."));
-                    settings.setValue("HardMode", timeElapsed);
-                }
-                else
-                {
-                    returnTime(timeElapsed, NORECORD);
-                    QMessageBox::information(this, tr("Temps de réponses"), tr("Tu as mis ")+QString::number(timeTab[1])+tr(" minute(s) et ")+QString::number(timeTab[0])+tr(" secondes."));
-                }
-            }
-        }
-        else
-        {
-            returnTime(timeElapsed, NORECORD);
-            QMessageBox::information(this, tr("Temps de réponses"), tr("Tu as mis ")+QString::number(timeTab[1])+tr(" minute(s) et ")+QString::number(timeTab[0])+tr(" secondes.<br />Ce temps ne compte pas pour les records car tu as fait des fautes !"));
-        }
-    }
 
     this->setLayout(vlayout);
 
@@ -131,15 +71,16 @@ void Fen_correction::setWindowLayout(int multiple)
         multiplication[i]->setText(QString::number(multiple)+ " x " + QString::number(tab[i]) + " = "+QString::number(reponse[i]));
     }
 
-    notation(multiple);
-
     texte = new QLabel(tr("<h3><strong>Voici la correction : </strong></h3>"));
     if(note >= 7)
     {
         total = new QLabel(tr("Tu as eu <strong><span style=\"color: green;\">")+QString::number(note)+tr("/10</span></strong>"));
         pngTotal = new QLabel();
         if(note == 10)
+        {
             pngTotal->setPixmap(QPixmap("excellent.png"));
+            //playApplause();
+        }
         else
             pngTotal->setPixmap(QPixmap("bien.png"));
     }
@@ -239,15 +180,16 @@ void Fen_correction::setWindowLayout(int tabOrder[])
         multiplication[i]->setText(QString::number(tabOrder[i])+ " x " + QString::number(tab[i]) + " = "+QString::number(reponse[i]));
     }
 
-    notation(tabOrder);
-
     texte = new QLabel(tr("<h3><strong>Voici la correction : </strong></h3>"));
     if(note >= 7)
     {
         total = new QLabel(tr("Tu as eu <strong><span style=\"color: green;\">")+QString::number(note)+tr("/10</span></strong>"));
         pngTotal = new QLabel();
         if(note == 10)
+        {
             pngTotal->setPixmap(QPixmap("excellent.png"));
+            //playApplause();
+        }
         else
             pngTotal->setPixmap(QPixmap("bien.png"));
     }
@@ -340,73 +282,32 @@ void Fen_correction::setWindowLayout(int tabOrder[])
 
 }
 
-void Fen_correction::notation(const int m_multiple)
+void Fen_correction::openMessageBox(RecordState state, int lastRecordTime)
 {
-    for(int i = 0; i < 10; i++)
-    {
-        resultat[i] = m_multiple*tab[i];
-    }
+    timeTab[0] = timeElapsed;
+    timeTab[2] = lastRecordTime;
 
-    for(int i = 0; i < 10; i++)
-    {
-        correction[0][i] = new QLabel;
-        correction[1][i] = new QLabel;
-        if(reponse[i] == resultat[i])
-        {
-            correction[0][i]->setPixmap(QPixmap("ok.png"));
-            correction[1][i]->setText(tr("<span style=\"color: green;\">C'est correct !</style>"));
-        }
-        else
-        {
-            note--;
-            correction[0][i]->setPixmap(QPixmap("faux.png"));
-           correction[1][i]->setText(tr("<span style=\"color: red;\">La bonne réponse était ")+QString::number(resultat[i])+"</style>");
-        }
-    }
+    TimeRecordMgr::returnTime(timeTab);
 
+    if(state == RECORD)
+    {
+        QMessageBox::information(this, tr("Temps de réponses"), tr("Tu as mis ")+QString::number(timeTab[1])+tr(" minute(s) et ")+QString::number(timeTab[0])+tr(" secondes.<br /><strong>C'est un nouveau record ! Félicitation !</strong><br />L'ancien record était de ")+QString::number(timeTab[3])+tr(" minute(s) et ")+QString::number(timeTab[2])+tr(" secondes."));
+        correct->saveTime();
+    }
+    else if(state == UNVALIDRECORD)
+        QMessageBox::information(this, tr("Temps de réponses"), tr("Tu as mis ")+QString::number(timeTab[1])+tr(" minute(s) et ")+QString::number(timeTab[0])+tr(" secondes.<br />Ce temps ne compte pas pour les records car tu as fait des fautes !"));
+    else if(state == NORECORD)
+        QMessageBox::information(this, tr("Temps de réponses"), tr("Tu as mis ")+QString::number(timeTab[1])+tr(" minute(s) et ")+QString::number(timeTab[0])+tr(" secondes."));
 }
-void Fen_correction::notation(int *m_multiple)
+/*void Fen_correction::playApplause()   // not implemented yet : need an update system update
 {
-    int *multiple = m_multiple;
-    for(int i = 0; i < 10; i++)
-    {
-        resultat[i] = multiple[i]*tab[i];
-    }
+    mediaObject = new Phonon::MediaObject(this);
+    mediaObject->setCurrentSource(Phonon::MediaSource("applause.mp3"));
+    audioOutput = new Phonon::AudioOutput(Phonon::MusicCategory, this);
+    Phonon::Path path = Phonon::createPath(mediaObject, audioOutput);
+    mediaObject->play();
+}*/
 
-    for(int i = 0; i < 10; i++)
-    {
-        correction[0][i] = new QLabel;
-        correction[1][i] = new QLabel;
-        if(reponse[i] == resultat[i])
-        {
-            correction[0][i]->setPixmap(QPixmap("ok.png"));
-            correction[1][i]->setText(tr("<span style=\"color: green;\">C'est correct !</style>"));
-        }
-        else
-        {
-            note--;
-            correction[0][i]->setPixmap(QPixmap("faux.png"));
-           correction[1][i]->setText(tr("<span style=\"color: red;\">La bonne réponse était ")+QString::number(resultat[i])+"</style>");
-        }
-    }
-}
-void Fen_correction::returnTime(const int sec, RecordState state)
-{
-    if(state == NORECORD)
-    {
-        timeTab[0] = sec;
-        timeTab[1] = timeTab[0]/60;
-        if(timeTab[1] != 0)
-            timeTab[0] %= 60;
-    }
-    else if(state == RECORD)
-    {
-        timeTab[2] = sec;
-        timeTab[3] = timeTab[2]/60;
-        if(timeTab[3] != 0)
-            timeTab[2] %= 60;
-    }
-}
 Fen_correction::~Fen_correction()
 {
     delete total;
@@ -415,12 +316,21 @@ Fen_correction::~Fen_correction()
     delete quit;
     delete texte;
     delete pngTotal;
+    delete correct;
+
+    /*delete mediaObject;
+    delete audioOutput;
+
+    mediaObject = 0;
+    audioOutput = 0;*/
 
     total = 0;
     layout = 0;
     vlayout = 0;
     quit = 0;
     texte = 0;
+    pngTotal = 0;
+    correct = 0;
 
     for (int i = 0; i < 10; i++)
     {
