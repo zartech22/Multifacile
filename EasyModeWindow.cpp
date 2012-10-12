@@ -82,7 +82,10 @@ void EasyModeWindow::openAstuce()
 void EasyModeWindow::open()
 {
     if(time)
+    {
+        chronometre->stop();
         fen = new Fen_correction(m_multiple, reponses, array, secondes, EASY);
+    }
     else if(!time)
         fen = new Fen_correction(m_multiple, reponses, array);
     fen->resize(200, 200);
