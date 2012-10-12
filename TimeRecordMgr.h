@@ -16,7 +16,7 @@ class TimeRecordMgr : public QSettings
 {
     Q_OBJECT
 public:
-    TimeRecordMgr(Format format, Scope scope, const QString &organisation, int time, const QString group, const QString table = QString());
+    TimeRecordMgr(Format format, Scope scope, const QString &organisation, const int time, const QString group, const QString table = QString());
 
     void CompareTime();
     void SaveRecordInFile();

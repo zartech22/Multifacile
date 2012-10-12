@@ -90,7 +90,7 @@ void MediumModeWindow::open()
     fen->show();
     this->close();
 }
-void MediumModeWindow::newSetFocus(int number)
+void MediumModeWindow::newSetFocus(const int number)
 {
     if(number < 9)
     {
@@ -120,7 +120,7 @@ void MediumModeWindow::newSecond()
     secondes++;
     emit addSeconde(secondes);
 }
-void MediumModeWindow::updateLabel(int temps)
+void MediumModeWindow::updateLabel(const int temps)
 {
     if((temps/60) != 0)
     {

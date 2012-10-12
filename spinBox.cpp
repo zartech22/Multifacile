@@ -2,6 +2,7 @@
 
 SpinBox::SpinBox() : QSpinBox()
 {
+    numero = 0;
 }
 void SpinBox::keyPressEvent(QKeyEvent *event)
 {

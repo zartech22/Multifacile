@@ -1,11 +1,11 @@
 #ifndef MODEENUM_H
 #define MODEENUM_H
 
-typedef enum Mode Mode;
-
 enum Mode
 {
     EASY, MEDIUM, HARD
 };
+
+typedef enum Mode Mode;
 
 #endif // MODEENUM_H

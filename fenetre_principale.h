@@ -80,7 +80,7 @@ private :
 
 public slots :
     void open_window();
-    void open_window(int nbr);
+    void open_window(const int nbr);
     void answer(bool update);
     void erreurSocket();
     void verification();

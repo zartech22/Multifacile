@@ -7,7 +7,7 @@ class CheckUpdate : public QTcpSocket
 {
     Q_OBJECT
 public:
-    CheckUpdate(QObject *parent, int version);
+    CheckUpdate(QObject *parent, const int version);
     void tryConnection();
 private:
     quint16 messageSize;

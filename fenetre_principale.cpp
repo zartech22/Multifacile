@@ -160,7 +160,7 @@ void Fenetre_principale::open_window()  //open a window which ask the table that
     }
 }
 
-void Fenetre_principale::open_window(int nbr)   //open a questionary window with the number given by the map signal of mapper. The questionary window is create in function of the Mode
+void Fenetre_principale::open_window(const int nbr)   //open a questionary window with the number given by the map signal of mapper. The questionary window is create in function of the Mode
 {
     if(mode == EASY)
     {

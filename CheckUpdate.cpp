@@ -1,11 +1,9 @@
 #include "CheckUpdate.h"
 
-CheckUpdate::CheckUpdate(QObject *parent, int version) : QTcpSocket(parent)
+CheckUpdate::CheckUpdate(QObject *parent, const int version) : QTcpSocket(parent)
 {
     actualVersion = version;
     messageSize = 0;
-
-    tryConnection();
 
     connect(this, SIGNAL(readyRead()), this, SLOT(dataReceived()));
     connect(this, SIGNAL(connected()), this , SLOT(sendRequest()));

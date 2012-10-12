@@ -10,7 +10,6 @@
 #include <QString>
 #include <QLabel>
 #include <QTimer>
-#include <QtDebug>
 #include <QLCDNumber>
 
 #include "fen_correction.h"
@@ -55,9 +54,9 @@ signals:
     void addSeconde(int);
 public slots:
     virtual void open();
-    void newSetFocus(int number);
+    void newSetFocus(const int number);
     void newSecond();
-    void updateLabel(int temps);
+    void updateLabel(const int temps);
 
 };
 
