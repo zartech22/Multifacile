@@ -1,6 +1,6 @@
 #include "Correction.h"
 
-Correction::Correction(Mode mode, int multiple, int *order, int* userAnswers, int time)
+Correction::Correction(Mode mode, const int multiple, int *order, int* userAnswers, const int time)
 {
     Multiple = multiple;
     orderTab = order;
@@ -9,12 +9,13 @@ Correction::Correction(Mode mode, int multiple, int *order, int* userAnswers, in
     seconds = time;
     isHardMode = false;
 }
-Correction::Correction(int *multiple, int *order, int *userAnswers, int time)
+Correction::Correction(int *multiple, int *order, int *userAnswers, const int time)
 {
     multipleTab = multiple;
     orderTab = order;
     answers = userAnswers;
     seconds = time;
+    isHardMode = true;
 }
 int Correction::getCorrection(QLabel *correction[][10])
 {
@@ -67,12 +68,12 @@ void Correction::doCorrection(QLabel *correction[][10], int resultat[], bool isC
         if(isCorrect[i])
         {
             correction[0][i]->setPixmap(QPixmap("ok.png"));
-            correction[1][i]->setText(tr("<span style=\"color: green;\">C'est correct !</style>"));
+            correction[1][i]->setText(tr("<span style=\"color: green;\">C'est correct !</span>"));
         }
         else
         {
             correction[0][i]->setPixmap(QPixmap("faux.png"));
-            correction[1][i]->setText(tr("<span style=\"color: red;\">La bonne réponse était ")+QString::number(resultat[i])+"</style>");
+            correction[1][i]->setText(tr("<span style=\"color: rgb(128, 0, 0);\">La bonne réponse était ")+QString::number(resultat[i])+"</span>");
         }
     }
 }

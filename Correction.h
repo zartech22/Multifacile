@@ -11,8 +11,8 @@ class Correction : public QObject
     Q_OBJECT
 
 public:
-    Correction(Mode mode, int multiple, int* order, int *userAnswers, int time = 0);
-    Correction(int* multiple, int* order, int* userAnswers, int time = 0);
+    Correction(Mode mode, const int multiple, int* order, int *userAnswers, const int time = 0);
+    Correction(int* multiple, int* order, int* userAnswers, const int time = 0);
 
     ~Correction();
 
