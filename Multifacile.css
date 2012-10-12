@@ -1,0 +1,83 @@
+* 
+{
+	font-family: "Comic Sans MS"; 
+	/*color: rgb(255,169,50);*/
+	color: rgb(255, 0, 0);
+	font-size: 16px; 
+} 
+QPushButton:hover 
+{ 
+	color: rgb(255, 0, 0); 
+} 
+QMainWindow 
+{
+	/*background-color: rgb(75, 75, 75);*/
+	background-color: rgb(34, 75, 217);
+}
+hr 
+{ 
+	border-color: red; 
+} 
+QMenuBar::item, QMenuBar, QMenu 
+{ 
+	background-color: rgb(34, 75, 217);
+	color: white;
+} 
+QMenuBar::item 
+{ 
+	/*background-color: red;*/
+	/*background-color: rgb(75, 75, 75);*/
+	background-color: rgb(34, 75, 217);
+	border: 2px solid rgb(255, 169, 50);
+	border-radius: 4px;
+	margin: 2px; 
+	padding: 1.5px; 
+}
+QMenuBar
+{
+	/*border-bottom: 1px solid rgb(255, 169, 50);*/
+	/*background-color: rgb(75, 75, 75);*/
+	background-color: rgb(34, 75, 217);
+}
+QMenu 
+{ 
+	border: 1.5px solid rgb(255, 169, 50);
+	border-radius: 4px;
+	background-color: rgb(34, 75, 217);
+}
+QMenu::item:selected:enabled, QMenuBar::item:selected
+{ 
+	background-color: rgb(44, 115, 255); 
+}
+QPushButton:disabled , QMenu::item:disabled
+{ 
+	color: grey; 
+}
+QPushButton:pressed 
+{ 
+	color: rgb(255,169,50); 
+}
+QWidget
+{
+	background-color: rgb(34, 75, 217);
+}
+QPushButton
+{
+	background-color: yellow;
+	border: 2px solid red;
+	border-radius: 4px;
+	padding: 1.5px;
+}
+QLabel#correction
+{
+	color: black;
+}
+QLabel
+{
+	color: white;
+	background-color: rgb(34, 75, 217);
+}
+QSpinBox
+{
+	color: white;
+}
