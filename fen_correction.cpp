@@ -1,10 +1,9 @@
 #include "fen_correction.h"
 
-Fen_correction::Fen_correction(const int multiple, SpinBox *reponses[], int *order, int time, Mode mode)
+Fen_correction::Fen_correction(const int multiple, SpinBox *reponses[], int *order, const int time, Mode mode)
 {
+    timeElapsed = time;
 
-    if(time != 0)
-        timeElapsed = time;
     this->setWindowTitle(tr("Correction"));
 
     tab = order;
@@ -32,7 +31,7 @@ Fen_correction::Fen_correction(const int multiple, SpinBox *reponses[], int *ord
 
     connect(quit, SIGNAL(clicked()), this, SLOT(close()));
 }
-Fen_correction::Fen_correction(SpinBox *reponses[], int *multipleOrder, int *order, int time)
+Fen_correction::Fen_correction(SpinBox *reponses[], int *multipleOrder, int *order, const int time)
 {
     if(time != 0)
         timeElapsed = time;
@@ -86,7 +85,7 @@ void Fen_correction::setWindowLayout(int multiple)
     }
     else if(note <= 2)
     {
-        total = new QLabel(tr("Tu as eu <strong><span style=\"color: red;\">")+QString::number(note)+tr("/10</span></strong>"));
+        total = new QLabel(tr("Tu as eu <strong><span style=\"color: rgb(128, 0, 0);\">")+QString::number(note)+tr("/10</span></strong>"));
         pngTotal = new QLabel();
         pngTotal->setPixmap(QPixmap("mauvais.png"));
     }
@@ -195,7 +194,7 @@ void Fen_correction::setWindowLayout(int tabOrder[])
     }
     else if(note <= 2)
     {
-        total = new QLabel(tr("Tu as eu <strong><span style=\"color: red;\">")+QString::number(note)+tr("/10</span></strong>"));
+        total = new QLabel(tr("Tu as eu <strong><span style=\"color: rgb(128, 0, 0);\">")+QString::number(note)+tr("/10</span></strong>"));
         pngTotal = new QLabel();
         pngTotal->setPixmap(QPixmap("mauvais.png"));
     }
@@ -282,7 +281,7 @@ void Fen_correction::setWindowLayout(int tabOrder[])
 
 }
 
-void Fen_correction::openMessageBox(RecordState state, int lastRecordTime)
+void Fen_correction::openMessageBox(RecordState state, const int lastRecordTime)
 {
     timeTab[0] = timeElapsed;
     timeTab[2] = lastRecordTime;

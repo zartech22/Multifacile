@@ -23,8 +23,8 @@ class Fen_correction : public QWidget
 {
     Q_OBJECT
 public :
-    Fen_correction(const int multiple, SpinBox *reponses[], int *order, int time = 0, Mode mode = EASY);
-    Fen_correction(SpinBox *reponses[], int *multipleOrder, int *order, int time = 0);
+    Fen_correction(const int multiple, SpinBox *reponses[], int *order, const int time = 0, Mode mode = EASY);
+    Fen_correction(SpinBox *reponses[], int *multipleOrder, int *order, const int time = 0);
     ~Fen_correction();
 private :
     void setWindowLayout(int multiple);
@@ -58,7 +58,7 @@ private :
 
     QHBoxLayout *hlayout[3];
 public slots:
-    void openMessageBox(RecordState, int);
+    void openMessageBox(RecordState, const int);
 };
 
 #endif // FEN_CORRECTION_H
