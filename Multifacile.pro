@@ -31,4 +31,4 @@ RC_FILE = Icon.rc
 QT += network phonon
 
 RESOURCES += \
-    ressource.qrc
+    ressource.qrc \
