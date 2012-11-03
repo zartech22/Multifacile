@@ -27,12 +27,12 @@ Fenetre_principale::Fenetre_principale()
 
         //create QActions
     quitAction = new QAction(QIcon(":/icon/sortie.png"), tr("&Quitter"), this); //the file comes of a Qt ressource file (it's faster than charge a directory's file)
-    updateAction = new QAction(QIcon(":/icon/update.png"), tr("Vérifier les mise à jours"), this);  //idem
-    chrono = new QAction(tr("Table chronomètré"), this);
-    shuffleAction = new QAction(tr("Table en désordre"), this);
-    easyMode = new QAction(tr("Facile"), this);
-    mediumMode = new QAction(tr("Moyen"), this);
-    hardMode = new QAction(tr("Difficile"), this);
+    updateAction = new QAction(QIcon(":/icon/update.png"), tr("&Vérifier les mise à jours"), this);  //idem
+    chrono = new QAction(tr("Table &chronomètré"), this);
+    shuffleAction = new QAction(tr("Table en &désordre"), this);
+    easyMode = new QAction(tr("&Facile"), this);
+    mediumMode = new QAction(tr("&Moyen"), this);
+    hardMode = new QAction(tr("D&ifficile"), this);
 
         //set the QAction checkable and set easyMode checked
     easyMode->setCheckable(true);
