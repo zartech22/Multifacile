@@ -287,23 +287,23 @@ Fenetre_principale::~Fenetre_principale()
         fenList[i] = 0;
     }
 
-    file =0;
-    tools = 0;
-    modes = 0;
-    quitAction = 0;
-    updateAction = 0;
-    shuffleAction = 0;
-    chrono = 0;
-    easyMode = 0;
-    mediumMode = 0;
-    hardMode = 0;
-    actionGroup = 0;
-    quit = 0;
-    customTable = 0;
-    layout = 0;
-    glayout = 0;
-    vlayout = 0;
-    check = 0;
-    widget = 0;
-    mapper = 0;
+    file = nullptr;
+    tools = nullptr;
+    modes = nullptr;
+    quitAction = nullptr;
+    updateAction = nullptr;
+    shuffleAction = nullptr;
+    chrono = nullptr;
+    easyMode = nullptr;
+    mediumMode = nullptr;
+    hardMode = nullptr;
+    actionGroup = nullptr;
+    quit = nullptr;
+    customTable = nullptr;
+    layout = nullptr;
+    glayout = nullptr;
+    vlayout = nullptr;
+    check = nullptr;
+    widget = nullptr;
+    mapper = nullptr;
 }

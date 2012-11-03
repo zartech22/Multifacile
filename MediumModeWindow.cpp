@@ -145,16 +145,16 @@ MediumModeWindow::~MediumModeWindow()
     delete layout;
     delete vlayout;
 
-    corriger = 0;
-    layout = 0;
-    vlayout = 0;
+    corriger = nullptr;
+    layout = nullptr;
+    vlayout = nullptr;
 
     for(int i = 0; i < 10; i++)
     {
         delete reponses[i];
-        reponses[i] = 0;
+        reponses[i] = nullptr;
     }
 
     if(time)
-        chronometre = 0;
+        chronometre = nullptr;
 }

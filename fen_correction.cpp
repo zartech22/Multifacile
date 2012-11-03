@@ -323,30 +323,30 @@ Fen_correction::~Fen_correction()
     mediaObject = 0;
     audioOutput = 0;*/
 
-    total = 0;
-    layout = 0;
-    vlayout = 0;
-    quit = 0;
-    texte = 0;
-    pngTotal = 0;
-    correct = 0;
+    total = nullptr;
+    layout = nullptr;
+    vlayout = nullptr;
+    quit = nullptr;
+    texte = nullptr;
+    pngTotal = nullptr;
+    correct = nullptr;
 
     for (int i = 0; i < 10; i++)
     {
         delete multiplication[i];
-        multiplication[i] = 0;
+        multiplication[i] = nullptr;
     }
     for (int i = 0; i < 3; i++)
     {
         delete hlayout[i];
-        hlayout[i] = 0;
+        hlayout[i] = nullptr;
     }
     for (int i = 0; i < 2; i++)
     {
         for ( int j = 0; j < 10; j++)
         {
             delete correction[i][j];
-            correction[i][j] = 0;
+            correction[i][j] = nullptr;
         }
     }
 }

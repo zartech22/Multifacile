@@ -96,5 +96,5 @@ void EasyModeWindow::open()
 EasyModeWindow::~EasyModeWindow()
 {
     delete astuces;
-    astuces = 0;
+    astuces = nullptr;
 }

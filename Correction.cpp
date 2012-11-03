@@ -117,5 +117,5 @@ Correction::~Correction()
 {
     delete manager;
 
-    manager = 0;
+    manager = nullptr;
 }
