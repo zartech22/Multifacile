@@ -16,7 +16,7 @@ void CheckUpdate::sendRequest()
         out << actualVersion;
         out.device()->seek(0);
         out << (quint16) (paquet.size() - sizeof(quint16));
-        this->write(paquet);
+        write(paquet);
 }
 void CheckUpdate::dataReceived()
 {

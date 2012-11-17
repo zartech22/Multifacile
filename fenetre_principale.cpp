@@ -188,7 +188,7 @@ void Fenetre_principale::answer(bool update)    //slot which is connected to the
 {
     if(!update) //if not update needed
     {
-        if(userAction)  //and if it's the user who click on "check for updates"
+        if(userAction)  //and if it's the user who clicked on "check for updates"
         {
             QMessageBox::information(this, tr("Vérification de mise à jour"), tr("Il n'y a pour le moment aucune mise à jour disponible."));
             userAction = false;
