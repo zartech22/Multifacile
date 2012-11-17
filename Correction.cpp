@@ -61,7 +61,7 @@ void Correction::notation(int resultat[], bool isCorrect[])
         }
     }
 }
-void Correction::doCorrection(QLabel *correction[][10], int resultat[], bool isCorrect[])
+void Correction::doCorrection(QLabel *correction[][10], int resultat[], bool isCorrect[]) const
 {
     for(int i = 0; i < 10; i++)
     {
@@ -95,9 +95,9 @@ void Correction::isRecordValid(RecordState record, int lastRecordTime)
     else
         emit newRecord(NORECORD, lastRecordTime);
 }
-void Correction::saveTime(){ manager->SaveRecordInFile(); }
+void Correction::saveTime() const { manager->SaveRecordInFile(); }
 
-QString Correction::getModeGroupName()
+QString Correction::getModeGroupName() const
 {
     if(difficultyMode == EASY)
         return QString("EasyMode");
@@ -106,7 +106,7 @@ QString Correction::getModeGroupName()
     else
         return QString("HardMode");
 }
-QString Correction::getModeKeyName()
+QString Correction::getModeKeyName() const
 {
     if(difficultyMode == EASY || difficultyMode == MEDIUM)
         return QString("TableDe"+QString::number(Multiple));

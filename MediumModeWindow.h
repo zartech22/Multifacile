@@ -56,7 +56,7 @@ public slots:
     virtual void open();
     void newSetFocus(const int number);
     void newSecond();
-    void updateLabel(const int temps);
+    void updateLabel(const int temps) const;
 
 };
 

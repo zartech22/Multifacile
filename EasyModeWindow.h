@@ -14,7 +14,7 @@ public:
 protected:
     QPushButton *astuces;
 public slots:
-    void openAstuce();
+    void openAstuce() const;
     void open();
 };
 

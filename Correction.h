@@ -18,7 +18,7 @@ public:
 
     int getCorrection(QLabel *correction[][10]);
 
-    void saveTime();
+    void saveTime() const;
 private:
     int seconds;
     int Multiple;
@@ -36,10 +36,10 @@ private:
 
     void manageTime();
     void notation(int resultat[], bool isCorrect[]);
-    void doCorrection(QLabel *correction[][10], int resultat[], bool isCorrect[]);
+    void doCorrection(QLabel *correction[][10], int resultat[], bool isCorrect[]) const;
 
-    QString getModeGroupName();
-    QString getModeKeyName();
+    QString getModeGroupName() const;
+    QString getModeKeyName() const;
 signals:
     void newRecord(RecordState, int);
 public slots:

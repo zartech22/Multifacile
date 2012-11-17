@@ -9,7 +9,7 @@ TimeRecordMgr::TimeRecordMgr(Format format, Scope scope, const QString &organisa
     if(Table.isEmpty())
         hardMode = true;
 }
-bool TimeRecordMgr::isKeyExist()
+bool TimeRecordMgr::isKeyExist() const
 {
     if(hardMode)
         return this->contains(Group);
@@ -40,7 +40,7 @@ void TimeRecordMgr::SaveRecordInFile()
         this->setValue(Group+"/"+Table, newTime);
 }
 
-int TimeRecordMgr::returnValue()
+int TimeRecordMgr::returnValue() const
 {
     if(hardMode)
         return this->value(Group).toInt();

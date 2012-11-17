@@ -120,7 +120,7 @@ void MediumModeWindow::newSecond()
     secondes++;
     emit addSeconde(secondes);
 }
-void MediumModeWindow::updateLabel(const int temps)
+void MediumModeWindow::updateLabel(const int temps) const
 {
     if((temps/60) != 0)
     {

@@ -74,7 +74,7 @@ EasyModeWindow::EasyModeWindow(const int m_multiplicateur, bool shuffleNeeded, b
     for(int i = 0; i < 10; i++)
         connect(reponses[i], SIGNAL(enterKeyPressed(int)), this, SLOT(newSetFocus(int)));
 }
-void EasyModeWindow::openAstuce()
+void EasyModeWindow::openAstuce() const
 {
     AstuceWindow astuce(m_multiple);
     astuce.exec();

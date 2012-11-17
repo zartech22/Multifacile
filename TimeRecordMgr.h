@@ -31,9 +31,9 @@ private:
     QString Group;
     QString Table;
 
-    int returnValue();
+    int returnValue() const;
 
-    bool isKeyExist();
+    bool isKeyExist() const;
     
 signals:
     void isNewRecord(RecordState, int);

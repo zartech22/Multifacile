@@ -13,7 +13,4 @@ void SpinBox::keyPressEvent(QKeyEvent *event)
     else
         return;
 }
-void SpinBox::setNumero(const int num)
-{
-    numero = num;
-}
+void SpinBox::setNumero(const int num){ numero = num; }
