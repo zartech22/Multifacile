@@ -16,7 +16,7 @@ int main(int argc, char* argv[])
     QApplication app(argc, argv);
 
     QTranslator translator;
-    translator.load("qt_fr");
+    translator.load(":/translation/qt_fr");
     app.installTranslator(&translator);
 
     QFile file(":/css/Multifacile.css");
