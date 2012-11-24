@@ -129,6 +129,15 @@ Fenetre_principale::Fenetre_principale()
     connect(actionGroup, SIGNAL(triggered(QAction*)), this, SLOT(resetLabel(QAction*)));
 
     /*****************************************************/
+
+#ifdef Q_OS_LINUX
+    if(QFile::exists("Add"))
+        QFile::remove("Add");
+#endif
+#ifdef Q_OS_WIN32
+    if(QFile::exists("Add.exe"))
+        QFile::remove("Addexe");
+#endif
 }
 void Fenetre_principale::open_window()  //open a window which ask the table that the user want to work on and open a questionary window in function of the Mode mode and the number given
 {
