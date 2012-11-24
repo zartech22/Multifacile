@@ -68,7 +68,7 @@ void Correction::doCorrection(QLabel *correction[][10], int resultat[], bool isC
         if(isCorrect[i])
         {
             correction[0][i]->setPixmap(QPixmap("ok.png"));
-            correction[1][i]->setText(tr("<span style=\"color: green;\">C'est correct !</span>"));
+            correction[1][i]->setText(tr("<span style=\"color: rgb(0, 200, 0);\">C'est correct !</span>"));
         }
         else
         {

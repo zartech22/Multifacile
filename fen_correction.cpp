@@ -73,7 +73,7 @@ void Fen_correction::setWindowLayout(int multiple)
     texte = new QLabel(tr("<h3><strong>Voici la correction : </strong></h3>"));
     if(note >= 7)
     {
-        total = new QLabel(tr("Tu as eu <strong><span style=\"color: green;\">")+QString::number(note)+tr("/10</span></strong>"));
+        total = new QLabel(tr("Tu as eu <strong><span style=\"color: rgb(0, 200, 0);\">")+QString::number(note)+tr("/10</span></strong>"));
         pngTotal = new QLabel();
         if(note == 10)
         {
@@ -182,7 +182,7 @@ void Fen_correction::setWindowLayout(int tabOrder[])
     texte = new QLabel(tr("<h3><strong>Voici la correction : </strong></h3>"));
     if(note >= 7)
     {
-        total = new QLabel(tr("Tu as eu <strong><span style=\"color: green;\">")+QString::number(note)+tr("/10</span></strong>"));
+        total = new QLabel(tr("Tu as eu <strong><span style=\"color: rgb(0, 200, 0);\">")+QString::number(note)+tr("/10</span></strong>"));
         pngTotal = new QLabel();
         if(note == 10)
         {
