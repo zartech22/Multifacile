@@ -3,6 +3,13 @@
 
 #include <QTcpSocket>
 
+typedef enum UpdateType UpdateType;
+
+enum UpdateType
+{
+    NoUpdate, NormalUpdate, UpdaterUpdate
+};
+
 class CheckUpdate : public QTcpSocket
 {
     Q_OBJECT
@@ -16,7 +23,7 @@ public slots:
     void dataReceived();
     void sendRequest();
 signals:
-    void updateNeeded(bool);
+    void checkUpdateAnswer(UpdateType);
 };
 
 #endif // CHECKUPDATE_H

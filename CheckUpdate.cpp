@@ -33,9 +33,11 @@ void CheckUpdate::dataReceived()
     in >> answer;
 
     if(answer == "ok")
-        emit updateNeeded(false);
+        emit checkUpdateAnswer(NoUpdate);
     else if(answer == "update needed")
-        emit updateNeeded(true);
+        emit checkUpdateAnswer(NormalUpdate);
+    else if(answer == "updaterUpdate")
+        emit checkUpdateAnswer(UpdaterUpdate);
 
     messageSize = 0;
 }

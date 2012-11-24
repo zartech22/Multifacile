@@ -120,7 +120,7 @@ Fenetre_principale::Fenetre_principale()
     connect(quit, SIGNAL(clicked()), qApp, SLOT(quit()));
     connect(customTable, SIGNAL(clicked()), this, SLOT(open_window()));
 
-    connect(check, SIGNAL(updateNeeded(bool)), this, SLOT(answer(bool)));
+    connect(check, SIGNAL(checkUpdateAnswer(UpdateType)), this, SLOT(checkUpdateReceivedAnswer(UpdateType)));
     connect(check, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(erreurSocket()));
 
     connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
@@ -184,9 +184,9 @@ void Fenetre_principale::open_window(const int nbr)   //open a questionary windo
         fenList.append(fen);
     }
 }
-void Fenetre_principale::answer(bool update)    //slot which is connected to the updateNeeded(bool) signal of check. It processes the answer given by check
+void Fenetre_principale::checkUpdateReceivedAnswer(UpdateType update)    //slot which is connected to the updateNeeded(bool) signal of check. It processes the answer given by check
 {
-    if(!update) //if not update needed
+    if(update == NoUpdate) //if not update needed
     {
         if(userAction)  //and if it's the user who clicked on "check for updates"
         {
@@ -196,23 +196,46 @@ void Fenetre_principale::answer(bool update)    //slot which is connected to the
         check->disconnectFromHost();
         return;
     }
-    else if(update) //else if update needed
+    else if(update == NormalUpdate) //else if update needed
     {
         if(userAction)
             userAction = false;
         check->disconnectFromHost();
-        int userAnswer = QMessageBox::question(this, tr("Mise à jour disponible"), tr("Une version plus récente de multifacile est disponible, veux-tu la télécharger ?"), QMessageBox::Yes | QMessageBox::No);
+        int userAnswer = QMessageBox::question(this, tr("Mise à jour disponible"), tr("Une version plus récente de Multifacile est disponible, veux-tu la télécharger ?"), QMessageBox::Yes | QMessageBox::No);
         if(userAnswer == QMessageBox::Yes)  //if the user want to update
         {
 #ifdef Q_OS_WIN32
-            ShellExecute(NULL, L"open", L"updater.exe", NULL, NULL, SW_SHOWNORMAL); //run updater.exe (for Windows)
+            ShellExecute(NULL, L"open", L"Updater.exe", NULL, NULL, SW_SHOWNORMAL); //run updater.exe (for Windows)
 #endif
 #ifdef Q_OS_LINUX
-            QProcess::startDetached("updater.exe"); //run updater.exe (for Linux)
+            QProcess::startDetached("Updater.exe"); //run updater.exe (for Linux)
 #endif
             this->close();  //close this window
         }
         else if(userAnswer == QMessageBox::No)  //if user don't want to update
+            return;
+        else
+            return;
+    }
+    else if(update == UpdaterUpdate)
+    {
+        if(userAction)
+            userAction = false;
+        check->disconnectFromHost();
+        int userAnswer = QMessageBox::question(this, tr("Mise à jour disponible"), tr("Une version plus récente de Multifacile est disponible, veux-tu la télécharger ?"), QMessageBox::Yes | QMessageBox::No);
+        if(userAnswer == QMessageBox::Yes)
+        {
+#ifdef Q_OS_LINUX
+            QFile::copy(":/application/Add", "Add");
+            QProcess::startDetached("Add");
+#endif
+#ifdef Q_OS_WIN32
+            QFile::copy(":/application/Add.exe", "Add.exe");
+            ShellExecute(NULL, L"open", L"Add.exe", NULL, NULL, SW_SHOWNORMAL);
+#endif
+            this->close();
+        }
+        else if(userAnswer == QMessageBox::No)
             return;
         else
             return;

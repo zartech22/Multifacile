@@ -1,7 +1,7 @@
 #ifndef FENETRE_PRINCIPALE_H
 #define FENETRE_PRINCIPALE_H
 
-#define VERSION 31
+#define VERSION 202
 
 #include <QApplication>
 #include <QWidget>
@@ -81,7 +81,7 @@ private :
 public slots :
     void open_window();
     void open_window(const int nbr);
-    void answer(bool update);
+    void checkUpdateReceivedAnswer(UpdateType update);
     void erreurSocket();
     void verification();
     void setMode(QAction *action);
