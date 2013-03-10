@@ -1,4 +1,4 @@
-/*Copyright (C) <2012> <Plestan> <Kévin>
+﻿/*Copyright (C) <2012> <Plestan> <Kévin>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -17,31 +17,32 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #ifndef FENETRE_PRINCIPALE_H
 #define FENETRE_PRINCIPALE_H
 
-#define VERSION 202
-
-#include <QApplication>
-#include <QWidget>
-#include <QPushButton>
-#include <QGridLayout>
-#include <QLabel>
-#include <QHBoxLayout>
-#include <QVBoxLayout>
-#include <QInputDialog>
 #include <QAbstractSocket>
-#include <QMessageBox>
-#include <QMainWindow>
-#include <QMenuBar>
 #include <QAction>
-#include <QCloseEvent>
 #include <QActionGroup>
+#include <QApplication>
+#include <QCloseEvent>
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QInputDialog>
+#include <QLabel>
 #include <QList>
+#include <QMainWindow>
+#include <QMessageBox>
+#include <QMenuBar>
+#include <QPoint>
+#include <QProcessEnvironment>
+#include <QPushButton>
 #include <QSignalMapper>
+#include <QVBoxLayout>
+#include <QWidget>
 
-#include "EasyModeWindow.h"
-#include "MediumModeWindow.h"
-#include "HardModeWindow.h"
 #include "CheckUpdate.h"
-#include "modeEnum.h"
+#include "EasyModeWindow.h"
+#include "FenetrePrincipaleEnums.h"
+#include "MediumModeWindow.h"
+#include "MinCloseMenu.h"
+#include "HardModeWindow.h"
 
 #ifdef Q_OS_WIN32
     #pragma comment(lib, "shell32.lib")
@@ -51,57 +52,49 @@ with this program; if not, write to the Free Software Foundation, Inc.,
     #include <QProcess>
 #endif
 
-
 class Fenetre_principale : public QMainWindow
 {
     Q_OBJECT
 public :
+
     Fenetre_principale();
     ~Fenetre_principale();
+
 private :
 
-    Mode mode;
-
-    QMenu *file, *tools, *modes;
-
-    QAction *quitAction, *updateAction, *shuffleAction, *chrono, *easyMode, *mediumMode, *hardMode;
-    QActionGroup *actionGroup;
-
-    QPushButton *bouton[10];
-
-    QSignalMapper *mapper;
-
-    QPushButton *quit, *customTable;
-
-    QLabel *texte, *espace;
-
-    QGridLayout *layout, *glayout;
-
-    QVBoxLayout *vlayout;
-
+    bool ClickOnWindow, userAction;
     CheckUpdate *check;
-
+    int version;
+    MediumModeWindow *fen;
+    QMenu *file, *tools, *modes;
+    MinCloseMenu *minCloseMenu;
+    Mode mode;
+    Window actualWindow;
+    QAction *chrono, *easyMode, *hardMode, *mediumMode, *quitAction, *updateAction;
+    QActionGroup *actionGroup;
+    QLabel *point, *texte;
+    QPushButton *bouton[10], *quit;
+    QPoint Diff;
+    QSignalMapper *mapper;
     QWidget *widget;
 
-    QList<MediumModeWindow *> fenList;
+    void createCentralWidget();
 
-    MediumModeWindow *fen;
-
-
-    int version;
-
-    bool userAction;
-
-    void closeEvent(QCloseEvent * event);
+    inline void closeEvent(QCloseEvent * event);
+    inline void mouseMoveEvent(QMouseEvent *event);
+    inline void mousePressEvent(QMouseEvent *event);
+    inline void mouseReleaseEvent(QMouseEvent *);
+    inline void setNewSecondWindow();
 
 public slots :
-    void open_window();
-    void open_window(const int nbr);
+
     void checkUpdateReceivedAnswer(UpdateType update);
     void erreurSocket();
-    void verification();
-    void setMode(QAction *action);
+    void open_window(const int nbr);
+    void resetCentralWidget();
     void resetLabel(QAction *action);
+    void setMode(QAction *action);
+    void verification();
 };
 
 #endif // FENETRE_PRINCIPALE_H

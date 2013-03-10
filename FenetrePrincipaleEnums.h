@@ -1,4 +1,4 @@
-/*Copyright (C) <2012> <Plestan> <Kévin>
+﻿/*Copyright (C) <2012> <Plestan> <Kévin>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -23,5 +23,12 @@ enum Mode
 };
 
 typedef enum Mode Mode;
+
+enum Window
+{
+    MainWindow, SecondWindow
+};
+
+typedef enum Window Window;
 
 #endif // MODEENUM_H

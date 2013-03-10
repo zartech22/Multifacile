@@ -1,4 +1,4 @@
-/*Copyright (C) <2012> <Plestan> <Kévin>
+﻿/*Copyright (C) <2012> <Plestan> <Kévin>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #define CORRECTION_H
 
 #include "spinBox.h"
-#include "modeEnum.h"
+#include "FenetrePrincipaleEnums.h"
 #include "TimeRecordMgr.h"
 #include "QLabel"
 
@@ -50,7 +50,7 @@ private:
 
     Mode difficultyMode;
 
-    void manageTime();
+    inline void manageTime();
     void notation(int resultat[], bool isCorrect[]);
     void doCorrection(QLabel *correction[][10], int resultat[], bool isCorrect[]) const;
 

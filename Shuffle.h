@@ -1,4 +1,4 @@
-/*Copyright (C) <2012> <Plestan> <Kévin>
+﻿/*Copyright (C) <2012> <Plestan> <Kévin>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -29,7 +29,6 @@ public:
 private:
     bool needShuffle;
     int numbers[10];
-    int n;
 };
 
 #endif // SHUFFLE_H

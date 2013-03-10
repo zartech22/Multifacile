@@ -1,4 +1,4 @@
-/*Copyright (C) <2012> <Plestan> <Kévin>
+﻿/*Copyright (C) <2012> <Plestan> <Kévin>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -16,13 +16,14 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "spinBox.h"
 
-SpinBox::SpinBox() : QSpinBox()
+SpinBox::SpinBox(QWidget *parent) : QLineEdit(parent), numero(0)
 {
-    numero = 0;
+    QIntValidator tempValidator(0, 100, this);
+    this->setValidator(&tempValidator);
 }
 void SpinBox::keyPressEvent(QKeyEvent *event)
 {
-    QSpinBox::keyPressEvent(event);
+    QLineEdit::keyPressEvent(event);
     QKeyEvent key = *event;
     if(key.key() == Qt::Key_Enter || key.key() == Qt::Key_Return)
         emit enterKeyPressed(numero);

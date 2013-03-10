@@ -1,0 +1,90 @@
+QWidget#Fen
+{
+	background-color: rgba(255, 255, 255, 0);
+	
+	
+}
+QLineEdit
+{
+	border-image: url(":/image/TextBox.png") 0, 0, 0, 0;
+	border-radius: 4px;
+	padding: 25px;
+}
+QPushButton#Corriger
+{
+	background-color: rgba(255, 255, 255, 0);
+	background-image: url(":/image/Underline.png");
+	background-repeat: no-repeat;
+	background-position: bottom;
+	margin: 0px;
+	padding: 0px;
+}
+QPushButton#Quitter
+{
+	background-color: rgba(255, 255, 255, 0);
+	background-image: url(":/image/Underline.png");
+	background-repeat: no-repeat;
+	background-position: bottom;
+	margin: 0px;
+	padding: 0px;
+}
+QPushButton#Astuce
+{
+	background-color: rgba(255, 255, 255, 0);
+	background-image: url(":/image/Underline.png");
+	background-repeat: no-repeat;
+	background-position: bottom;
+	margin: 0px;
+	padding: 0px;
+}
+QWidget#AstuceFen
+{
+	background-color: rgba(255, 255, 255, 0);
+	background-image: url(":/image/Background_Astuce.png");
+	background-repeat: no-repeat;
+	background-position: center;
+	border: 1px solid black;
+	border-radius: 2px;
+	margin: 1000px;
+	padding: 1000px;
+}
+QLabel#LabelAstuce
+{
+	margin-left: 20px;
+	margin-right: 20px;
+}
+QPushButton#Cross
+{
+	background-color: rgba(255, 255, 255, 0);
+	background-image: url(none);
+	margin-top: 30px;
+	margin-right: 50px;
+}
+QPushButton#mini
+{
+	background-color: rgba(255, 255, 255, 0);
+	background-image: url(none);
+	margin-top: 25px;
+	margin-right: 5px;
+}
+QPushButton#Precedent
+{
+	background-color: rgba(255, 255, 255, 0);
+	background-image: url(":/image/Previous.png");
+}
+QPushButton#Suivant
+{
+	background-color: rgba(255, 255, 255, 0);
+	background-image: url(":/image/Next.png");
+}
+QPushButton#OkBouton
+{
+	background-color: rgba(255, 255, 255, 0);
+	background-image: url(none);
+	border: 2px solid rgb(255,169,50);
+	padding: 3px;
+}
+QPushButton#OkBouton:pressed 
+{ 
+	color: rgb(255,169,50); 
+}
