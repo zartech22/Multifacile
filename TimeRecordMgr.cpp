@@ -1,4 +1,4 @@
-/*Copyright (C) <2012> <Plestan> <Kévin>
+﻿/*Copyright (C) <2012> <Plestan> <Kévin>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -16,16 +16,12 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "TimeRecordMgr.h"
 
-TimeRecordMgr::TimeRecordMgr(Format format, Scope scope, const QString &organisation,int time, const QString group, const QString table) : QSettings(format, scope, organisation)
+TimeRecordMgr::TimeRecordMgr(Format format, Scope scope, const QString &organisation,int time, const QString group, const QString table) : QSettings(format, scope, organisation), newTime(time), Group(group), Table(table)
 {
-    newTime = time;
-    Group = group;
-    Table = table;
-
     if(Table.isEmpty())
         hardMode = true;
 }
-bool TimeRecordMgr::isKeyExist() const
+inline bool TimeRecordMgr::isKeyExist() const
 {
     if(hardMode)
         return this->contains(Group);
@@ -56,7 +52,7 @@ void TimeRecordMgr::SaveRecordInFile()
         this->setValue(Group+"/"+Table, newTime);
 }
 
-int TimeRecordMgr::returnValue() const
+inline int TimeRecordMgr::returnValue() const
 {
     if(hardMode)
         return this->value(Group).toInt();

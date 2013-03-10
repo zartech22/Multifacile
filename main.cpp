@@ -1,4 +1,4 @@
-/*Copyright (C) <2012> <Plestan> <Kévin>
+ï»¿/*Copyright (C) <2012> <Plestan> <KÃ©vin>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <QWidget>
 #include <QTextEdit>
 #include <QtDebug>
+#include <QFontDatabase>
 #include "fenetre_principale.h"
 
 int main(int argc, char* argv[])
@@ -35,7 +36,9 @@ int main(int argc, char* argv[])
     translator.load(":/translation/qt_fr");
     app.installTranslator(&translator);
 
-    QFile file(":/css/Multifacile.css");
+    QFontDatabase::addApplicationFont(":/police/DK Crayon Crumble.ttf");
+
+    QFile file(":/css/Application.css");
 
     file.open(QIODevice::ReadOnly | QIODevice::Text);
 
@@ -49,7 +52,7 @@ int main(int argc, char* argv[])
 
         if(arg == "-updated")
         {
-            int answer = QMessageBox::information(nullptr, "Mise à jour achevé", "Multifacile vient d'être mis à jour. Voulez-vous voir les changements ?", QMessageBox::No | QMessageBox::Yes);
+            int answer = QMessageBox::information(nullptr, "Mise Ã  jour achevÃ©", "Multifacile vient d'Ãªtre mis Ã  jour. Voulez-vous voir les changements ?", QMessageBox::No | QMessageBox::Yes);
 
             if(answer == QMessageBox::Yes)
             {

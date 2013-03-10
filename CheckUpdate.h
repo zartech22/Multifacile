@@ -1,4 +1,4 @@
-/*Copyright (C) <2012> <Plestan> <Kévin>
+﻿/*Copyright (C) <2012> <Plestan> <Kévin>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -17,7 +17,10 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #ifndef CHECKUPDATE_H
 #define CHECKUPDATE_H
 
+#define VERSION 315
+
 #include <QTcpSocket>
+#include <QDataStream>
 
 typedef enum UpdateType UpdateType;
 
@@ -35,6 +38,7 @@ public:
 private:
     quint16 messageSize;
     int actualVersion;
+    inline void Connection();
 public slots:
     void dataReceived();
     void sendRequest();

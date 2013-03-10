@@ -1,4 +1,4 @@
-/*Copyright (C) <2012> <Plestan> <Kévin>
+﻿/*Copyright (C) <2012> <Plestan> <Kévin>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -18,60 +18,67 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #define FEN_SECONDAIRE_H
 
 #include <QApplication>
-#include <QWidget>
 #include <QFormLayout>
-#include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QLabel>
+#include <QPainter>
+#include <QPoint>
 #include <QPushButton>
 #include <QString>
-#include <QLabel>
+#include <QStyleOption>
 #include <QTimer>
-#include <QLCDNumber>
+#include <QVBoxLayout>
+#include <QWidget>
 
-#include "fen_correction.h"
-#include "spinBox.h"
+#include "MinCloseMenu.h"
 #include "Shuffle.h"
-
+#include "spinBox.h"
 
 class MediumModeWindow : public QWidget
 {
     Q_OBJECT
 public :
+
     MediumModeWindow();
     MediumModeWindow(const int multiplicateur, bool chrono);
-    virtual ~MediumModeWindow();
+    ~MediumModeWindow();
+
+    virtual const int getMultiple();
 protected :
-    int m_multiple;
 
-    int array[10], secondes;
+    int m_multiple, note, array[10], secondes;
 
-    QLabel *label[10], *text, *minute, *seconde, *deuxPoint;
+    bool time, ClickOnWindow;
 
-    QVBoxLayout *vlayout;
+    QLabel *label[10], *text, *minute, *seconde, *deuxPoint, *labelPoint[10], *trueFalseLabel[2][10], *labelCorrection[10];
 
-    QHBoxLayout *hlayoutBottom, *hlayoutTop;
-
-    QFormLayout *layout;
-
-    QPushButton *corriger;
+    QPushButton *corriger, *quitter, *nextPrev[2];
 
     SpinBox *reponses[10];
 
-    Fen_correction *fen;
-
     QTimer *chronometre;
 
-    void startTime();
-    void closeEvent(QCloseEvent *event);
+    QPoint Diff;
 
-    bool time;
+    inline void ApplyStyle();
+    inline void closeEvent(QCloseEvent *event);
+    inline void paintEvent(QPaintEvent *);
+    inline void setNewNumber(int newNumber);
+    inline void startTime();
 
 signals:
+
     void addSeconde(int);
+    void wasClosed();
+
 public slots:
-    virtual void open();
-    void newSetFocus(const int number);
+
+    virtual void correct();
     void newSecond();
+    void newSetFocus(const int number);
+    void Next();
+    void Previous();
+    virtual void Retry();
     void updateLabel(const int temps) const;
 
 };

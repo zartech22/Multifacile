@@ -1,4 +1,4 @@
-/*Copyright (C) <2012> <Plestan> <Kévin>
+﻿/*Copyright (C) <2012> <Plestan> <Kévin>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -17,17 +17,26 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #ifndef ASTUCEWINDOW_H
 #define ASTUCEWINDOW_H
 
-#include <QMessageBox>
+#include <QWidget>
 #include <QMap>
+#include <QStyleOption>
+#include <QPainter>
+#include <QFile>
+#include <QLabel>
+#include <QPushButton>
 
-class AstuceWindow : public QMessageBox
+class AstuceWindow : public QWidget
 {
     Q_OBJECT
 public:
     AstuceWindow(const int table);
+    ~AstuceWindow();
 private:
+    QLabel *label;
     QMap<int, QString> astuces;
-    void astucesInit();
+    QPushButton *OkBouton;
+    inline void astucesInit();
+    void paintEvent(QPaintEvent *);
 signals:
     
 public slots:

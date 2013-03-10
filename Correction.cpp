@@ -1,4 +1,4 @@
-/*Copyright (C) <2012> <Plestan> <Kévin>
+ï»¿/*Copyright (C) <2012> <Plestan> <KÃ©vin>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -16,22 +16,11 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "Correction.h"
 
-Correction::Correction(Mode mode, const int multiple, int *order, int* userAnswers, const int time)
+Correction::Correction(Mode mode, const int multiple, int *order, int* userAnswers, const int time) : Multiple(multiple), orderTab(order), answers(userAnswers), difficultyMode(mode), seconds(time), isHardMode(false)
 {
-    Multiple = multiple;
-    orderTab = order;
-    answers = userAnswers;
-    difficultyMode = mode;
-    seconds = time;
-    isHardMode = false;
 }
-Correction::Correction(int *multiple, int *order, int *userAnswers, const int time)
+Correction::Correction(int *multiple, int *order, int *userAnswers, const int time) : multipleTab(multiple), orderTab(order), answers(userAnswers), seconds(time), isHardMode(true)
 {
-    multipleTab = multiple;
-    orderTab = order;
-    answers = userAnswers;
-    seconds = time;
-    isHardMode = true;
 }
 int Correction::getCorrection(QLabel *correction[][10])
 {
@@ -89,12 +78,12 @@ void Correction::doCorrection(QLabel *correction[][10], int resultat[], bool isC
         else
         {
             correction[0][i]->setPixmap(QPixmap("faux.png"));
-            correction[1][i]->setText(tr("<span style=\"color: rgb(128, 0, 0);\">La bonne réponse était ")+QString::number(resultat[i])+"</span>");
+            correction[1][i]->setText(tr("<span style=\"color: rgb(100, 0, 0);\">La bonne rÃ©ponse Ã©tait ")+QString::number(resultat[i])+"</span>");
         }
     }
 }
 
-void Correction::manageTime()
+inline void Correction::manageTime()
 {
     manager = new TimeRecordMgr(QSettings::IniFormat, QSettings::UserScope, "Multifacile", seconds, this->getModeGroupName(), this->getModeKeyName());
 

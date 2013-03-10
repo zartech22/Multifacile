@@ -1,4 +1,4 @@
-/*Copyright (C) <2012> <Plestan> <Kévin>
+﻿/*Copyright (C) <2012> <Plestan> <Kévin>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -16,13 +16,11 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "CheckUpdate.h"
 
-CheckUpdate::CheckUpdate(QObject *parent, const int version) : QTcpSocket(parent)
+CheckUpdate::CheckUpdate(QObject *parent, const int version) : QTcpSocket(parent), actualVersion(version), messageSize(0)
 {
-    actualVersion = version;
-    messageSize = 0;
-
     connect(this, SIGNAL(readyRead()), this, SLOT(dataReceived()));
     connect(this, SIGNAL(connected()), this , SLOT(sendRequest()));
+    Connection();
 }
 void CheckUpdate::sendRequest()
 {
@@ -58,6 +56,11 @@ void CheckUpdate::dataReceived()
     messageSize = 0;
 }
 void CheckUpdate::tryConnection()
+{
+    Connection();
+}
+
+inline void CheckUpdate::Connection()
 {
     this->abort();
     this->connectToHost("multifacile.no-ip.org", 8087);

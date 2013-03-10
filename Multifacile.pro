@@ -1,7 +1,6 @@
 SOURCES += \
     main.cpp \
     fenetre_principale.cpp \
-    fen_correction.cpp \
     CheckUpdate.cpp \
     Shuffle.cpp \
     spinBox.cpp \
@@ -10,25 +9,26 @@ SOURCES += \
     HardModeWindow.cpp \
     AstuceWindow.cpp \
     Correction.cpp \
-    TimeRecordMgr.cpp
+    TimeRecordMgr.cpp \
+    MinCloseMenu.cpp
 
 HEADERS += \
     fenetre_principale.h \
-    fen_correction.h \
     CheckUpdate.h \
     Shuffle.h \
     spinBox.h \
-    modeEnum.h \
     MediumModeWindow.h \
     EasyModeWindow.h \
     HardModeWindow.h \
     AstuceWindow.h \
     Correction.h \
-    TimeRecordMgr.h
+    TimeRecordMgr.h \
+    MinCloseMenu.h \
+    FenetrePrincipaleEnums.h
 
 RC_FILE = Icon.rc
 
-QT += network phonon
+QT += network
 
 RESOURCES += \
     ressource.qrc \

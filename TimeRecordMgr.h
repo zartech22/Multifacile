@@ -1,4 +1,4 @@
-/*Copyright (C) <2012> <Plestan> <Kévin>
+﻿/*Copyright (C) <2012> <Plestan> <Kévin>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -47,9 +47,9 @@ private:
     QString Group;
     QString Table;
 
-    int returnValue() const;
+    inline int returnValue() const;
 
-    bool isKeyExist() const;
+    inline bool isKeyExist() const;
     
 signals:
     void isNewRecord(RecordState, int);
