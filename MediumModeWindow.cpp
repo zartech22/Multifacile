@@ -113,6 +113,8 @@ MediumModeWindow::MediumModeWindow(const int multiplicateur, bool chrono) : time
         deuxPoint = new QLabel(":", this);
         seconde = new QLabel("00", this);
 
+        secondes = 0;
+
         text->move(235, 15);
         minute->move(330, 15);
         deuxPoint->move(355, 15);
@@ -232,6 +234,13 @@ inline void MediumModeWindow::setNewNumber(register int newNumber)
 }
 void MediumModeWindow::correct()
 {
+    if(time)
+    {
+        chronometre->stop();
+        delete chronometre;
+        secondes = 0;
+    }
+
     note = 10;
 
     corriger->setText("Retenter");
@@ -287,6 +296,13 @@ void MediumModeWindow::Retry()
         trueFalseLabel[0][i]->setPixmap(QPixmap(":/image/OpacRight.png"));
         trueFalseLabel[1][i]->setPixmap(QPixmap(":/image/OpacWrong.png"));
     }
+
+    if(time)
+    {
+        minute->setText("00");
+        seconde->setText("00");
+        startTime();
+    }
 }
 
 const int MediumModeWindow::getMultiple() { return m_multiple; }
@@ -330,6 +346,7 @@ MediumModeWindow::~MediumModeWindow()
         delete minute;
         delete seconde;
         delete deuxPoint;
+        delete chronometre;
 
 
         chronometre = nullptr;

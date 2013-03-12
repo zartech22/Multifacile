@@ -16,7 +16,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "HardModeWindow.h"
 
-HardModeWindow::HardModeWindow(bool chrono) : time(chrono)
+HardModeWindow::HardModeWindow(bool chrono)
 {
     ApplyStyle();
     Shuffle shuffle(true);
@@ -24,6 +24,8 @@ HardModeWindow::HardModeWindow(bool chrono) : time(chrono)
     setWindowFlags(Qt::FramelessWindowHint);
 
     this->setWindowTitle(tr("Table aléatoire"));
+
+    time = chrono;
 
     quitter = new QPushButton(tr("Retour"));
     quitter->setParent(this);
@@ -43,6 +45,8 @@ HardModeWindow::HardModeWindow(bool chrono) : time(chrono)
         minute = new QLabel("00", this);
         deuxPoint = new QLabel(":", this);
         seconde = new QLabel("00", this);
+
+        secondes = 0;
 
         text->move(235, 15);
         minute->move(330, 15);
@@ -118,6 +122,13 @@ void HardModeWindow::correct()
     connect(corriger, SIGNAL(clicked()), this, SLOT(Retry()));
     note = 10;
 
+    if(time)
+    {
+        chronometre->stop();
+        delete chronometre;
+        secondes = 0;
+    }
+
     for(int i = 0; i < 10; i++)
     {
         int number = reponses[i]->text().toInt();
@@ -160,6 +171,7 @@ void HardModeWindow::Retry()
     Shuffle shuffle(true);
     shuffle.getNumbers(array, multiple);
 
+
     for(int i = 0; i < 10; i++)
     {
         label[i]->setText("<span style=\"color: #9FC54D\">"+QString::number(multiple[i])+"</span> x "+QString::number(array[i]));
@@ -168,6 +180,13 @@ void HardModeWindow::Retry()
         reponses[i]->clear();
         reponses[i]->setVisible(true);
         delete labelCorrection[i];
+    }
+
+    if(time)
+    {
+        minute->setText("00");
+        seconde->setText("00");
+        startTime();
     }
 }
 

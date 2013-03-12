@@ -16,11 +16,13 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "EasyModeWindow.h"
 
-EasyModeWindow::EasyModeWindow(const int m_multiplicateur, bool chrono) : time(chrono)
+EasyModeWindow::EasyModeWindow(const int m_multiplicateur, bool chrono)
 {
     ApplyStyle();
 
     m_multiple = m_multiplicateur;
+
+    time = chrono;
 
     setWindowFlags(Qt::FramelessWindowHint);
     Shuffle shuffle(false);

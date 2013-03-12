@@ -29,7 +29,6 @@ public:
     ~EasyModeWindow();
 protected:
     QPushButton *astuces;
-    bool time;
 public slots:
     void openAstuce() const;
 };

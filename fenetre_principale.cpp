@@ -60,8 +60,7 @@ Fenetre_principale::Fenetre_principale() : userAction(false), mode(EASY), actual
     hardMode->setCheckable(true);
     hardMode->setToolTip("Une table mélangé avec n'importe quelle table");
     easyMode->setChecked(true);
-    chrono->setEnabled(false);
-    chrono->setChecked(false);
+    chrono->setCheckable(true);
     chrono->setObjectName("Chrono");
 
         //create a QActionGroup, add to it QActions and set it exclusive
@@ -263,7 +262,7 @@ void Fenetre_principale::open_window(const int nbr)   //open a questionary windo
 {
     if(mode == EASY)
     {
-        fen = new EasyModeWindow(nbr, false);
+        fen = new EasyModeWindow(nbr, chrono->isChecked());
         fen->setFixedSize(650, 560);
         fen->setObjectName("Fen");
         this->setCentralWidget(fen);
@@ -271,7 +270,7 @@ void Fenetre_principale::open_window(const int nbr)   //open a questionary windo
     }
     else if(mode == MEDIUM)
     {
-        fen = new MediumModeWindow(nbr, false);
+        fen = new MediumModeWindow(nbr, chrono->isChecked());
         fen->setFixedSize(650, 560);
         fen->setObjectName("Fen");
         this->setCentralWidget(fen);
@@ -279,7 +278,7 @@ void Fenetre_principale::open_window(const int nbr)   //open a questionary windo
     }
     else if(mode == HARD)
     {
-        fen = new HardModeWindow(false);
+        fen = new HardModeWindow(chrono->isChecked());
         fen->setFixedSize(650, 560);
         fen->setObjectName("Fen");
         this->setCentralWidget(fen);

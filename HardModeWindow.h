@@ -28,8 +28,6 @@ public:
     ~HardModeWindow();
 
     const int getMultiple();
-protected:
-    bool time;
 private:
     int multiple[10];
     void correct();
