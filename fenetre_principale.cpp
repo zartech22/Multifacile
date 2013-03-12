@@ -218,16 +218,16 @@ void Fenetre_principale::createCentralWidget()
     quit->setParent(widget);
     quit->move(490, 480);
 
-    bouton[0]->move(80, 80);
-    bouton[1]->move(320, 80);
-    bouton[2]->move(80, 155);
-    bouton[3]->move(320, 155);
-    bouton[4]->move(80, 230);
-    bouton[5]->move(320, 230);
-    bouton[6]->move(80, 305);
-    bouton[7]->move(320, 305);
-    bouton[8]->move(80, 380);
-    bouton[9]->move(320, 380);
+    for(int i = 0, j = 0; i < 10; i++)
+    {
+        if(i % 2 == 0)
+            bouton[i]->move(80, (80 + 75 * j));
+        else
+        {
+            bouton[i]->move(320, (80 + 75 * j));
+            j++;
+        }
+    }
 
     connect(quit, SIGNAL(clicked()), qApp, SLOT(quit()));
 

@@ -95,16 +95,8 @@ HardModeWindow::HardModeWindow(bool chrono)
         labelPoint[i]->move(105, (90 + 40 * i));
     }
 
-    label[0]->move(120, 78);
-    label[1]->move(120, 118);
-    label[2]->move(120, 158);
-    label[3]->move(120, 198);
-    label[4]->move(120, 238);
-    label[5]->move(120, 278);
-    label[6]->move(120, 318);
-    label[7]->move(120, 358);
-    label[8]->move(120, 398);
-    label[9]->move(120, 438);
+    for(int i = 0; i < 10; i++)
+        label[i]->move(120, (78 + 40 * i));
 
     if(time)
         startTime();
