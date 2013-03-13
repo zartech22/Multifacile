@@ -238,7 +238,11 @@ void MediumModeWindow::correct()
     {
         chronometre->stop();
         delete chronometre;
+        int time[2];
+        time[1] = secondes / 60;
+        time[0] = secondes % 60;
         secondes = 0;
+        QMessageBox::information(this, "Ton temps", "Tu as mis "+QString::number(time[1])+" minute(s) et "+QString::number(time[0])+" secondes !");
     }
 
     note = 10;
