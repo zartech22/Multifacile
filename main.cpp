@@ -1,4 +1,4 @@
-ï»¿/*Copyright (C) <2012> <Plestan> <KÃ©vin>
+/*Copyright (C) <2013> <Plestan> <Kévin>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <QTextEdit>
 #include <QtDebug>
 #include <QFontDatabase>
+
 #include "fenetre_principale.h"
 
 int main(int argc, char* argv[])
@@ -46,13 +47,13 @@ int main(int argc, char* argv[])
 
     file.close();
 
-    for(int i = 0; i < argc; i++)
+    for(int i = 0; i < argc; ++i)
     {
         QString arg(argv[i]);
 
         if(arg == "-updated")
         {
-            int answer = QMessageBox::information(nullptr, "Mise Ã  jour achevÃ©", "Multifacile vient d'Ãªtre mis Ã  jour. Voulez-vous voir les changements ?", QMessageBox::No | QMessageBox::Yes);
+            int answer = QMessageBox::information(nullptr, "Mise à jour achevé", "Multifacile vient d'être mis à jour. Voulez-vous voir les nouveautés ?", QMessageBox::No | QMessageBox::Yes);
 
             if(answer == QMessageBox::Yes)
             {

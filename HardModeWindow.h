@@ -1,4 +1,4 @@
-﻿/*Copyright (C) <2012> <Plestan> <Kévin>
+/*Copyright (C) <2013> <Plestan> <K�vin>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@ class HardModeWindow : public MediumModeWindow
     Q_OBJECT
 
 public:
-    HardModeWindow(bool chrono);
+    HardModeWindow();
     ~HardModeWindow();
 
     const int getMultiple();

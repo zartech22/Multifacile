@@ -1,4 +1,4 @@
-﻿/*Copyright (C) <2012> <Plestan> <Kévin>
+/*Copyright (C) <2013> <Plestan> <K�vin>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -17,7 +17,18 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #ifndef TIMERECORDMGR_H
 #define TIMERECORDMGR_H
 
+#include <QDomDocument>
+#include <QFile>
 #include <QSettings>
+#include <QStringList>
+#include <QTextStream>
+
+#include <QDebug>
+
+bool readXML(QIODevice &device, QSettings::SettingsMap &map);
+bool writeXML(QIODevice &device, const QSettings::SettingsMap &map);
+
+const QSettings::Format XML = QSettings::registerFormat("xml", readXML, writeXML);
 
 typedef enum RecordState RecordState;
 
@@ -32,14 +43,18 @@ class TimeRecordMgr : public QSettings
 {
     Q_OBJECT
 public:
-    TimeRecordMgr(Format format, Scope scope, const QString &organisation, const int time, const QString group, const QString table = QString());
+    TimeRecordMgr(Scope scope, const QString &organisation, const int time, const QString &group, const QString &table = QString());
 
     void CompareTime();
     void SaveRecordInFile();
 
     static void returnTime(int tab[]);
 
+
+    QString read();
+
 private:
+
     int newTime;
 
     bool hardMode;

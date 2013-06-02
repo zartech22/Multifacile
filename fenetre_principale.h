@@ -1,4 +1,4 @@
-﻿/*Copyright (C) <2012> <Plestan> <Kévin>
+/*Copyright (C) <2013> <Plestan> <K�vin>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -70,7 +70,7 @@ private :
     MinCloseMenu *minCloseMenu;
     Mode mode;
     Window actualWindow;
-    QAction *chrono, *easyMode, *hardMode, *mediumMode, *quitAction, *updateAction;
+    QAction *easyMode, *hardMode, *mediumMode, *quitAction, *updateAction;
     QActionGroup *actionGroup;
     QLabel *point, *texte;
     QPushButton *bouton[10], *quit;

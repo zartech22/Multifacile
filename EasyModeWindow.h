@@ -1,4 +1,4 @@
-﻿/*Copyright (C) <2012> <Plestan> <Kévin>
+/*Copyright (C) <2013> <Plestan> <K�vin>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -19,13 +19,13 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "MediumModeWindow.h"
 #include "Shuffle.h"
-#include"AstuceWindow.h"
+#include "AstuceWindow.h"
 
 class EasyModeWindow : public MediumModeWindow
 {
     Q_OBJECT
 public:
-    EasyModeWindow(const int m_multiplicateur, bool chrono);
+    EasyModeWindow(const int m_multiplicateur);
     ~EasyModeWindow();
 protected:
     QPushButton *astuces;

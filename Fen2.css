@@ -37,7 +37,7 @@ QPushButton#Astuce
 	margin: 0px;
 	padding: 0px;
 }
-QWidget#AstuceFen
+/*QWidget#AstuceFen
 {
 	background-color: rgba(255, 255, 255, 0);
 	background-image: url(":/image/Background_Astuce.png");
@@ -47,7 +47,7 @@ QWidget#AstuceFen
 	border-radius: 2px;
 	margin: 1000px;
 	padding: 1000px;
-}
+}*/
 QLabel#LabelAstuce
 {
 	margin-left: 20px;

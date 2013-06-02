@@ -1,4 +1,4 @@
-﻿/*Copyright (C) <2012> <Plestan> <Kévin>
+/*Copyright (C) <2013> <Plestan> <K�vin>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -16,19 +16,19 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "EasyModeWindow.h"
 
-EasyModeWindow::EasyModeWindow(const int m_multiplicateur, bool chrono)
+EasyModeWindow::EasyModeWindow(const int m_multiplicateur)
 {
     ApplyStyle();
 
+    mode = EASY;
     m_multiple = m_multiplicateur;
-
-    time = chrono;
+    secondes = 0;
 
     setWindowFlags(Qt::FramelessWindowHint);
     Shuffle shuffle(false);
     shuffle.getNumbers(array);
 
-    this->setWindowTitle(tr("Table de ")+QString::number(m_multiple));
+    setWindowTitle(tr("Table de ")+QString::number(m_multiple));
 
     quitter = new QPushButton(tr("Retour"));
     quitter->setParent(this);
@@ -48,27 +48,27 @@ EasyModeWindow::EasyModeWindow(const int m_multiplicateur, bool chrono)
     astuces->move(310, 490);
     astuces->setObjectName("Astuce");
 
-    if(time)
+    text = new QLabel(tr("Temps : "), this);
+    minute = new QLabel("00", this);
+    deuxPoint = new QLabel(":", this);
+    seconde = new QLabel("00", this);
+
+    text->move(235, 15);
+    minute->move(330, 15);
+    deuxPoint->move(355, 15);
+    seconde->move(380, 15);
+
+    mapper = new QSignalMapper(this);
+
+    for(int i = 0; i < 10; ++i)
     {
-        text = new QLabel(tr("Temps : "), this);
-        minute = new QLabel("00", this);
-        deuxPoint = new QLabel(":", this);
-        seconde = new QLabel("00", this);
-
-        text->move(235, 15);
-        minute->move(330, 15);
-        deuxPoint->move(355, 15);
-        seconde->move(380, 15);
-    }
-
-
-    for(int i = 0; i < 10; i++)
-    {
-        reponses[i] = new SpinBox(this);
+        reponses[i] = new QLineEdit(this);
         reponses[i]->setAttribute(Qt::WA_TranslucentBackground);
-        reponses[i]->setNumero(i);
         reponses[i]->setFixedSize(302, 69);
         reponses[i]->move(185, (60 + 40 * i));
+
+        connect(reponses[i], SIGNAL(returnPressed()), mapper, SLOT(map()));
+        mapper->setMapping(reponses[i], (i + 1));
 
         labelCorrection[i] = new QLabel(this);
         labelCorrection[i]->setVisible(false);
@@ -76,16 +76,14 @@ EasyModeWindow::EasyModeWindow(const int m_multiplicateur, bool chrono)
 
     reponses[0]->setFocus();
 
-    register int temp_multiple = m_multiple;
-
-    for(int i = 0; i < 10; i++)
+    for(int i = 0; i < 10; ++i)
     {
-        label[i] = new QLabel("<span style=\"color: #9FC54D\">"+QString::number(temp_multiple)+"</span> x "+QString::number(array[i]), this);
+        label[i] = new QLabel("<span style=\"color: #9FC54D\">"+QString::number(m_multiple)+"</span> x "+QString::number(array[i]), this);
         label[i]->setFixedSize(100, 30);
     }
 
-    for(int j = 0; j < 2; j++)
-        for(int i = 0; i < 10; i++)
+    for(int j = 0; j < 2; ++j)
+        for(int i = 0; i < 10; ++i)
         {
             trueFalseLabel[j][i] = new QLabel(this);
             if(j == 0)
@@ -100,7 +98,7 @@ EasyModeWindow::EasyModeWindow(const int m_multiplicateur, bool chrono)
             }
         }
 
-    for(int i = 0; i < 10; i++)
+    for(int i = 0; i < 10; ++i)
     {
         labelPoint[i] = new QLabel(this);
         labelPoint[i]->setPixmap(QPixmap(":/image/Point.png"));
@@ -117,19 +115,10 @@ EasyModeWindow::EasyModeWindow(const int m_multiplicateur, bool chrono)
     nextPrev[1]->setFixedSize(58, 58);
     nextPrev[1]->move(570, 240);
 
-    label[0]->move(120, 78);
-    label[1]->move(120, 118);
-    label[2]->move(120, 158);
-    label[3]->move(120, 198);
-    label[4]->move(120, 238);
-    label[5]->move(120, 278);
-    label[6]->move(120, 318);
-    label[7]->move(120, 358);
-    label[8]->move(120, 398);
-    label[9]->move(120, 438);
+    for(int i = 0; i < 10; ++i)
+        label[i]->move(120, 78 + (i * 40));
 
-    if(time)
-        startTime();
+    startTime();
 
     connect(quitter, SIGNAL(clicked()), this, SIGNAL(wasClosed()));
     connect(corriger, SIGNAL(clicked()), this, SLOT(correct()));
@@ -138,14 +127,13 @@ EasyModeWindow::EasyModeWindow(const int m_multiplicateur, bool chrono)
     connect(nextPrev[0], SIGNAL(clicked()), this, SLOT(Previous()));
     connect(nextPrev[1], SIGNAL(clicked()), this, SLOT(Next()));
 
-    for(int i = 0; i < 10; i++)
-        connect(reponses[i], SIGNAL(enterKeyPressed(int)), this, SLOT(newSetFocus(int)));
+    connect(mapper, SIGNAL(mapped(int)), this, SLOT(newSetFocus(int)));
 }
 void EasyModeWindow::openAstuce() const
 {
     AstuceWindow *astuce = new AstuceWindow(m_multiple);
     astuce->setObjectName("AstuceFen");
-    astuce->show();
+    astuce->exec();
 }
 EasyModeWindow::~EasyModeWindow()
 {

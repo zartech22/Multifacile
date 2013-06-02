@@ -1,4 +1,4 @@
-﻿/*Copyright (C) <2012> <Plestan> <Kévin>
+/*Copyright (C) <2013> <Plestan> <K�vin>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -17,26 +17,35 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #ifndef ASTUCEWINDOW_H
 #define ASTUCEWINDOW_H
 
-#include <QWidget>
+#include <QDialog>
 #include <QMap>
 #include <QStyleOption>
 #include <QPainter>
 #include <QFile>
 #include <QLabel>
 #include <QPushButton>
+#include <QMouseEvent>
 
-class AstuceWindow : public QWidget
+#include "MinCloseMenu.h"
+
+class AstuceWindow : public QDialog
 {
     Q_OBJECT
 public:
-    AstuceWindow(const int table);
+    AstuceWindow(const int table, QWidget *parent = 0);
     ~AstuceWindow();
 private:
     QLabel *label;
     QMap<int, QString> astuces;
     QPushButton *OkBouton;
+    MinCloseMenu *menu;
+    bool clickOnWindow;
+    QPoint Diff;
     inline void astucesInit();
     void paintEvent(QPaintEvent *);
+    inline void mouseMoveEvent(QMouseEvent *event);
+    inline void mousePressEvent(QMouseEvent *event);
+    inline void mouseReleaseEvent(QMouseEvent *);
 signals:
     
 public slots:

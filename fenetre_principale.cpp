@@ -1,4 +1,4 @@
-ï»¿/*Copyright (C) <2012> <Plestan> <KÃ©vin>
+/*Copyright (C) <2013> <Plestan> <Kévin>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -44,10 +44,13 @@ Fenetre_principale::Fenetre_principale() : userAction(false), mode(EASY), actual
 
     menuBar()->setAttribute(Qt::WA_TranslucentBackground);
 
+#ifndef Q_OS_WIN32
+    menuBar()->setNativeMenuBar(false);
+#endif
+
         //create QActions
     quitAction = new QAction(QIcon(":/icon/sortie.png"), tr("&Quitter"), this); //the file comes of a Qt ressource file (it's faster than charge a directory's file)
-    updateAction = new QAction(QIcon(":/icon/update.png"), tr("&VÃ©rifier les mise Ã  jours"), this);  //idem
-    chrono = new QAction(tr("Table &chronomÃ¨trÃ©"), this);
+    updateAction = new QAction(QIcon(":/icon/update.png"), tr("&Vérifier les mise à jours"), this);  //idem
     easyMode = new QAction(tr("&Facile"), this);
     mediumMode = new QAction(tr("&Moyen"), this);
     hardMode = new QAction(tr("D&ifficile"), this);
@@ -56,12 +59,10 @@ Fenetre_principale::Fenetre_principale() : userAction(false), mode(EASY), actual
     easyMode->setCheckable(true);
     easyMode->setToolTip("Table de multiplication normale avec astuces");
     mediumMode->setCheckable(true);
-    mediumMode->setToolTip("Table en dÃ©sordre sans astuces");
+    mediumMode->setToolTip("Table en désordre sans astuces");
     hardMode->setCheckable(true);
-    hardMode->setToolTip("Une table mÃ©langÃ© avec n'importe quelle table");
+    hardMode->setToolTip("Une table mélangé avec n'importe quelle table");
     easyMode->setChecked(true);
-    chrono->setCheckable(true);
-    chrono->setObjectName("Chrono");
 
         //create a QActionGroup, add to it QActions and set it exclusive
     actionGroup = new QActionGroup(this);
@@ -74,8 +75,6 @@ Fenetre_principale::Fenetre_principale() : userAction(false), mode(EASY), actual
     file->addAction(quitAction);
     tools->addAction(updateAction);
     modes->addActions(actionGroup->actions());
-    modes->addSeparator();
-    modes->addAction(chrono);
     /*****************************************************/
 
 
@@ -128,7 +127,7 @@ void Fenetre_principale::checkUpdateReceivedAnswer(UpdateType update)    //slot 
     {
         if(userAction)  //and if it's the user who clicked on "check for updates"
         {
-            QMessageBox::information(this, tr("VÃ©rification de mise Ã  jour"), tr("Il n'y a pour le moment aucune mise Ã  jour disponible."));
+            QMessageBox::information(this, tr("Vérification de mise à jour"), tr("Il n'y a pour le moment aucune mise à jour disponible."));
             userAction = false;
         }
         check->disconnectFromHost();
@@ -139,7 +138,7 @@ void Fenetre_principale::checkUpdateReceivedAnswer(UpdateType update)    //slot 
         if(userAction)
             userAction = false;
         check->disconnectFromHost();
-        int userAnswer = QMessageBox::question(this, tr("Mise Ã  jour disponible"), tr("Une version plus rÃ©cente de Multifacile est disponible, veux-tu la tÃ©lÃ©charger ?"), QMessageBox::Yes | QMessageBox::No);
+        int userAnswer = QMessageBox::question(this, tr("Mise à jour disponible"), tr("Une version plus récente de Multifacile est disponible, veux-tu la télécharger ?"), QMessageBox::Yes | QMessageBox::No);
         if(userAnswer == QMessageBox::Yes)  //if the user want to update
         {
 #ifdef Q_OS_WIN32
@@ -160,7 +159,7 @@ void Fenetre_principale::checkUpdateReceivedAnswer(UpdateType update)    //slot 
         if(userAction)
             userAction = false;
         check->disconnectFromHost();
-        int userAnswer = QMessageBox::question(this, tr("Mise Ã  jour disponible"), tr("Une version plus rÃ©cente de Multifacile est disponible, veux-tu la tÃ©lÃ©charger ?"), QMessageBox::Yes | QMessageBox::No);
+        int userAnswer = QMessageBox::question(this, tr("Mise à jour disponible"), tr("Une version plus récente de Multifacile est disponible, veux-tu la télécharger ?"), QMessageBox::Yes | QMessageBox::No);
         if(userAnswer == QMessageBox::Yes)
         {
 #ifdef Q_OS_LINUX
@@ -193,12 +192,12 @@ void Fenetre_principale::createCentralWidget()
     point->setPixmap(QPixmap(":/image/Point.png"));
 
 
-    for(int i = 0; i < 10; i++)
+    for(int i = 0; i < 10; ++i)
     {
         if(mode == EASY || mode == MEDIUM)
             bouton[i] = new QPushButton(tr("La table de ")+QString::number(i+1), widget);
         else if(mode == HARD)
-            bouton[i] = new QPushButton(tr("La table alÃ©atoire"), widget);
+            bouton[i] = new QPushButton(tr("La table aléatoire"), widget);
         bouton[i]->setFixedSize(256, 94);
 
         connect(bouton[i], SIGNAL(clicked()), mapper, SLOT(map()));
@@ -218,14 +217,14 @@ void Fenetre_principale::createCentralWidget()
     quit->setParent(widget);
     quit->move(490, 480);
 
-    for(int i = 0, j = 0; i < 10; i++)
+    for(int i = 0, j = 0; i < 10; ++i)
     {
         if(i % 2 == 0)
             bouton[i]->move(80, (80 + 75 * j));
         else
         {
             bouton[i]->move(320, (80 + 75 * j));
-            j++;
+            ++j;
         }
     }
 
@@ -237,17 +236,13 @@ void Fenetre_principale::createCentralWidget()
 void Fenetre_principale::erreurSocket()
 {
     if(userAction)
-        QMessageBox::information(this, tr("Erreur de connexion"), tr("Impossible de vÃ©rifier les mise Ã  jours")); //if there is a connection error, it open a QMessageBox for inform the user
+        QMessageBox::information(this, tr("Erreur de connexion"), tr("Impossible de vérifier les mise à jours")); //if there is a connection error, it open a QMessageBox for inform the user
 }
 
 inline void Fenetre_principale::mouseMoveEvent(QMouseEvent *event)
 {
     if(ClickOnWindow)
-    {
-        QPoint p = event->globalPos();
-
-        window()->move(p - Diff);
-    }
+        window()->move(event->globalPos() - Diff);
 }
 
 inline void Fenetre_principale::mousePressEvent(QMouseEvent *event)
@@ -262,7 +257,7 @@ void Fenetre_principale::open_window(const int nbr)   //open a questionary windo
 {
     if(mode == EASY)
     {
-        fen = new EasyModeWindow(nbr, chrono->isChecked());
+        fen = new EasyModeWindow(nbr);
         fen->setFixedSize(650, 560);
         fen->setObjectName("Fen");
         this->setCentralWidget(fen);
@@ -270,7 +265,7 @@ void Fenetre_principale::open_window(const int nbr)   //open a questionary windo
     }
     else if(mode == MEDIUM)
     {
-        fen = new MediumModeWindow(nbr, chrono->isChecked());
+        fen = new MediumModeWindow(nbr);
         fen->setFixedSize(650, 560);
         fen->setObjectName("Fen");
         this->setCentralWidget(fen);
@@ -278,7 +273,7 @@ void Fenetre_principale::open_window(const int nbr)   //open a questionary windo
     }
     else if(mode == HARD)
     {
-        fen = new HardModeWindow(chrono->isChecked());
+        fen = new HardModeWindow();
         fen->setFixedSize(650, 560);
         fen->setObjectName("Fen");
         this->setCentralWidget(fen);
@@ -303,7 +298,7 @@ void Fenetre_principale::resetLabel(QAction *action)    //change the Buttons's t
     else if(action == hardMode && actualWindow == MainWindow)
     {
         for(int i = 0; i < 10; i++)
-            bouton[i]->setText(tr("La table alÃ©atoire"));
+            bouton[i]->setText(tr("La table aléatoire"));
     }
     else
         return;
@@ -344,13 +339,13 @@ void Fenetre_principale::verification() //slot that is call when user click on c
 Fenetre_principale::~Fenetre_principale()
 {
     delete file, tools, modes;
-    delete quitAction, updateAction, chrono, easyMode, mediumMode, hardMode;
+    delete quitAction, updateAction, easyMode, mediumMode, hardMode;
     delete actionGroup;
     delete check;
     delete mapper;
     delete minCloseMenu;
 
-    for(int i = 0; i < 10; i++)
+    for(int i = 0; i < 10; ++i)
         bouton[i] = nullptr;
 
     file = nullptr;
@@ -358,7 +353,6 @@ Fenetre_principale::~Fenetre_principale()
     modes = nullptr;
     quitAction = nullptr;
     updateAction = nullptr;
-    chrono = nullptr;
     easyMode = nullptr;
     mediumMode = nullptr;
     hardMode = nullptr;

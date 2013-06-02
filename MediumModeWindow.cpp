@@ -1,4 +1,4 @@
-﻿/*Copyright (C) <2012> <Plestan> <Kévin>
+/*Copyright (C) <2013> <Plestan> <K�vin>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@ MediumModeWindow::MediumModeWindow() : QWidget()
 {
 }
 
-MediumModeWindow::MediumModeWindow(const int multiplicateur, bool chrono) : time(chrono), secondes(0)
+MediumModeWindow::MediumModeWindow(const int multiplicateur) : secondes(0), mode(MEDIUM)
 {
     ApplyStyle();
     this->setWindowFlags(Qt::FramelessWindowHint);
@@ -44,18 +44,19 @@ MediumModeWindow::MediumModeWindow(const int multiplicateur, bool chrono) : time
     corriger->move(400, 490);
     corriger->setObjectName("Corriger");
 
+    mapper = new QSignalMapper(this);
 
-    register int multiple_temp = m_multiple;
-
-    for(int i = 0; i < 10; i++)
+    for(int i = 0; i < 10; ++i)
     {
-        reponses[i] = new SpinBox(this);
+        reponses[i] = new QLineEdit(this);
         reponses[i]->setAttribute(Qt::WA_TranslucentBackground);
-        reponses[i]->setNumero(i);
         reponses[i]->setFixedSize(302, 69);
         reponses[i]->move(185, (60 + 40 * i));
 
-        label[i] = new QLabel("<span style=\"color: #9FC54D\">"+QString::number(multiple_temp)+"</span> x "+QString::number(array[i]), this);
+        connect(reponses[i], SIGNAL(returnPressed()), mapper, SLOT(map()));
+        mapper->setMapping(reponses[i], (i + 1));
+
+        label[i] = new QLabel("<span style=\"color: #9FC54D\">"+QString::number(m_multiple)+"</span> x "+QString::number(array[i]), this);
         label[i]->setFixedSize(100, 30);
 
         labelPoint[i] = new QLabel(this);
@@ -66,8 +67,8 @@ MediumModeWindow::MediumModeWindow(const int multiplicateur, bool chrono) : time
         labelCorrection[i]->setVisible(false);
     }
 
-    for(int j = 0; j < 2; j++)
-        for(int i = 0; i < 10; i++)
+    for(int j = 0; j < 2; ++j)
+        for(int i = 0; i < 10; ++i)
         {
             trueFalseLabel[j][i] = new QLabel(this);
             if(j == 0)
@@ -83,7 +84,7 @@ MediumModeWindow::MediumModeWindow(const int multiplicateur, bool chrono) : time
         }
 
 
-    for(int i = 0; i < 2; i++)
+    for(int i = 0; i < 2; ++i)
         nextPrev[i] = new QPushButton(this);
 
     nextPrev[0]->setObjectName("Precedent");
@@ -92,36 +93,23 @@ MediumModeWindow::MediumModeWindow(const int multiplicateur, bool chrono) : time
     nextPrev[0]->setFixedSize(58, 58);
     nextPrev[1]->setFixedSize(58, 58);
 
-    label[0]->move(120, 78);
-    label[1]->move(120, 118);
-    label[2]->move(120, 158);
-    label[3]->move(120, 198);
-    label[4]->move(120, 238);
-    label[5]->move(120, 278);
-    label[6]->move(120, 318);
-    label[7]->move(120, 358);
-    label[8]->move(120, 398);
-    label[9]->move(120, 438);
+    for(int i = 0; i < 10; ++i)
+        label[i]->move(120, 78 + i * 40);
 
     nextPrev[0]->move(20, 240);
     nextPrev[1]->move(570, 240);
 
-    if(time)
-    {
-        text = new QLabel(tr("Temps :"),this);
-        minute = new QLabel("00", this);
-        deuxPoint = new QLabel(":", this);
-        seconde = new QLabel("00", this);
+    text = new QLabel(tr("Temps :"),this);
+    minute = new QLabel("00", this);
+    deuxPoint = new QLabel(":", this);
+    seconde = new QLabel("00", this);
 
-        secondes = 0;
+    text->move(235, 15);
+    minute->move(330, 15);
+    deuxPoint->move(355, 15);
+    seconde->move(380, 15);
 
-        text->move(235, 15);
-        minute->move(330, 15);
-        deuxPoint->move(355, 15);
-        seconde->move(380, 15);
-
-        startTime();
-    }
+    startTime();
 
     connect(corriger, SIGNAL(clicked()), this, SLOT(correct()));
     connect(quitter, SIGNAL(clicked()), this, SIGNAL(wasClosed()));
@@ -130,8 +118,7 @@ MediumModeWindow::MediumModeWindow(const int multiplicateur, bool chrono) : time
     connect(nextPrev[0], SIGNAL(clicked()), this, SLOT(Previous()));
     connect(nextPrev[1], SIGNAL(clicked()), this, SLOT(Next()));
 
-    for(int i = 0; i < 10; i++)
-        connect(reponses[i], SIGNAL(enterKeyPressed(int)), this, SLOT(newSetFocus(int)));
+    connect(mapper, SIGNAL(mapped(int)), this, SLOT(newSetFocus(int)));
 
     reponses[0]->setFocus();
 }
@@ -146,11 +133,10 @@ inline void MediumModeWindow::ApplyStyle()
 
 void MediumModeWindow::newSetFocus(const int number)
 {
-    if(number < 9)
+    if(number < 10)
     {
-        int num = number+1;
-        reponses[num]->setFocus();
-        reponses[num]->selectAll();
+        reponses[number]->setFocus();
+        reponses[number]->selectAll();
     }
     else
         correct();
@@ -164,13 +150,13 @@ inline void MediumModeWindow::startTime()
 }
 inline void MediumModeWindow::closeEvent(QCloseEvent *event)
 {
-    if(time && event->spontaneous())
+    if(event->spontaneous())
         delete chronometre;
     event->accept();
 }
 void MediumModeWindow::newSecond()
 {
-    secondes++;
+    ++secondes;
     emit addSeconde(secondes);
 }
 void MediumModeWindow::updateLabel(const int temps) const
@@ -202,13 +188,13 @@ inline void MediumModeWindow::paintEvent(QPaintEvent *)
 void MediumModeWindow::Previous()
 {
     if(m_multiple > 1)
-        m_multiple--;
+        --m_multiple;
     setNewNumber(m_multiple);
 }
 void MediumModeWindow::Next()
 {
     if(m_multiple < 10)
-        m_multiple += 1;
+       ++ m_multiple;
     setNewNumber(m_multiple);
 }
 inline void MediumModeWindow::setNewNumber(register int newNumber)
@@ -217,10 +203,10 @@ inline void MediumModeWindow::setNewNumber(register int newNumber)
 
     corriger->setText("Corriger");
 
-    for(int i = 0; i < 10; i++)
+    for(int i = 0; i < 10; ++i)
         label[i]->setText("<span style=\"color: #9FC54D\">"+QString::number(newNumber)+"</span> x "+QString::number(array[i]));
 
-    for(int i = 0; i < 10; i++)
+    for(int i = 0; i < 10; ++i)
     {
         labelCorrection[i]->setVisible(false);
 
@@ -230,68 +216,73 @@ inline void MediumModeWindow::setNewNumber(register int newNumber)
         trueFalseLabel[0][i]->setPixmap(QPixmap(":/image/OpacRight.png"));
         trueFalseLabel[1][i]->setPixmap(QPixmap(":/image/OpacWrong.png"));
     }
+    if(chronometre != NULL)
+    {
+        chronometre->stop();
+        delete chronometre;
+    }
+    secondes = 0;
+    minute->setText("00");
+    seconde->setText("00");
+    startTime();
     reponses[0]->setFocus();
 }
 void MediumModeWindow::correct()
 {
-    if(time)
-    {
-        chronometre->stop();
-        delete chronometre;
-        int time[2];
-        time[1] = secondes / 60;
-        time[0] = secondes % 60;
-        secondes = 0;
-        QMessageBox::information(this, "Ton temps", "Tu as mis "+QString::number(time[1])+" minute(s) et "+QString::number(time[0])+" secondes !");
-    }
+    chronometre->stop();
+    delete chronometre;
+    chronometre = NULL;
+    int time[2];
+    time[1] = secondes / 60;
+    time[0] = secondes % 60;
 
-    note = 10;
+    int rep[10];
+    for(int i = 0; i < 10; ++i)
+        rep[i] = reponses[i]->text().toInt();
 
-    corriger->setText("Retenter");
+    Correction test(mode, m_multiple, array, rep, secondes);
+
+    secondes = 0;
+
+    bool isGood[10];
+    QString texte[10];
+
+    note = test.getCorrection(texte, isGood);
+
+    QMessageBox::information(this, tr("Ton temps"), tr("Tu as mis %1 minute(s) et %2 secondes !").arg(QString::number(time[1])).arg(QString::number(time[0])));
+
+    corriger->setText(tr("Retenter"));
     disconnect(corriger, SIGNAL(clicked()), this, SLOT(correct()));
     connect(corriger, SIGNAL(clicked()), this, SLOT(Retry()));
 
-    for(int i = 0; i < 10; i++)
+    for(int i = 0; i < 10; ++i)
     {
-        int number = reponses[i]->text().toInt();
         reponses[i]->setVisible(false);
 
-        if((m_multiple * array[i]) == number)
+        labelCorrection[i]->setText(texte[i]);
+        labelCorrection[i]->move(200, (80 + (i * 40)));
+        labelCorrection[i]->setVisible(true);
+
+        if(isGood[i])
         {
             trueFalseLabel[0][i]->setPixmap(QPixmap(":/image/Right.png"));
             trueFalseLabel[1][i]->setPixmap(QPixmap(":/image/OpacWrong.png"));
-
-            labelCorrection[i]->setText("<span style=\"color: #9FC54D;\">" + QString::number(number) + " C'est la bonne réponse !</span>");
-            labelCorrection[i]->move(200, (80 + 40 * i));
-            labelCorrection[i]->setVisible(true);
         }
         else
         {
-
             trueFalseLabel[0][i]->setPixmap(QPixmap(":/image/OpacRight.png"));
             trueFalseLabel[1][i]->setPixmap(QPixmap(":/image/Wrong.png"));
-
-            int Answer = m_multiple * array[i];
-
-            labelCorrection[i]->setText("<span style=\"color: red;\">" + QString::number(number) + "</span> <span style=\"color: #9FC54D;\">La bonne réponse était " + QString::number(Answer) + "</span>");
-            labelCorrection[i]->move(200, (80 + 40 * i));
-            labelCorrection[i]->setVisible(true);
-
-            if(note != 0)
-                note--;
         }
-
         this->repaint();
-
     }
 }
 void MediumModeWindow::Retry()
 {
-    corriger->setText("Corriger");
+    corriger->setText(tr("Corriger"));
     disconnect(corriger, SIGNAL(clicked()), this, SLOT(Retry()));
     connect(corriger, SIGNAL(clicked()), this, SLOT(correct()));
 
-    for(int i = 0; i < 10; i++)
+    for(int i = 0; i < 10; ++i)
     {
         labelCorrection[i]->setVisible(false);
         reponses[i]->clear();
@@ -301,26 +292,22 @@ void MediumModeWindow::Retry()
         trueFalseLabel[1][i]->setPixmap(QPixmap(":/image/OpacWrong.png"));
     }
 
-    if(time)
-    {
-        minute->setText("00");
-        seconde->setText("00");
-        startTime();
-    }
+    minute->setText("00");
+    seconde->setText("00");
+    startTime();
 }
 
 const int MediumModeWindow::getMultiple() { return m_multiple; }
 
 MediumModeWindow::~MediumModeWindow()
 {
-    time = false;
     delete corriger;
     corriger = nullptr;
 
     delete quitter;
     quitter = nullptr;
 
-    for(int i = 0; i < 10; i++)
+    for(int i = 0; i < 10; ++i)
     {
         delete label[i];
         label[i] = nullptr;
@@ -332,9 +319,9 @@ MediumModeWindow::~MediumModeWindow()
         reponses[i] = nullptr;*/
     }
 
-    for(int i = 0; i < 2; i++)
+    for(int i = 0; i < 2; ++i)
     {
-        for(int j = 0; j < 10; j++)
+        for(int j = 0; j < 10; ++j)
         {
             delete trueFalseLabel[i][j];
             trueFalseLabel[i][j] = nullptr;
@@ -344,19 +331,16 @@ MediumModeWindow::~MediumModeWindow()
         nextPrev[i] = nullptr;*/
     }
 
-    if(time)
-    {
-        delete text;
-        delete minute;
-        delete seconde;
-        delete deuxPoint;
-        delete chronometre;
+    delete text;
+    delete minute;
+    delete seconde;
+    delete deuxPoint;
+    //delete chronometre;
 
 
-        chronometre = nullptr;
-        text = nullptr;
-        minute = nullptr;
-        seconde = nullptr;
-        deuxPoint = nullptr;
-    }
+    chronometre = nullptr;
+    text = nullptr;
+    minute = nullptr;
+    seconde = nullptr;
+    deuxPoint = nullptr;
 }

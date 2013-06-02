@@ -1,4 +1,4 @@
-ï»¿/*Copyright (C) <2012> <Plestan> <KÃ©vin>
+/*Copyright (C) <2013> <Plestan> <Kévin>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -16,80 +16,72 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "Correction.h"
 
-Correction::Correction(Mode mode, const int multiple, int *order, int* userAnswers, const int time) : Multiple(multiple), orderTab(order), answers(userAnswers), difficultyMode(mode), seconds(time), isHardMode(false)
-{
-}
-Correction::Correction(int *multiple, int *order, int *userAnswers, const int time) : multipleTab(multiple), orderTab(order), answers(userAnswers), seconds(time), isHardMode(true)
-{
-}
-int Correction::getCorrection(QLabel *correction[][10])
+Correction::Correction(Mode mode, const int multiple, int *order, int* userAnswers, const int time) : Multiple(multiple), orderTab(order), answers(userAnswers), difficultyMode(mode), seconds(time), isHardMode(false) {}
+
+Correction::Correction(int *multiple, int *order, int *userAnswers, const int time) : multipleTab(multiple), orderTab(order), answers(userAnswers), seconds(time), isHardMode(true){}
+
+int Correction::getCorrection(QString texte[], bool isGood[])
 {
     int resultat[10];
     note = 10;
 
-    bool isCorrect[10];
-    for(int i = 0; i < 10; i++)
-        isCorrect[i] = true;
-
-    this->notation(resultat, isCorrect);
-    this->doCorrection(correction, resultat, isCorrect);
+    this->notation(resultat, isGood);
+    this->doCorrection(texte, isGood, resultat);
 
     if(seconds != 0)
         this->manageTime();
 
     return note;
 }
-void Correction::notation(int resultat[], bool isCorrect[])
+void Correction::notation(int resultat[], bool isGood[])
 {
     if(!isHardMode)
     {
-        for(int i = 0; i < 10; i++)
+        for(int i = 0; i < 10; ++i)
         {
             resultat[i] = Multiple*orderTab[i];
             if(resultat[i] != answers[i])
             {
-                isCorrect[i] = false;
+                isGood[i] = false;
                 --note;
             }
+            else
+                isGood[i] = true;
         }
     }
     else
     {
-        for(int i = 0; i < 10; i++)
+        for(int i = 0; i < 10; ++i)
         {
             resultat[i] = multipleTab[i]*orderTab[i];
             if(resultat[i] != answers[i])
             {
-                isCorrect[i] = false;
+                isGood[i] = false;
                 --note;
             }
+            else
+                isGood[i] = true;
         }
     }
 }
-void Correction::doCorrection(QLabel *correction[][10], int resultat[], bool isCorrect[]) const
+void Correction::doCorrection(QString texte[], bool isGood[], int resultat[]) const
 {
-    for(int i = 0; i < 10; i++)
+    for(int i = 0; i < 10; ++i)
     {
-        if(isCorrect[i])
-        {
-            correction[0][i]->setPixmap(QPixmap("ok.png"));
-            correction[1][i]->setText(tr("<span style=\"color: rgb(0, 200, 0);\">C'est correct !</span>"));
-        }
+        if(isGood[i])
+            texte[i] = QString("<span style=\"color: #9FC54D;\">" + QString::number(resultat[i]) + tr(" C'est la bonne réponse !") + "</span>");
         else
-        {
-            correction[0][i]->setPixmap(QPixmap("faux.png"));
-            correction[1][i]->setText(tr("<span style=\"color: rgb(100, 0, 0);\">La bonne rÃ©ponse Ã©tait ")+QString::number(resultat[i])+"</span>");
-        }
+           texte[i] = QString("<span style=\"color: red;\">" + QString::number(answers[i]) +  "</span> <span style=\"color: #9FC54D;\"> " + tr("La bonne réponse était ") + QString::number(resultat[i]));
     }
 }
 
 inline void Correction::manageTime()
 {
-    manager = new TimeRecordMgr(QSettings::IniFormat, QSettings::UserScope, "Multifacile", seconds, this->getModeGroupName(), this->getModeKeyName());
-
-    QObject::connect(manager, SIGNAL(isNewRecord(RecordState,int)), this, SLOT(isRecordValid(RecordState, int)));
-
-    manager->CompareTime();
+    manager = new DataFileMgr("Multifacile.xml");
+    if(isHardMode)
+        qDebug() <<  __FILE__ << __LINE__ << manager->setValue(getModeGroupName(), seconds);
+    else
+        qDebug() <<  __FILE__ << __LINE__ << manager->setValue(getModeGroupName(), seconds, Multiple);
 }
 void Correction::isRecordValid(RecordState record, int lastRecordTime)
 {
@@ -100,16 +92,16 @@ void Correction::isRecordValid(RecordState record, int lastRecordTime)
     else
         emit newRecord(NORECORD, lastRecordTime);
 }
-void Correction::saveTime() const { manager->SaveRecordInFile(); }
+void Correction::saveTime() const { /*manager->SaveRecordInFile();*/ }
 
 QString Correction::getModeGroupName() const
 {
-    if(difficultyMode == EASY)
+    if(isHardMode)
+        return QString("HardMode");
+    else if(difficultyMode == EASY)
         return QString("EasyMode");
     else if(difficultyMode == MEDIUM)
         return QString("MediumMode");
-    else
-        return QString("HardMode");
 }
 QString Correction::getModeKeyName() const
 {
@@ -120,7 +112,7 @@ QString Correction::getModeKeyName() const
 }
 Correction::~Correction()
 {
-    delete manager;
+    /*delete manager;
 
-    manager = nullptr;
+    manager = nullptr;*/
 }

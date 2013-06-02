@@ -1,4 +1,4 @@
-﻿/*Copyright (C) <2012> <Plestan> <Kévin>
+/*Copyright (C) <2013> <Plestan> <K�vin>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -18,22 +18,27 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #define FEN_SECONDAIRE_H
 
 #include <QApplication>
+#include <QCloseEvent>
 #include <QFormLayout>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QLineEdit>
 #include <QMessageBox>
 #include <QPainter>
 #include <QPoint>
 #include <QPushButton>
+#include <QSignalMapper>
 #include <QString>
 #include <QStyleOption>
 #include <QTimer>
 #include <QVBoxLayout>
 #include <QWidget>
 
+#include <QDebug>
+
 #include "MinCloseMenu.h"
 #include "Shuffle.h"
-#include "spinBox.h"
+#include "Correction.h"
 
 class MediumModeWindow : public QWidget
 {
@@ -41,7 +46,7 @@ class MediumModeWindow : public QWidget
 public :
 
     MediumModeWindow();
-    MediumModeWindow(const int multiplicateur, bool chrono);
+    MediumModeWindow(const int multiplicateur);
     ~MediumModeWindow();
 
     virtual const int getMultiple();
@@ -49,13 +54,17 @@ protected :
 
     int m_multiple, note, array[10], secondes;
 
-    bool time, ClickOnWindow;
+    bool ClickOnWindow;
+
+    Mode mode;
+
+    QSignalMapper *mapper;
 
     QLabel *label[10], *text, *minute, *seconde, *deuxPoint, *labelPoint[10], *trueFalseLabel[2][10], *labelCorrection[10];
 
     QPushButton *corriger, *quitter, *nextPrev[2];
 
-    SpinBox *reponses[10];
+    QLineEdit *reponses[10];
 
     QTimer *chronometre;
 

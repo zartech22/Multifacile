@@ -1,4 +1,4 @@
-﻿/*Copyright (C) <2012> <Plestan> <Kévin>
+/*Copyright (C) <2013> <Plestan> <K�vin>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -17,10 +17,14 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #ifndef CORRECTION_H
 #define CORRECTION_H
 
-#include "spinBox.h"
+#include <QLabel>
+#include <QMultiMap>
+#include <QString>
+#include <QDebug>
+
 #include "FenetrePrincipaleEnums.h"
+#include "DataFileMgr.h"
 #include "TimeRecordMgr.h"
-#include "QLabel"
 
 class Correction : public QObject
 {
@@ -32,11 +36,11 @@ public:
 
     ~Correction();
 
-    int getCorrection(QLabel *correction[][10]);
+    int getCorrection(QString texte[], bool isGood[]);
 
     void saveTime() const;
 private:
-    int seconds;
+    unsigned int seconds;
     int Multiple;
     int note;
 
@@ -46,13 +50,13 @@ private:
 
     bool isHardMode;
 
-    TimeRecordMgr *manager;
+    DataFileMgr *manager;
 
     Mode difficultyMode;
 
     inline void manageTime();
-    void notation(int resultat[], bool isCorrect[]);
-    void doCorrection(QLabel *correction[][10], int resultat[], bool isCorrect[]) const;
+    void notation(int resultat[], bool isGood[]);
+    void doCorrection(QString texte[], bool isGood[], int resultat[]) const;
 
     QString getModeGroupName() const;
     QString getModeKeyName() const;

@@ -11,5 +11,5 @@ Makefile.*
 vc100.pdb
 Multifacile.pro.*
 *.ts
-*.qm
+en.qm
 Thumbs.db
