@@ -22,7 +22,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <QString>
 #include <QDebug>
 
-#include "FenetrePrincipaleEnums.h"
+#include "MainWindowEnums.h"
 #include "DataFileMgr.h"
 #include "TimeRecordMgr.h"
 

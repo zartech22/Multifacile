@@ -39,7 +39,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "CheckUpdate.h"
 #include "EasyModeWindow.h"
-#include "FenetrePrincipaleEnums.h"
+#include "MainWindowEnums.h"
 #include "MediumModeWindow.h"
 #include "MinCloseMenu.h"
 #include "HardModeWindow.h"
@@ -47,18 +47,27 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #ifdef Q_OS_WIN32
     #pragma comment(lib, "shell32.lib")
     #include <Windows.h>
+    #define START_UPDATER() ShellExecute(NULL, L"open", L"Updater.exe", NULL, NULL, SW_SHOWNORMAL);
+
+    #define START_ADD() QProcessEnvironment env = QProcessEnvironment::systemEnvironment(); \
+                                       QString str(env.value("appdata")+"/Add.exe"); \
+                                       QFile::copy(":/application/Add.exe", str); \
+                                       ShellExecute(NULL, L"open", str.toStdWString().c_str(), NULL, NULL, SW_SHOWNORMAL);
 #endif
 #ifdef Q_OS_LINUX
     #include <QProcess>
+    #define START_UPDATER() QProcess::startDetached("Updater");
+    #define START_ADD() QFile::copy(":/application/Add", "Add"); \
+                                       QProcess::startDetached("Add");
 #endif
 
-class Fenetre_principale : public QMainWindow
+class MainWindow : public QMainWindow
 {
     Q_OBJECT
 public :
 
-    Fenetre_principale();
-    ~Fenetre_principale();
+    MainWindow();
+    ~MainWindow();
 
 private :
 
@@ -69,7 +78,7 @@ private :
     QMenu *file, *tools, *modes;
     MinCloseMenu *minCloseMenu;
     Mode mode;
-    Window actualWindow;
+    Widget actualWindow;
     QAction *easyMode, *hardMode, *mediumMode, *quitAction, *updateAction;
     QActionGroup *actionGroup;
     QLabel *point, *texte;
@@ -79,6 +88,11 @@ private :
     QWidget *widget;
 
     void createCentralWidget();
+    void deleteAddIfExist();
+    void doActions();
+    void doActionGroup();
+    void doMenuBar();
+    void initStyle();
 
     inline void closeEvent(QCloseEvent * event);
     inline void mouseMoveEvent(QMouseEvent *event);

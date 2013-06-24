@@ -24,11 +24,11 @@ enum Mode
 
 typedef enum Mode Mode;
 
-enum Window
+enum Widget
 {
-    MainWindow, SecondWindow
+    MainWidget, SecondWidget
 };
 
-typedef enum Window Window;
+typedef enum Widget Widget;
 
 #endif // MODEENUM_H

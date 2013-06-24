@@ -1,6 +1,5 @@
 SOURCES += \
     main.cpp \
-    fenetre_principale.cpp \
     CheckUpdate.cpp \
     Shuffle.cpp \
     MediumModeWindow.cpp \
@@ -10,10 +9,10 @@ SOURCES += \
     Correction.cpp \
     TimeRecordMgr.cpp \
     MinCloseMenu.cpp \
-    DataFileMgr.cpp
+    DataFileMgr.cpp \
+    MainWindow.cpp
 
 HEADERS += \
-    fenetre_principale.h \
     CheckUpdate.h \
     Shuffle.h \
     MediumModeWindow.h \
@@ -23,8 +22,9 @@ HEADERS += \
     Correction.h \
     TimeRecordMgr.h \
     MinCloseMenu.h \
-    FenetrePrincipaleEnums.h \
-    DataFileMgr.h
+    DataFileMgr.h \
+    MainWindow.h \
+    MainWindowEnums.h
 
 RC_FILE = Icon.rc
 

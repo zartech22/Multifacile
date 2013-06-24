@@ -27,7 +27,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <QtDebug>
 #include <QFontDatabase>
 
-#include "fenetre_principale.h"
+#include "MainWindow.h"
 
 int main(int argc, char* argv[])
 {
@@ -71,9 +71,9 @@ int main(int argc, char* argv[])
         }
     }
 
-    Fenetre_principale fenetre;
-    fenetre.setWindowIcon(QIcon(":/icon/icone.png"));
-    fenetre.show();
+    MainWindow window;
+   window.setWindowIcon(QIcon(":/icon/icone.png"));
+    window.show();
 
     return app.exec();
 }
