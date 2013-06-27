@@ -20,11 +20,16 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <QLabel>
 #include <QMultiMap>
 #include <QString>
-#include <QDebug>
 
 #include "MainWindowEnums.h"
 #include "DataFileMgr.h"
-#include "TimeRecordMgr.h"
+
+enum RecordState
+{
+    RECORD, UNVALIDRECORD, NORECORD
+};
+
+typedef enum RecordState RecordState;
 
 class Correction : public QObject
 {

@@ -22,7 +22,7 @@ MediumModeWindow::MediumModeWindow() : QWidget()
 
 MediumModeWindow::MediumModeWindow(const int multiplicateur) : secondes(0), mode(MEDIUM)
 {
-    ApplyStyle();
+    initStyle();
     this->setWindowFlags(Qt::FramelessWindowHint);
 
     m_multiple = multiplicateur;
@@ -123,7 +123,7 @@ MediumModeWindow::MediumModeWindow(const int multiplicateur) : secondes(0), mode
     reponses[0]->setFocus();
 }
 
-inline void MediumModeWindow::ApplyStyle()
+inline void MediumModeWindow::initStyle()
 {
     QFile css(":/css/Fen2.css");
     css.open(QIODevice::ReadOnly);
@@ -141,6 +141,7 @@ void MediumModeWindow::newSetFocus(const int number)
     else
         correct();
 }
+
 inline void MediumModeWindow::startTime()
 {
     chronometre = new QTimer;
@@ -148,17 +149,20 @@ inline void MediumModeWindow::startTime()
     connect(chronometre, SIGNAL(timeout()), this, SLOT(newSecond()));
     connect(this, SIGNAL(addSeconde(int)), this, SLOT(updateLabel(int)));
 }
+
 inline void MediumModeWindow::closeEvent(QCloseEvent *event)
 {
     if(event->spontaneous())
         delete chronometre;
     event->accept();
 }
+
 void MediumModeWindow::newSecond()
 {
     ++secondes;
     emit addSeconde(secondes);
 }
+
 void MediumModeWindow::updateLabel(const int temps) const
 {
     if((temps/60) != 0)
@@ -177,6 +181,7 @@ void MediumModeWindow::updateLabel(const int temps) const
             seconde->setText(QString::number(temps));
     }
 }
+
 inline void MediumModeWindow::paintEvent(QPaintEvent *)
 {
     QStyleOption opt;
@@ -191,12 +196,14 @@ void MediumModeWindow::Previous()
         --m_multiple;
     setNewNumber(m_multiple);
 }
+
 void MediumModeWindow::Next()
 {
     if(m_multiple < 10)
        ++ m_multiple;
     setNewNumber(m_multiple);
 }
+
 inline void MediumModeWindow::setNewNumber(register int newNumber)
 {
     this->setWindowTitle(tr("Table de ")+QString::number(newNumber));
@@ -227,14 +234,12 @@ inline void MediumModeWindow::setNewNumber(register int newNumber)
     startTime();
     reponses[0]->setFocus();
 }
+
 void MediumModeWindow::correct()
 {
     chronometre->stop();
     delete chronometre;
     chronometre = NULL;
-    int time[2];
-    time[1] = secondes / 60;
-    time[0] = secondes % 60;
 
     int rep[10];
     for(int i = 0; i < 10; ++i)
@@ -242,14 +247,14 @@ void MediumModeWindow::correct()
 
     Correction test(mode, m_multiple, array, rep, secondes);
 
-    secondes = 0;
-
     bool isGood[10];
     QString texte[10];
 
     note = test.getCorrection(texte, isGood);
 
-    QMessageBox::information(this, tr("Ton temps"), tr("Tu as mis %1 minute(s) et %2 secondes !").arg(QString::number(time[1])).arg(QString::number(time[0])));
+    CustomMessageBox results(secondes, note, this);
+
+    secondes = 0;
 
     corriger->setText(tr("Retenter"));
     disconnect(corriger, SIGNAL(clicked()), this, SLOT(correct()));
@@ -275,7 +280,10 @@ void MediumModeWindow::correct()
         }
         this->repaint();
     }
+
+    results.exec();
 }
+
 void MediumModeWindow::Retry()
 {
     corriger->setText(tr("Corriger"));

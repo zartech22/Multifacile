@@ -17,7 +17,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #ifndef CHECKUPDATE_H
 #define CHECKUPDATE_H
 
-#define VERSION 315
+#define VERSION 321
 
 #include <QTcpSocket>
 #include <QDataStream>

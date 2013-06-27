@@ -39,6 +39,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MinCloseMenu.h"
 #include "Shuffle.h"
 #include "Correction.h"
+#include "CustomMessageBox.h"
 
 class MediumModeWindow : public QWidget
 {
@@ -70,7 +71,7 @@ protected :
 
     QPoint Diff;
 
-    inline void ApplyStyle();
+    inline void initStyle();
     inline void closeEvent(QCloseEvent *event);
     inline void paintEvent(QPaintEvent *);
     inline void setNewNumber(int newNumber);

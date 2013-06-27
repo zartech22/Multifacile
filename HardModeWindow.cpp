@@ -18,7 +18,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 HardModeWindow::HardModeWindow()
 {
-    ApplyStyle();
+    initStyle();
     Shuffle shuffle(true);
     shuffle.getNumbers(array, multiple);
     setWindowFlags(Qt::FramelessWindowHint);
@@ -129,11 +129,10 @@ void HardModeWindow::correct()
 
     chronometre->stop();
     delete chronometre;
-    int time[2];
-    time[1] = secondes / 60;
-    time[0] = secondes % 60;
+
+    CustomMessageBox results(secondes, note, this);
+
     secondes = 0;
-    QMessageBox::information(this, tr("Ton temps"), tr("Tu as mis %1 minute(s) et %2 secondes !").arg(QString::number(time[1])).arg(QString::number(time[0])));
 
     for(int i = 0; i < 10; ++i)
     {
@@ -157,6 +156,8 @@ void HardModeWindow::correct()
 
         this->repaint();
     }
+
+    results.exec();
 }
 void HardModeWindow::Retry()
 {

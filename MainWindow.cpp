@@ -63,7 +63,8 @@ void MainWindow::checkUpdateReceivedAnswer(UpdateType update)    //slot which is
     {
         if(userAction)  //and if it's the user who clicked on "check for updates"
         {
-            QMessageBox::information(this, tr("Vérification de mise à jour"), tr("Il n'y a pour le moment aucune mise à jour disponible."));
+            CustomMessageBox noUpdateMsgBox(NoUpdateMsg, this);
+            noUpdateMsgBox.exec();
             userAction = false;
         }
 
@@ -76,9 +77,11 @@ void MainWindow::checkUpdateReceivedAnswer(UpdateType update)    //slot which is
             userAction = false;
 
         check->disconnectFromHost();
-        int userAnswer = QMessageBox::question(this, tr("Mise à jour disponible"), tr("Une version plus récente de Multifacile est disponible, veux-tu la télécharger ?"), QMessageBox::Yes | QMessageBox::No);
 
-        if(userAnswer == QMessageBox::Yes)  //if the user want to update
+        CustomMessageBox updateMsgBox(NewUpdate, this);
+        bool userAnswer = updateMsgBox.exec();
+
+        if(userAnswer)  //if the user want to update
         {
             START_UPDATER()
             this->close();  //close this window
@@ -90,9 +93,12 @@ void MainWindow::checkUpdateReceivedAnswer(UpdateType update)    //slot which is
     {
         if(userAction)
             userAction = false;
+
         check->disconnectFromHost();
-        int userAnswer = QMessageBox::question(this, tr("Mise à jour disponible"), tr("Une version plus récente de Multifacile est disponible, veux-tu la télécharger ?"), QMessageBox::Yes | QMessageBox::No);
-        if(userAnswer == QMessageBox::Yes)
+        CustomMessageBox updateMsgBox(NewUpdate, this);
+        bool userAnswer = updateMsgBox.exec();
+
+        if(userAnswer)
         {
             START_ADD()
             this->close();
@@ -220,7 +226,10 @@ void MainWindow::doMenuBar()
 void MainWindow::erreurSocket()
 {
     if(userAction)
-        QMessageBox::information(this, tr("Erreur de connexion"), tr("Impossible de vérifier les mise à jours")); //if there is a connection error, it open a QMessageBox for inform the user
+    {
+        CustomMessageBox ConnectionErrorMsgBox(ConnectionError, this); //if there is a connection error, it open a QMessageBox for inform the user
+        ConnectionErrorMsgBox.exec();
+    }
 }
 
 void MainWindow::initStyle()

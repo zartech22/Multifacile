@@ -27,8 +27,15 @@
         <file>TextBox.png</file>
         <file>Underline.png</file>
         <file>Wrong.png</file>
+        <file>Message_box.png</file>
     </qresource>
     <qresource prefix="/police">
         <file>DK Crayon Crumble.ttf</file>
+    </qresource>
+    <qresource prefix="/smiley">
+        <file>bien.png</file>
+        <file>excellent.png</file>
+        <file>mauvais.png</file>
+        <file>moyen.png</file>
     </qresource>
 </RCC>

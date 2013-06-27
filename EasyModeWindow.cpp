@@ -18,7 +18,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 EasyModeWindow::EasyModeWindow(const int m_multiplicateur)
 {
-    ApplyStyle();
+    initStyle();
 
     mode = EASY;
     m_multiple = m_multiplicateur;
@@ -131,9 +131,9 @@ EasyModeWindow::EasyModeWindow(const int m_multiplicateur)
 }
 void EasyModeWindow::openAstuce() const
 {
-    AstuceWindow *astuce = new AstuceWindow(m_multiple);
-    astuce->setObjectName("AstuceFen");
-    astuce->exec();
+    CustomMessageBox trick (Trick, 0, m_multiple);
+    trick.setObjectName("AstuceFen");
+    trick.exec();
 }
 EasyModeWindow::~EasyModeWindow()
 {

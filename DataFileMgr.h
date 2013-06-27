@@ -6,8 +6,7 @@
 #include <QString>
 #include <QProcessEnvironment>
 #include <QTextStream>
-
-#include <QDebug>
+#include <QDir>
 
 class DataFileMgr
 {

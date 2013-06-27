@@ -28,20 +28,37 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "MinCloseMenu.h"
 
-class AstuceWindow : public QDialog
+enum MessageType
+{
+    Trick, Results, ConnectionError, NoUpdateMsg, NewUpdate
+};
+
+typedef enum MessageType MessageType;
+
+class CustomMessageBox : public QDialog
 {
     Q_OBJECT
 public:
-    AstuceWindow(const int table, QWidget *parent = 0);
-    ~AstuceWindow();
+    CustomMessageBox(MessageType msgType, QWidget *parent = 0, const int table = 0);
+    CustomMessageBox(const int time, const int note, QWidget *parent = 0);
+    ~CustomMessageBox();
 private:
     QLabel *label;
-    QMap<int, QString> astuces;
     QPushButton *OkBouton;
     MinCloseMenu *menu;
     bool clickOnWindow;
     QPoint Diff;
-    inline void astucesInit();
+    MessageType type;
+
+    inline void tricksInit(QMap<int, QString> &tricks);
+    void displayTricks(const int table);
+    void displayResults(const int time, const int note);
+    void displayConnectionError();
+    void displayNoUpdate();
+    void displayNewUpdate();
+    void calculTime(const int time, int &minutes, int &seconds);
+    void setSmiley(const int note, QPixmap &smiley);
+
     void paintEvent(QPaintEvent *);
     inline void mouseMoveEvent(QMouseEvent *event);
     inline void mousePressEvent(QMouseEvent *event);

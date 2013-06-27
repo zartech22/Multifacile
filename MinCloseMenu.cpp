@@ -24,6 +24,9 @@ MinCloseMenu::MinCloseMenu(QWidget *parent) : QWidget(parent), ParentWidget(pare
     cross->setObjectName("Cross");
     mini->setObjectName("mini");
 
+    cross->setDefault(false);
+    mini->setDefault(false);
+
     layout = new QHBoxLayout;
 
     layout->addWidget(mini);

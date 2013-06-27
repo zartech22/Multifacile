@@ -43,6 +43,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MediumModeWindow.h"
 #include "MinCloseMenu.h"
 #include "HardModeWindow.h"
+#include "CustomMessageBox.h"
 
 #ifdef Q_OS_WIN32
     #pragma comment(lib, "shell32.lib")

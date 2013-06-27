@@ -79,9 +79,9 @@ inline void Correction::manageTime()
 {
     manager = new DataFileMgr("Multifacile.xml");
     if(isHardMode)
-        qDebug() <<  __FILE__ << __LINE__ << manager->setValue(getModeGroupName(), seconds);
+        manager->setValue(getModeGroupName(), seconds);
     else
-        qDebug() <<  __FILE__ << __LINE__ << manager->setValue(getModeGroupName(), seconds, Multiple);
+        manager->setValue(getModeGroupName(), seconds, Multiple);
 }
 void Correction::isRecordValid(RecordState record, int lastRecordTime)
 {

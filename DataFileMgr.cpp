@@ -4,6 +4,14 @@ DataFileMgr::DataFileMgr(const QString &fileName)
 {
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
 #ifdef Q_OS_WIN32
+    QDir multifacileDir(env.value("appdata") + "/Multifacile");
+
+    if(!multifacileDir.exists())
+    {
+        QDir appdata(env.value("appdata"));
+        appdata.mkdir("Multifacile");
+    }
+
     xmlFile.setFileName(env.value("appdata") + "/Multifacile/" + fileName);
 #endif
 #ifdef Q_OS_LINUX
@@ -13,9 +21,7 @@ DataFileMgr::DataFileMgr(const QString &fileName)
     xmlFile.setFileName(env.value("$HOME") + "/.config/Multifacile/" + fileName);
 #endif
 
-    qDebug() << __FILE__ << __LINE__ << xmlFile.open(QIODevice::ReadWrite);
-    qDebug() << __FILE__ << __LINE__ << xmlFile.errorString();
-
+    xmlFile.open(QIODevice::ReadWrite);
 
     if(xmlFile.readAll().isEmpty())
         createGroup(true);
@@ -69,7 +75,6 @@ bool DataFileMgr::setValue(const QString &group, const unsigned int &time, const
                 alreadyExist = true;
                 break;
             }
-            qDebug() <<  __FILE__ << __LINE__ << actualTime.attribute("table");
             if(alreadyExist)
                 groupElement.replaceChild(timeElement, actualTime);
             else
@@ -118,8 +123,6 @@ bool DataFileMgr::exist(const QString &group)
 
     QDomElement data = doc.documentElement();
 
-    qDebug() << __FILE__ << __LINE__ << group << data.elementsByTagName(group).isEmpty() << data.elementsByTagName(group).count();
-
     if(data.elementsByTagName(group).isEmpty())
         return false;
     else
@@ -131,7 +134,6 @@ void DataFileMgr::createGroup(bool createAllGroups, const QString &group)
 
     if(createAllGroups)
     {
-        qDebug() << __FILE__ << __LINE__;
         doc.appendChild(doc.createProcessingInstruction("xml", "version=\"1.0\""));
 
         QDomElement data = doc.createElement("data");
@@ -151,7 +153,6 @@ void DataFileMgr::createGroup(bool createAllGroups, const QString &group)
 
     else
     {
-        qDebug() <<  __FILE__ << __LINE__;
         QDomElement data = doc.documentElement();
         data.appendChild(doc.createElement(group));
         doc.save(out, 4);

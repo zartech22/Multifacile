@@ -18,6 +18,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #define HARDMODEWINDOW_H
 
 #include "MediumModeWindow.h"
+#include "CustomMessageBox.h"
 
 class HardModeWindow : public MediumModeWindow
 {

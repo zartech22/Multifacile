@@ -5,12 +5,11 @@ SOURCES += \
     MediumModeWindow.cpp \
     EasyModeWindow.cpp \
     HardModeWindow.cpp \
-    AstuceWindow.cpp \
     Correction.cpp \
-    TimeRecordMgr.cpp \
     MinCloseMenu.cpp \
     DataFileMgr.cpp \
-    MainWindow.cpp
+    MainWindow.cpp \
+    CustomMessageBox.cpp
 
 HEADERS += \
     CheckUpdate.h \
@@ -18,13 +17,12 @@ HEADERS += \
     MediumModeWindow.h \
     EasyModeWindow.h \
     HardModeWindow.h \
-    AstuceWindow.h \
     Correction.h \
-    TimeRecordMgr.h \
     MinCloseMenu.h \
     DataFileMgr.h \
     MainWindow.h \
-    MainWindowEnums.h
+    MainWindowEnums.h \
+    CustomMessageBox.h
 
 RC_FILE = Icon.rc
 
