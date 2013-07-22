@@ -82,7 +82,7 @@ void CustomMessageBox::displayTricks(const int table)
         label->setText(tr("Il n'y a pas encore d'astuces pour cette table."));
 }
 
-inline void CustomMessageBox::tricksInit(QMap<int, QString> &tricks)
+void CustomMessageBox::tricksInit(QMap<int, QString> &tricks)
 {
     tricks[1] = tr("Pour la table de 1, le résultat sera toujours égal au nombre que multiplie 1.<br /><span style=\"color: #9FC54D\">Ex</span> : 1 x <span style=\"text-decoration: underline;\">7</span> = <span style=\"text-decoration: underline;\">7</span></strong>");
     tricks[2] = tr("Pour la table de 2, le résultat est toujours un nombre paire et les résultats vont de 2 en 2.<br /><span style=\"color: #9FC54D\">Ex</span> : <strong>2 x 1 = <span style=\"text-decoration: underline;\">2</span><br />2 x 2 = <span style=\"text-decoration: underline;\">4</span></strong>");
@@ -236,19 +236,17 @@ void CustomMessageBox::paintEvent(QPaintEvent *)
     painter.end();
 }
 
-inline void CustomMessageBox::mouseMoveEvent(QMouseEvent *event)
+void CustomMessageBox::mouseMoveEvent(QMouseEvent *event)
 {
     if(clickOnWindow)
         window()->move(event->globalPos() - Diff);
 }
 
-inline void CustomMessageBox::mousePressEvent(QMouseEvent *event)
+void CustomMessageBox::mousePressEvent(QMouseEvent *event)
 {
     clickOnWindow = true;
     Diff = event->pos();
 }
-
-inline void CustomMessageBox::mouseReleaseEvent(QMouseEvent *) { clickOnWindow = false; }
 
 CustomMessageBox::~CustomMessageBox()
 {

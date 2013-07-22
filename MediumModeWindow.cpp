@@ -119,7 +119,7 @@ MediumModeWindow::MediumModeWindow(const int multiplicateur) : secondes(0), mode
     reponses[0]->setFocus();
 }
 
-inline void MediumModeWindow::initStyle()
+void MediumModeWindow::initStyle()
 {
     QFile css(":/css/Fen2.css");
     css.open(QIODevice::ReadOnly);
@@ -138,7 +138,7 @@ void MediumModeWindow::newSetFocus(const int number)
         correct();
 }
 
-inline void MediumModeWindow::startTime()
+void MediumModeWindow::startTime()
 {
     chronometre = new QTimer;
     chronometre->start(1000);
@@ -146,7 +146,7 @@ inline void MediumModeWindow::startTime()
     connect(this, SIGNAL(addSeconde(int)), this, SLOT(updateLabel(int)));
 }
 
-inline void MediumModeWindow::closeEvent(QCloseEvent *event)
+void MediumModeWindow::closeEvent(QCloseEvent *event)
 {
     if(event->spontaneous())
         delete chronometre;
@@ -178,7 +178,7 @@ void MediumModeWindow::updateLabel(const int temps) const
     }
 }
 
-inline void MediumModeWindow::paintEvent(QPaintEvent *)
+void MediumModeWindow::paintEvent(QPaintEvent *)
 {
     QStyleOption opt;
     opt.init(this);
@@ -200,7 +200,7 @@ void MediumModeWindow::Next()
     setNewNumber(m_multiple);
 }
 
-inline void MediumModeWindow::setNewNumber(register int newNumber)
+void MediumModeWindow::setNewNumber(register int newNumber)
 {
     this->setWindowTitle(tr("Table de ")+QString::number(newNumber));
 

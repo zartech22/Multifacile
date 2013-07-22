@@ -70,11 +70,11 @@ protected :
 
     QPoint Diff;
 
-    inline void initStyle();
-    inline void closeEvent(QCloseEvent *event);
-    inline void paintEvent(QPaintEvent *);
-    inline void setNewNumber(int newNumber);
-    inline void startTime();
+    void initStyle();
+    void closeEvent(QCloseEvent *event);
+    void paintEvent(QPaintEvent *);
+    void setNewNumber(int newNumber);
+    void startTime();
 
 signals:
 

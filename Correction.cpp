@@ -70,7 +70,7 @@ void Correction::doCorrection(QString texte[], bool isGood[], int resultat[]) co
         texte[i] = (isGood[i]) ? QString("<span style=\"color: #9FC54D;\">" + QString::number(resultat[i]) + tr(" C'est la bonne réponse !") + "</span>") : QString("<span style=\"color: red;\">" + QString::number(answers[i]) +  "</span> <span style=\"color: #9FC54D;\"> " + tr("La bonne réponse était ") + QString::number(resultat[i]));
 }
 
-inline void Correction::manageTime()
+void Correction::manageTime()
 {
     manager = new DataFileMgr("Multifacile.xml");
     if(isHardMode)

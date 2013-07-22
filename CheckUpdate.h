@@ -38,7 +38,7 @@ public:
 private:
     quint16 messageSize;
     int actualVersion;
-    inline void Connection();
+    void Connection();
 public slots:
     void dataReceived();
     void sendRequest();

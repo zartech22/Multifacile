@@ -234,25 +234,25 @@ void MainWindow::initStyle()
     css.close();
 }
 
-inline void MainWindow::closeEvent(QCloseEvent * event)
+void MainWindow::closeEvent(QCloseEvent * event)
 {
     qApp->quit();
     event->accept();
 }
 
-inline void MainWindow::mouseMoveEvent(QMouseEvent *event)
+void MainWindow::mouseMoveEvent(QMouseEvent *event)
 {
     if(ClickOnWindow)
         window()->move(event->globalPos() - Diff);
 }
 
-inline void MainWindow::mousePressEvent(QMouseEvent *event)
+void MainWindow::mousePressEvent(QMouseEvent *event)
 {
     ClickOnWindow = true;
     Diff = event->pos();
 }
 
-inline void MainWindow::setNewSecondWindow()
+void MainWindow::setNewSecondWindow()
 {
     open_window(fen->getMultiple());
 }

@@ -55,7 +55,7 @@ void CheckUpdate::dataReceived()
 
     messageSize = 0;
 }
-inline void CheckUpdate::Connection()
+void CheckUpdate::Connection()
 {
     this->abort();
     this->connectToHost("multifacile.no-ip.org", 8087);

@@ -60,13 +60,10 @@ private:
     void setSmiley(const int note, QPixmap &smiley);
 
     void paintEvent(QPaintEvent *);
-    inline void mouseMoveEvent(QMouseEvent *event);
-    inline void mousePressEvent(QMouseEvent *event);
-    inline void mouseReleaseEvent(QMouseEvent *);
-signals:
-    
-public slots:
-    
+    void mouseMoveEvent(QMouseEvent *event);
+    void mousePressEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *) { clickOnWindow = false; }
+
 };
 
 #endif // ASTUCEWINDOW_H

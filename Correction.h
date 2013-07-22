@@ -58,7 +58,7 @@ private:
 
     Mode difficultyMode;
 
-    inline void manageTime();
+    void manageTime();
     void notation(int resultat[], bool isGood[]);
     void doCorrection(QString texte[], bool isGood[], int resultat[]) const;
 

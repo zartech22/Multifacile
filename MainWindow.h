@@ -95,11 +95,11 @@ private :
     void doMenuBar();
     void initStyle();
 
-    inline void closeEvent(QCloseEvent * event);
-    inline void mouseMoveEvent(QMouseEvent *event);
-    inline void mousePressEvent(QMouseEvent *event);
-    inline void mouseReleaseEvent(QMouseEvent *) { ClickOnWindow = false; }
-    inline void setNewSecondWindow();
+    void closeEvent(QCloseEvent * event);
+    void mouseMoveEvent(QMouseEvent *event);
+    void mousePressEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *) { ClickOnWindow = false; }
+    void setNewSecondWindow();
 
 public slots :
 
