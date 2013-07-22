@@ -22,12 +22,12 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <QTcpSocket>
 #include <QDataStream>
 
-typedef enum UpdateType UpdateType;
-
 enum UpdateType
 {
     NoUpdate, NormalUpdate, UpdaterUpdate
 };
+
+typedef enum UpdateType UpdateType;
 
 class CheckUpdate : public QTcpSocket
 {
