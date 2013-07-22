@@ -55,11 +55,6 @@ void CheckUpdate::dataReceived()
 
     messageSize = 0;
 }
-void CheckUpdate::tryConnection()
-{
-    Connection();
-}
-
 inline void CheckUpdate::Connection()
 {
     this->abort();

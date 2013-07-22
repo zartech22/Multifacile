@@ -51,12 +51,6 @@ MainWindow::MainWindow() : userAction(false), mode(EASY), actualWindow(MainWidge
     connect(actionGroup, SIGNAL(triggered(QAction*)), this, SLOT(resetLabel(QAction*)));
 }
 
-inline void MainWindow::closeEvent(QCloseEvent *event) //reimplemented slot who close the program
-{
-    qApp->quit();
-    event->accept();
-}
-
 void MainWindow::checkUpdateReceivedAnswer(UpdateType update)    //slot which is connected to the updateNeeded(UpdateType) signal of check. It processes the answer given by check
 {
     if(update == NoUpdate) //if not update needed
@@ -240,6 +234,12 @@ void MainWindow::initStyle()
     css.close();
 }
 
+inline void MainWindow::closeEvent(QCloseEvent * event)
+{
+    qApp->quit();
+    event->accept();
+}
+
 inline void MainWindow::mouseMoveEvent(QMouseEvent *event)
 {
     if(ClickOnWindow)
@@ -252,7 +252,10 @@ inline void MainWindow::mousePressEvent(QMouseEvent *event)
     Diff = event->pos();
 }
 
-inline void MainWindow::mouseReleaseEvent(QMouseEvent *) { ClickOnWindow = false; }
+inline void MainWindow::setNewSecondWindow()
+{
+    open_window(fen->getMultiple());
+}
 
 void MainWindow::open_window(const int nbr)   //open a questionary window with the number given by the map signal of mapper. The questionary window is create in function of the Mode
 {
@@ -293,12 +296,12 @@ void MainWindow::resetLabel(QAction *action)    //change the Buttons's text when
 {
     if((action == easyMode || action == mediumMode) && actualWindow == MainWidget)
     {
-        for(int i = 0; i < 10; i++)
+        for(int i = 0; i < 10; ++i)
             bouton[i]->setText(tr("La table de ")+QString::number(i+1));
     }
     else if(action == hardMode && actualWindow == MainWidget)
     {
-        for(int i = 0; i < 10; i++)
+        for(int i = 0; i < 10; ++i)
             bouton[i]->setText(tr("La table aléatoire"));
     }
     else
@@ -329,9 +332,7 @@ void MainWindow::setMode(QAction *action)   //slot call when user change the mod
     }
 }
 
-inline void MainWindow::setNewSecondWindow() { open_window(fen->getMultiple()); }
-
-void MainWindow::verification() //slot that is call when user click on check update action.
+void MainWindow::verification()
 {
     check->tryConnection(); //try a connection
     userAction = true;  //set userAction to true because it's the user who ask update (not the program)

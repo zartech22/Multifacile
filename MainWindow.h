@@ -98,7 +98,7 @@ private :
     inline void closeEvent(QCloseEvent * event);
     inline void mouseMoveEvent(QMouseEvent *event);
     inline void mousePressEvent(QMouseEvent *event);
-    inline void mouseReleaseEvent(QMouseEvent *);
+    inline void mouseReleaseEvent(QMouseEvent *) { ClickOnWindow = false; }
     inline void setNewSecondWindow();
 
 public slots :

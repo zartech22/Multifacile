@@ -183,9 +183,3 @@ void HardModeWindow::Retry()
     seconde->setText("00");
     startTime();
 }
-
-const int HardModeWindow::getMultiple() { return 1; }
-
-HardModeWindow::~HardModeWindow()
-{
-}

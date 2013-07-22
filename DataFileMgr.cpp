@@ -159,7 +159,4 @@ void DataFileMgr::createGroup(bool createAllGroups, const QString &group)
     }
 }
 
-DataFileMgr::~DataFileMgr()
-{
-    xmlFile.close();
-}
+DataFileMgr::~DataFileMgr() { xmlFile.close(); }

@@ -16,9 +16,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "Shuffle.h"
 
-Shuffle::Shuffle(bool shuffle) : needShuffle(shuffle)
-{
-}
+Shuffle::Shuffle(bool shuffle) : needShuffle(shuffle) {}
+
 void Shuffle::getNumbers(int tab[])
 {
         srand(time(0));

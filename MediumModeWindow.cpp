@@ -16,10 +16,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "MediumModeWindow.h"
 
-MediumModeWindow::MediumModeWindow() : QWidget()
-{
-}
-
 MediumModeWindow::MediumModeWindow(const int multiplicateur) : secondes(0), mode(MEDIUM)
 {
     initStyle();
@@ -304,8 +300,6 @@ void MediumModeWindow::Retry()
     seconde->setText("00");
     startTime();
 }
-
-const int MediumModeWindow::getMultiple() { return m_multiple; }
 
 MediumModeWindow::~MediumModeWindow()
 {

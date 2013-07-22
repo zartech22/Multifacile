@@ -67,12 +67,7 @@ void Correction::notation(int resultat[], bool isGood[])
 void Correction::doCorrection(QString texte[], bool isGood[], int resultat[]) const
 {
     for(int i = 0; i < 10; ++i)
-    {
-        if(isGood[i])
-            texte[i] = QString("<span style=\"color: #9FC54D;\">" + QString::number(resultat[i]) + tr(" C'est la bonne réponse !") + "</span>");
-        else
-           texte[i] = QString("<span style=\"color: red;\">" + QString::number(answers[i]) +  "</span> <span style=\"color: #9FC54D;\"> " + tr("La bonne réponse était ") + QString::number(resultat[i]));
-    }
+        texte[i] = (isGood[i]) ? QString("<span style=\"color: #9FC54D;\">" + QString::number(resultat[i]) + tr(" C'est la bonne réponse !") + "</span>") : QString("<span style=\"color: red;\">" + QString::number(answers[i]) +  "</span> <span style=\"color: #9FC54D;\"> " + tr("La bonne réponse était ") + QString::number(resultat[i]));
 }
 
 inline void Correction::manageTime()
@@ -92,8 +87,6 @@ void Correction::isRecordValid(RecordState record, int lastRecordTime)
     else
         emit newRecord(NORECORD, lastRecordTime);
 }
-void Correction::saveTime() const { /*manager->SaveRecordInFile();*/ }
-
 QString Correction::getModeGroupName() const
 {
     if(isHardMode)
@@ -102,6 +95,8 @@ QString Correction::getModeGroupName() const
         return QString("EasyMode");
     else if(difficultyMode == MEDIUM)
         return QString("MediumMode");
+    else
+        return QString();
 }
 QString Correction::getModeKeyName() const
 {

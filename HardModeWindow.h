@@ -26,9 +26,9 @@ class HardModeWindow : public MediumModeWindow
 
 public:
     HardModeWindow();
-    ~HardModeWindow();
+    ~HardModeWindow() {}
 
-    const int getMultiple();
+    const int getMultiple() { return 1; }
 private:
     int multiple[10];
     void correct();

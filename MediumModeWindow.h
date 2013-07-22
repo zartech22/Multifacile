@@ -46,11 +46,10 @@ class MediumModeWindow : public QWidget
     Q_OBJECT
 public :
 
-    MediumModeWindow();
     MediumModeWindow(const int multiplicateur);
     ~MediumModeWindow();
 
-    virtual const int getMultiple();
+    virtual const int getMultiple() { return m_multiple; }
 protected :
 
     int m_multiple, note, array[10], secondes;

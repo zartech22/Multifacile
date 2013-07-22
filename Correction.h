@@ -43,7 +43,6 @@ public:
 
     int getCorrection(QString texte[], bool isGood[]);
 
-    void saveTime() const;
 private:
     unsigned int seconds;
     int Multiple;
