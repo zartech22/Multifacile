@@ -107,7 +107,7 @@ QString Correction::getModeKeyName() const
 }
 Correction::~Correction()
 {
-    /*delete manager;
+    delete manager;
 
-    manager = nullptr;*/
+    manager = nullptr;
 }
