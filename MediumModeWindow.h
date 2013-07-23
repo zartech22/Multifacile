@@ -46,6 +46,7 @@ class MediumModeWindow : public QWidget
     Q_OBJECT
 public :
 
+    MediumModeWindow() {}
     MediumModeWindow(const int multiplicateur);
     ~MediumModeWindow();
 
