@@ -17,6 +17,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MainWindow.h"
 #include "CheckUpdate.h"
 #include "Shuffle.h"
+#include "DataFileMgr.h"
 
 MainWindow::MainWindow() : userAction(false), mode(EASY), actualWindow(MainWidget), mapper(NULL)
 {
@@ -143,13 +144,21 @@ void MainWindow::createCentralWidget()
     for(int i = 0, j = 0; i < 10; ++i)
     {
         if(i % 2 == 0)
-            bouton[i]->move(80, (80 + 75 * j));
+            bouton[i]->move(80, (75 + 80 * j));
         else
         {
-            bouton[i]->move(320, (80 + 75 * j));
+            bouton[i]->move(320, (75 + 80 * j));
             ++j;
         }
     }
+
+    QMap<int, bool> *list = DataFileMgr::getNoErrorList("Multifacile.xml", (mode == EASY) ? "EasyMode" : "MediumMode");
+
+    for(QMap<int, bool>::Iterator it = list->begin(); it != list->end(); ++it)
+        if(it.value())
+            bouton[ (it.key() - 1)]->setStyleSheet("background-image: url(\":/image/Bouton_succes.png\");");
+
+    delete list;
 
     connect(quit, SIGNAL(clicked()), qApp, SLOT(quit()));
 
@@ -298,11 +307,23 @@ void MainWindow::resetLabel(QAction *action)    //change the Buttons's text when
     {
         for(int i = 0; i < 10; ++i)
             bouton[i]->setText(tr("La table de ")+QString::number(i+1));
+
+        QMap<int, bool> *list = DataFileMgr::getNoErrorList("Multifacile.xml", (mode == EASY) ? "EasyMode" : "MediumMode");
+
+        for(QMap<int, bool>::Iterator it = list->begin(); it != list->end(); ++it)
+            if(it.value())
+                bouton[ (it.key() - 1)]->setStyleSheet("background-image: url(\":/image/Bouton_succes.png\");");
+
+        delete list;
+
     }
     else if(action == hardMode && actualWindow == MainWidget)
     {
         for(int i = 0; i < 10; ++i)
+        {
             bouton[i]->setText(tr("La table aléatoire"));
+            bouton[i]->setStyleSheet("");
+        }
     }
     else
         return;

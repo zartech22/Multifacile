@@ -76,7 +76,7 @@ void Correction::manageTime()
     if(isHardMode)
         manager->setValue(getModeGroupName(), seconds);
     else
-        manager->setValue(getModeGroupName(), seconds, Multiple);
+        manager->setValue(getModeGroupName(), seconds, (note == 10) ? true : false, Multiple);
 }
 void Correction::isRecordValid(RecordState record, int lastRecordTime)
 {

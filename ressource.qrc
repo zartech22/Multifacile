@@ -28,6 +28,7 @@
         <file>Underline.png</file>
         <file>Wrong.png</file>
         <file>Message_box.png</file>
+        <file>Bouton_succes.png</file>
     </qresource>
     <qresource prefix="/police">
         <file>DK Crayon Crumble.ttf</file>

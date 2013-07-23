@@ -2,8 +2,8 @@
 
 DataFileMgr::DataFileMgr(const QString &fileName)
 {
-    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
 #ifdef Q_OS_WIN32
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     QDir multifacileDir(env.value("appdata") + "/Multifacile");
 
     if(!multifacileDir.exists())
@@ -15,9 +15,15 @@ DataFileMgr::DataFileMgr(const QString &fileName)
     xmlFile.setFileName(env.value("appdata") + "/Multifacile/" + fileName);
 #endif
 #ifdef Q_OS_LINUX
-    xmlFile.setFileName(env.value("$HOME") + "/.config/Multifacile/" + fileName);
+    if(!QDir(QDir::homePath() + "/.config/Multifacile/").exists())
+        QDir(QDir::homePath() + "/.config").mkdir("Multifacile");
+
+    xmlFile.setFileName(QDir::homePath() + "/.config/Multifacile/" + fileName);
 #endif
 #ifdef Q_OS_MAC
+    if(!QDir(QDir::homePath() + "/.config/Multifacile/").exists())
+        QDir(QDir::homePath() + "/.config").mkdir("Multifacile");
+
     xmlFile.setFileName(env.value("$HOME") + "/.config/Multifacile/" + fileName);
 #endif
 
@@ -26,7 +32,7 @@ DataFileMgr::DataFileMgr(const QString &fileName)
     if(xmlFile.readAll().isEmpty())
         createGroup(true);
 }
-bool DataFileMgr::setValue(const QString &group, const unsigned int &time, const unsigned int &table)
+bool DataFileMgr::setValue(const QString &group, const unsigned int &time, const bool &noError, const unsigned int &table)
 {
     xmlFile.seek(0);
     QTextStream out(&xmlFile);
@@ -58,8 +64,15 @@ bool DataFileMgr::setValue(const QString &group, const unsigned int &time, const
         timeElement.setAttribute("table", table);
         timeElement.appendChild(doc.createTextNode(QString::number(time)));
 
+        if(noError)
+            timeElement.setAttribute("noError", "true");
+        else
+            timeElement.setAttribute("noError", "false");
+
+
         if(groupElement.elementsByTagName("time").isEmpty())
             groupElement.appendChild(timeElement);
+
         else
         {
             QDomElement actualTime;
@@ -76,7 +89,12 @@ bool DataFileMgr::setValue(const QString &group, const unsigned int &time, const
                 break;
             }
             if(alreadyExist)
+            {
+                if(actualTime.attribute("noError", "false") == "true" && !noError)
+                    timeElement.setAttribute("noError", "true");
+
                 groupElement.replaceChild(timeElement, actualTime);
+            }
             else
                 groupElement.appendChild(timeElement);
         }
@@ -157,6 +175,45 @@ void DataFileMgr::createGroup(bool createAllGroups, const QString &group)
         data.appendChild(doc.createElement(group));
         doc.save(out, 4);
     }
+}
+QMap<int, bool>* DataFileMgr::getNoErrorList(const QString &fileName, const QString &mode)
+{
+    QFile file;
+
+#ifdef Q_OS_WIN
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+
+    file.setFileName(env.value("appdata") + "/Multifacile/" + fileName);
+#endif
+#ifdef Q_OS_LINUX
+    file.setFileName(QDir::homePath() + "/.config/Multifacile/" + fileName);
+#endif
+#ifdef Q_OS_MAC
+    file.setFileName(QDir::homePath() + "/.config/Multifacile/" + fileName);
+#endif
+
+    if(!file.open(QIODevice::ReadOnly))
+        return new QMap<int, bool>;
+    else if (file.size() == 0)
+        return new QMap<int, bool>;
+
+    QDomDocument doc;
+
+    if(!doc.setContent(&file))
+        return new QMap<int, bool>;
+
+    QDomNodeList childs = doc.elementsByTagName(mode).at(0).childNodes();
+
+    QMap<int, bool> *noErrorList = new QMap<int, bool>;
+
+    for(int i = 0; i < childs.size(); ++i)
+    {
+        if(childs.at(i).toElement().attribute("noError", "false") == "true")
+            noErrorList->insert(childs.at(i).toElement().attribute("table").toInt(), true);
+        else
+            noErrorList->insert(childs.at(i).toElement().attribute("table").toInt(), false);
+    }
+    return noErrorList;
 }
 
 DataFileMgr::~DataFileMgr() { xmlFile.close(); }

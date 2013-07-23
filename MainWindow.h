@@ -38,6 +38,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <QWidget>
 
 #include "CheckUpdate.h"
+#include "DataFileMgr.h"
 #include "EasyModeWindow.h"
 #include "MainWindowEnums.h"
 #include "MediumModeWindow.h"
