@@ -36,6 +36,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <QSignalMapper>
 #include <QVBoxLayout>
 #include <QWidget>
+#include <QWidgetAction>
 
 #include "CheckUpdate.h"
 #include "DataFileMgr.h"
@@ -79,11 +80,12 @@ private :
     MediumModeWindow *fen;
     QMenu *file, *tools, *modes;
     MinCloseMenu *minCloseMenu;
-    Mode mode;
+    Mode _mode;
     Widget actualWindow;
-    QAction *easyMode, *hardMode, *mediumMode, *quitAction, *updateAction;
+    QAction *easyMode, *quitAction, *updateAction;
+    QWidgetAction *hardMode, *mediumMode;
     QActionGroup *actionGroup;
-    QLabel *point, *texte;
+    QLabel *point, *texte, *hardModeActionText, *mediumModeActionText;
     QPushButton *bouton[10], *quit;
     QPoint Diff;
     QSignalMapper *mapper;
@@ -100,15 +102,17 @@ private :
     void mouseMoveEvent(QMouseEvent *event);
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *) { ClickOnWindow = false; }
-    void setNewSecondWindow();
+    void setNewSecondWindow() { open_window(fen->getMultiple()); }
+    void unavailableMode(Mode mode);
+    void unavailableTable(const int &table) { CustomMessageBox(CannotDoThisTable, this, table).exec(); }
+    void updateButtonsLabels();
 
 public slots :
 
     void checkUpdateReceivedAnswer(UpdateType update);
-    void erreurSocket();
+    void socketError();
     void open_window(const int nbr);
     void resetCentralWidget();
-    void resetLabel(QAction *action);
     void setMode(QAction *action);
     void verification();
 };

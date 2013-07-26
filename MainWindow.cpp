@@ -19,19 +19,18 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "Shuffle.h"
 #include "DataFileMgr.h"
 
-MainWindow::MainWindow() : userAction(false), mode(EASY), actualWindow(MainWidget), mapper(NULL)
+MainWindow::MainWindow() : userAction(false), _mode(EASY), actualWindow(MainWidget), mapper(NULL)
 {
     setWindowFlags(Qt::FramelessWindowHint);  //Work only on Windows ! ; disallow user to resize the window
     resize(650, 650);
 
     initStyle();
 
+    doMenuBar();
+
     createCentralWidget();
 
     check = new CheckUpdate(this, VERSION);  //create a new CheckUpdate object with VERSION defined in header
-
-
-    doMenuBar();
 
     minCloseMenu = new MinCloseMenu(this);
 
@@ -49,7 +48,6 @@ MainWindow::MainWindow() : userAction(false), mode(EASY), actualWindow(MainWidge
     connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
     connect(updateAction, SIGNAL(triggered()), this, SLOT(verification()));
     connect(actionGroup, SIGNAL(triggered(QAction*)), this, SLOT(setMode(QAction*)));
-    connect(actionGroup, SIGNAL(triggered(QAction*)), this, SLOT(resetLabel(QAction*)));
 }
 
 void MainWindow::checkUpdateReceivedAnswer(UpdateType update)    //slot which is connected to the updateNeeded(UpdateType) signal of check. It processes the answer given by check
@@ -58,8 +56,7 @@ void MainWindow::checkUpdateReceivedAnswer(UpdateType update)    //slot which is
     {
         if(userAction)  //and if it's the user who clicked on "check for updates"
         {
-            CustomMessageBox noUpdateMsgBox(NoUpdateMsg, this);
-            noUpdateMsgBox.exec();
+            CustomMessageBox(NoUpdateMsg, this).exec();
             userAction = false;
         }
 
@@ -118,10 +115,11 @@ void MainWindow::createCentralWidget()
 
     for(int i = 0; i < 10; ++i)
     {
-        if(mode == EASY || mode == MEDIUM)
+        if(_mode == EASY || _mode == MEDIUM)
             bouton[i] = new QPushButton(tr("La table de ")+QString::number(i+1), widget);
-        else if(mode == HARD)
+        else if(_mode == HARD)
             bouton[i] = new QPushButton(tr("La table aléatoire"), widget);
+
         bouton[i]->setFixedSize(256, 94);
 
         connect(bouton[i], SIGNAL(clicked()), mapper, SLOT(map()));
@@ -152,13 +150,31 @@ void MainWindow::createCentralWidget()
         }
     }
 
-    QMap<int, bool> *list = DataFileMgr::getNoErrorList("Multifacile.xml", (mode == EASY) ? "EasyMode" : "MediumMode");
+    if(_mode == EASY || _mode == MEDIUM)
+    {
+        QMap<int, bool> *list = DataFileMgr::getNoErrorList("Multifacile.xml", (_mode == EASY) ? "EasyMode" : "MediumMode");
 
-    for(QMap<int, bool>::Iterator it = list->begin(); it != list->end(); ++it)
-        if(it.value())
-            bouton[ (it.key() - 1)]->setStyleSheet("background-image: url(\":/image/Bouton_succes.png\");");
+        for(QMap<int, bool>::Iterator it = list->begin(); it != list->end(); ++it)
+            if(it.value())
+                bouton[ (it.key() - 1)]->setStyleSheet("background-image: url(\":/image/Bouton_succes.png\");");
 
-    delete list;
+        delete list;
+
+        if(_mode == MEDIUM)
+            for(int i = 0; i < 10; ++i)
+                if(!DataFileMgr::hasNoErrorTrue("Multifacile.xml", "EasyMode", (i + 1)))
+                    bouton[i]->setStyleSheet("background-image: url(\":/image/Bouton_inacessible.png\"); color: grey;");
+    }
+
+    if(!DataFileMgr::isAllTableWithNoErrorTrue("Multifacile.xml", "EasyMode") || !DataFileMgr::isAllTableWithNoErrorTrue("Multifacile.xml", "MediumMode"))
+        hardModeActionText->setStyleSheet("color: grey; padding-left: 12px;");
+    else
+        hardModeActionText->setStyleSheet("color: white; padding-left: 12px;");
+
+    if(DataFileMgr::isAllTableWithNoErrorFalse("Multifacile.xml", "EasyMode"))
+        mediumModeActionText->setStyleSheet("color: grey; padding-left: 12px;");
+    else
+        mediumModeActionText->setStyleSheet("color: white; padding-left: 12px;");
 
     connect(quit, SIGNAL(clicked()), qApp, SLOT(quit()));
 
@@ -182,8 +198,22 @@ void MainWindow::doActions()
     quitAction = new QAction(QIcon(":/icon/sortie.png"), tr("&Quitter"), this); //the file comes of a Qt ressource file (it's faster than charge a directory's file)
     updateAction = new QAction(QIcon(":/icon/update.png"), tr("&Vérifier les mise à jours"), this);  //idem
     easyMode = new QAction(tr("&Facile"), this);
-    mediumMode = new QAction(tr("&Moyen"), this);
-    hardMode = new QAction(tr("D&ifficile"), this);
+    mediumMode = new QWidgetAction(this);
+    mediumModeActionText = new QLabel("Moyen");
+    mediumMode->setDefaultWidget(mediumModeActionText);
+    hardMode = new QWidgetAction(this);
+    hardModeActionText = new QLabel("Difficile");
+    hardMode->setDefaultWidget(hardModeActionText);
+
+    if(!DataFileMgr::isAllTableWithNoErrorTrue("Multifacile.xml", "EasyMode") || !DataFileMgr::isAllTableWithNoErrorTrue("Multifacile.xml", "MediumMode"))
+        hardModeActionText->setStyleSheet("color: grey; padding-left: 12px;");
+    else
+        hardModeActionText->setStyleSheet("color: white; padding-left: 12px;");
+
+    if(DataFileMgr::isAllTableWithNoErrorFalse("Multifacile.xml", "EasyMode"))
+        mediumModeActionText->setStyleSheet("color: grey; padding-left: 12px;");
+    else
+        mediumModeActionText->setStyleSheet("color: white; padding-left: 12px;");
 }
 
 void MainWindow::doActionGroup()
@@ -226,13 +256,10 @@ void MainWindow::doMenuBar()
     menuBar()->setAttribute(Qt::WA_TranslucentBackground);
 }
 
-void MainWindow::erreurSocket()
+void MainWindow::scoketError()
 {
     if(userAction)
-    {
-        CustomMessageBox ConnectionErrorMsgBox(ConnectionError, this); //if there is a connection error, it open a QMessageBox for inform the user
-        ConnectionErrorMsgBox.exec();
-    }
+        CustomMessageBox(ConnectionError, this).exec(); //if there is a connection error, it open a QMessageBox for inform the user
 }
 
 void MainWindow::initStyle()
@@ -261,14 +288,9 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
     Diff = event->pos();
 }
 
-void MainWindow::setNewSecondWindow()
-{
-    open_window(fen->getMultiple());
-}
-
 void MainWindow::open_window(const int nbr)   //open a questionary window with the number given by the map signal of mapper. The questionary window is create in function of the Mode
 {
-    if(mode == EASY)
+    if(_mode == EASY)
     {
         fen = new EasyModeWindow(nbr);
         fen->setFixedSize(650, 560);
@@ -276,15 +298,23 @@ void MainWindow::open_window(const int nbr)   //open a questionary window with t
         this->setCentralWidget(fen);
         connect(fen, SIGNAL(wasClosed()), this, SLOT(resetCentralWidget()));
     }
-    else if(mode == MEDIUM)
+    else if(_mode == MEDIUM)
     {
-        fen = new MediumModeWindow(nbr);
-        fen->setFixedSize(650, 560);
-        fen->setObjectName("Fen");
-        this->setCentralWidget(fen);
-        connect(fen, SIGNAL(wasClosed()), this, SLOT(resetCentralWidget()));
+        if(DataFileMgr::hasNoErrorTrue("Multifacile.xml", "EasyMode", nbr))
+        {
+            fen = new MediumModeWindow(nbr);
+            fen->setFixedSize(650, 560);
+            fen->setObjectName("Fen");
+            this->setCentralWidget(fen);
+            connect(fen, SIGNAL(wasClosed()), this, SLOT(resetCentralWidget()));
+        }
+        else
+        {
+            unavailableTable(nbr);
+            return;
+        }
     }
-    else if(mode == HARD)
+    else if(_mode == HARD)
     {
         fen = new HardModeWindow();
         fen->setFixedSize(650, 560);
@@ -301,14 +331,17 @@ void MainWindow::resetCentralWidget()
     this->setCentralWidget(widget);
 }
 
-void MainWindow::resetLabel(QAction *action)    //change the Buttons's text when changing mode
+void MainWindow::updateButtonsLabels()    //change the Buttons's text when changing mode
 {
-    if((action == easyMode || action == mediumMode) && actualWindow == MainWidget)
+    if((_mode == EASY || _mode == MEDIUM) && actualWindow == MainWidget)
     {
         for(int i = 0; i < 10; ++i)
-            bouton[i]->setText(tr("La table de ")+QString::number(i+1));
+        {
+            bouton[i]->setText(tr("La table de ") + QString::number(i+1));
+            bouton[i]->setStyleSheet("");
+        }
 
-        QMap<int, bool> *list = DataFileMgr::getNoErrorList("Multifacile.xml", (mode == EASY) ? "EasyMode" : "MediumMode");
+        QMap<int, bool> *list = DataFileMgr::getNoErrorList("Multifacile.xml", (_mode == EASY) ? "EasyMode" : "MediumMode");
 
         for(QMap<int, bool>::Iterator it = list->begin(); it != list->end(); ++it)
             if(it.value())
@@ -316,8 +349,13 @@ void MainWindow::resetLabel(QAction *action)    //change the Buttons's text when
 
         delete list;
 
+        if(_mode == MEDIUM)
+            for(int i = 0; i < 10; ++i)
+                if(!DataFileMgr::hasNoErrorTrue("Multifacile.xml", "EasyMode", (i + 1)))
+                    bouton[i]->setStyleSheet("background-image: url(\":/image/Bouton_inacessible.png\"); color: grey;");
+
     }
-    else if(action == hardMode && actualWindow == MainWidget)
+    else if(_mode == HARD && actualWindow == MainWidget)
     {
         for(int i = 0; i < 10; ++i)
         {
@@ -333,24 +371,59 @@ void MainWindow::setMode(QAction *action)   //slot call when user change the mod
 {
     if(action == easyMode)
     {
-        mode = EASY;
+        _mode = EASY;
         if(actualWindow == SecondWidget)
                 setNewSecondWindow();
+        else
+            updateButtonsLabels();
     }
     else if(action == mediumMode)
     {
-        mode = MEDIUM;
 
-        if(actualWindow == SecondWidget)
+        if(DataFileMgr::isAllTableWithNoErrorFalse("Multifacile.xml", "EasyMode"))
+        {
+            unavailableMode(MEDIUM);
+            easyMode->setChecked(true);
+        }
+        else if(actualWindow == SecondWidget)
+        {
+            _mode = MEDIUM;
+            mediumMode->setChecked(true);
             setNewSecondWindow();
+        }
+        else
+        {
+            _mode = MEDIUM;
+            updateButtonsLabels();
+        }
     }
     else if(action == hardMode)
     {
-        mode = HARD;
-
-        if(actualWindow == SecondWidget)
+        if(!DataFileMgr::isAllTableWithNoErrorTrue("Multifacile.xml", "EasyMode") || !DataFileMgr::isAllTableWithNoErrorTrue("Multifacile.xml", "MediumMode"))
+        {
+            unavailableMode(HARD);
+            if(_mode == MEDIUM)
+                mediumMode->setChecked(true);
+            else
+                easyMode->setChecked(true);
+        }
+        else if(actualWindow == SecondWidget)
+        {
+            _mode = HARD;
             setNewSecondWindow();
+        }
+        else
+        {
+            _mode = HARD;
+            updateButtonsLabels();
+        }
     }
+}
+
+void MainWindow::unavailableMode(Mode mode)
+{
+    MessageType type = (mode == MEDIUM) ? CannotMediumMode : CannotHardMode;
+    CustomMessageBox(type, this).exec();
 }
 
 void MainWindow::verification()

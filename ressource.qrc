@@ -29,6 +29,7 @@
         <file>Wrong.png</file>
         <file>Message_box.png</file>
         <file>Bouton_succes.png</file>
+        <file>Bouton_inacessible.png</file>
     </qresource>
     <qresource prefix="/police">
         <file>DK Crayon Crumble.ttf</file>

@@ -27,7 +27,7 @@ QMenu
 	border-radius: 4px;
 	background-color: rgb(54, 103, 59);
 }
-QMenu::item:disabled
+QMenu::item#unavailable
 { 
 	color: grey; 
 }

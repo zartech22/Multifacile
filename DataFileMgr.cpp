@@ -176,6 +176,7 @@ void DataFileMgr::createGroup(bool createAllGroups, const QString &group)
         doc.save(out, 4);
     }
 }
+
 QMap<int, bool>* DataFileMgr::getNoErrorList(const QString &fileName, const QString &mode)
 {
     QFile file;
@@ -214,6 +215,62 @@ QMap<int, bool>* DataFileMgr::getNoErrorList(const QString &fileName, const QStr
             noErrorList->insert(childs.at(i).toElement().attribute("table").toInt(), false);
     }
     return noErrorList;
+}
+
+bool DataFileMgr::hasNoErrorTrue(const QString &fileName, const QString &mode, const int &table)
+{
+    QFile file;
+
+#ifdef Q_OS_WIN
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+
+    file.setFileName(env.value("appdata") + "/Multifacile/" + fileName);
+#endif
+#ifdef Q_OS_LINUX
+    file.setFileName(QDir::homePath() + "/.config/Multifacile/" + fileName);
+#endif
+#ifdef Q_OS_MAC
+    file.setFileName(QDir::homePath() + "/.config/Multifacile/" + fileName);
+#endif
+
+    if(!file.open(QIODevice::ReadOnly))
+        return false;
+    else if(file.size() == 0)
+        return false;
+
+    QDomDocument doc;
+
+    if(!doc.setContent(&file))
+        return false;
+
+    QDomNodeList childs = doc.elementsByTagName(mode).at(0).toElement().childNodes();
+
+    for(int i = 0; i < childs.size(); ++i)
+        if(childs.at(i).toElement().attribute("table").toInt() == table)
+            return (childs.at(i).toElement().attribute("noError", "false") == "true") ? true : false;
+    return false;
+}
+
+bool DataFileMgr::isAllTableWithNoErrorTrue(const QString &fileName, const QString &mode)
+{
+    bool allWithNoError = true;
+
+    for(int i = 0; i < 10; ++i)
+        if(!hasNoErrorTrue(fileName, mode, (i + 1)))
+            allWithNoError = false;
+
+    return allWithNoError;
+}
+
+bool DataFileMgr::isAllTableWithNoErrorFalse(const QString &fileName, const QString &mode)
+{
+    bool AllWithError = true;
+
+    for(int i = 0; i < 10; ++i)
+        if(hasNoErrorTrue(fileName, mode, (i + 1)))
+            AllWithError = false;
+
+    return AllWithError;
 }
 
 DataFileMgr::~DataFileMgr() { xmlFile.close(); }

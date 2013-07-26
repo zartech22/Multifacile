@@ -18,6 +18,9 @@ public:
     const QString value(const QString &group, const int &table = 0);
 
     static QMap<int, bool>* getNoErrorList(const QString &fileName, const QString &mode);
+    static bool hasNoErrorTrue(const QString &fileName, const QString &mode, const int &table);
+    static bool isAllTableWithNoErrorTrue(const QString &fileName, const QString &mode);
+    static bool isAllTableWithNoErrorFalse(const QString &fileName, const QString &mode);
 
 private:
     QFile xmlFile;

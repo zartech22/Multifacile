@@ -30,7 +30,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 enum MessageType
 {
-    Trick, Results, ConnectionError, NoUpdateMsg, NewUpdate
+    Trick, Results, ConnectionError, NoUpdateMsg, NewUpdate, CannotMediumMode, CannotHardMode, CannotDoThisTable
 };
 
 typedef enum MessageType MessageType;
@@ -51,13 +51,15 @@ private:
     MessageType type;
 
     inline void tricksInit(QMap<int, QString> &tricks);
-    void displayTricks(const int table);
-    void displayResults(const int time, const int note);
+    void displayTricks(const int &table);
+    void displayResults(const int &time, const int &note);
     void displayConnectionError();
     void displayNoUpdate();
     void displayNewUpdate();
-    void calculTime(const int time, int &minutes, int &seconds);
-    void setSmiley(const int note, QPixmap &smiley);
+    void displayCannotAMode();
+    void displayCannotDoATable(const int &table);
+    void calculTime(const int &time, int &minutes, int &seconds);
+    void setSmiley(const int &note, QPixmap &smiley);
 
     void paintEvent(QPaintEvent *);
     void mouseMoveEvent(QMouseEvent *event);

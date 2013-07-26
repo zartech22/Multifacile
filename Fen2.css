@@ -1,8 +1,6 @@
 QWidget#Fen
 {
-	background-color: rgba(255, 255, 255, 0);
-	
-	
+	background-color: rgba(255, 255, 255, 0);	
 }
 QLineEdit
 {
@@ -37,17 +35,6 @@ QPushButton#Astuce
 	margin: 0px;
 	padding: 0px;
 }
-/*QWidget#AstuceFen
-{
-	background-color: rgba(255, 255, 255, 0);
-	background-image: url(":/image/Background_Astuce.png");
-	background-repeat: no-repeat;
-	background-position: center;
-	border: 1px solid black;
-	border-radius: 2px;
-	margin: 1000px;
-	padding: 1000px;
-}*/
 QLabel#LabelAstuce
 {
 	margin-left: 20px;

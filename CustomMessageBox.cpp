@@ -30,14 +30,28 @@ CustomMessageBox::CustomMessageBox(MessageType msgType, QWidget *parent, const i
     OkBouton->setObjectName("OkBouton");
     OkBouton->setStyleSheet("QPushButton#OkBouton{background-color: rgba(255, 255, 255, 0);color: rgb(144,191,79);}");
 
-    if(type == ConnectionError)
+    switch(type)
+    {
+    case ConnectionError:
         displayConnectionError();
-    else if(type == NewUpdate)
+        break;
+    case NewUpdate:
         displayNewUpdate();
-    else if(type == NoUpdateMsg)
+        break;
+    case NoUpdateMsg:
         displayNoUpdate();
-    else if(type == Trick)
+        break;
+    case Trick:
         displayTricks(table);
+    case CannotMediumMode:
+
+    case CannotHardMode:
+        displayCannotAMode();
+        break;
+    case CannotDoThisTable:
+        displayCannotDoATable(table);
+        break;
+    }
 
     connect(OkBouton, SIGNAL(clicked()), this, SLOT(close()));
 }
@@ -61,7 +75,7 @@ CustomMessageBox::CustomMessageBox(const int time, const int note, QWidget* pare
     connect(OkBouton, SIGNAL(clicked()), this, SLOT(close()));
 }
 
-void CustomMessageBox::displayTricks(const int table)
+void CustomMessageBox::displayTricks(const int &table)
 {
     setFixedSize(646, 266);
 
@@ -101,7 +115,7 @@ void CustomMessageBox::displayConnectionError()
     OkBouton->move(386, 135);
 }
 
-void CustomMessageBox::displayResults(const int time, const int note)
+void CustomMessageBox::displayResults(const int &time, const int &note)
 {
     setFixedSize(434, 179);
 
@@ -166,16 +180,42 @@ void CustomMessageBox::displayNewUpdate()
     connect(No, SIGNAL(clicked()), this, SLOT(reject()));
 }
 
-void CustomMessageBox::calculTime(const int time, int &minutes, int &seconds)
+void CustomMessageBox::displayCannotAMode()
+{
+    setFixedSize(434, 179);
+
+    (type == CannotMediumMode) ? label->setText("Réussis au moins une table du mode Facile sans faire de faute pour accéder au mode Moyen.") : label->setText("Réussis toutes les tables du mode Moyen et du mode Facile sans faire de faute pour accéder au mode Difficile.");
+    label->setWordWrap(true);
+    label->move(45, 50);
+
+    menu->move(376, 0);
+    OkBouton->move(386, 135);
+}
+
+void CustomMessageBox::displayCannotDoATable(const int &table)
+{
+    setFixedSize(434, 179);
+
+    label->setText("Réussis d'abords à faire la table de " + QString::number(table) + " sans faute pour la faire en mode Moyen.");
+    label->setWordWrap(true);
+    label->move(45, 50);
+
+    menu->move(376, 0);
+
+    OkBouton->move(386, 135);
+}
+
+void CustomMessageBox::calculTime(const int &time, int &minutes, int &seconds)
 {
     minutes = time/60;
+
     if(minutes != 0)
         seconds = time % 60;
     else
         seconds = time;
 }
 
-void CustomMessageBox::setSmiley(const int note, QPixmap &smiley)
+void CustomMessageBox::setSmiley(const int &note, QPixmap &smiley)
 {
     switch(note)
     {
