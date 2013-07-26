@@ -62,7 +62,8 @@ int main(int argc, char* argv[])
                 QFile fichier("change.txt");
                 fichier.open(QIODevice::ReadOnly | QIODevice::Text);
 
-                QTextEdit *textEdit = new QTextEdit(fichier.readAll(), change);
+                QTextEdit *textEdit = new QTextEdit(fichier.readAll());
+                textEdit->setParent(change);
 
                 fichier.close();
 
