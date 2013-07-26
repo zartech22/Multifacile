@@ -1,43 +1,43 @@
 <RCC>
     <qresource prefix="/icon">
-        <file>icon/sortie.png</file>
-        <file>icon/update.png</file>
+        <file alias="sortie.png">icon/sortie.png</file>
+        <file alias="update.png">icon/update.png</file>
     </qresource>
     <qresource prefix="/css">
-        <file>css/Application.css</file>
-        <file>css/Fen2.css</file>
-        <file>css/Multifacile.css</file>
+        <file alias="Application.css">css/Application.css</file>
+        <file alias="Fen2.css">css/Fen2.css</file>
+        <file alias="Multifacile.css">css/Multifacile.css</file>
     </qresource>
     <qresource prefix="/translation">
-        <file>translation/qt_fr.qm</file>
+        <file alias="qt_fr.qm">translation/qt_fr.qm</file>
     </qresource>
     <qresource prefix="/application">
-        <file>application/Add.exe</file>
+        <file alias="Add.exe">application/Add.exe</file>
     </qresource>
     <qresource prefix="/image">
-        <file>image/Background_Astuce.png</file>
-        <file>image/Bouton.png</file>
-        <file>image/Bouton_inacessible.png</file>
-        <file>image/Bouton_succes.png</file>
-        <file>image/Fond.png</file>
-        <file>image/Message_box.png</file>
-        <file>image/Next.png</file>
-        <file>image/OpacRight.png</file>
-        <file>image/OpacWrong.png</file>
-        <file>image/Point.png</file>
-        <file>image/Previous.png</file>
-        <file>image/Right.png</file>
-        <file>image/TextBox.png</file>
-        <file>image/Underline.png</file>
-        <file>image/Wrong.png</file>
+        <file alias="Background_Astuce.png">image/Background_Astuce.png</file>
+        <file alias="Bouton.png">image/Bouton.png</file>
+        <file alias="Bouton_inacessible.png">image/Bouton_inacessible.png</file>
+        <file alias="Bouton_succes.png">image/Bouton_succes.png</file>
+        <file alias="Fond.png">image/Fond.png</file>
+        <file alias="Message_box.png">image/Message_box.png</file>
+        <file alias="Next.png">image/Next.png</file>
+        <file alias="OpacRight.png">image/OpacRight.png</file>
+        <file alias="OpacWrong.png">image/OpacWrong.png</file>
+        <file alias="Point.png">image/Point.png</file>
+        <file alias="Previous.png">image/Previous.png</file>
+        <file alias="Right.png">image/Right.png</file>
+        <file alias="TextBox.png">image/TextBox.png</file>
+        <file alias="Underline.png">image/Underline.png</file>
+        <file alias="Wrong.png">image/Wrong.png</file>
     </qresource>
     <qresource prefix="/police">
-        <file>police/DK Crayon Crumble.ttf</file>
+        <file alias="DK Crayon Crumble.ttf">police/DK Crayon Crumble.ttf</file>
     </qresource>
     <qresource prefix="/smiley">
-        <file>smiley/bien.png</file>
-        <file>smiley/excellent.png</file>
-        <file>smiley/mauvais.png</file>
-        <file>smiley/moyen.png</file>
+        <file alias="bien.png">smiley/bien.png</file>
+        <file alias="excellent.png">smiley/excellent.png</file>
+        <file alias="mauvais.png">smiley/mauvais.png</file>
+        <file alias="moyen.png">smiley/moyen.png</file>
     </qresource>
 </RCC>
