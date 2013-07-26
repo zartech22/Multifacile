@@ -138,5 +138,5 @@ void EasyModeWindow::openAstuce() const
 EasyModeWindow::~EasyModeWindow()
 {
     delete astuces;
-    astuces = nullptr;
+    astuces = NULL;
 }

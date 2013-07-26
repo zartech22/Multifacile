@@ -442,21 +442,21 @@ MainWindow::~MainWindow()
     delete minCloseMenu;
 
     for(int i = 0; i < 10; ++i)
-        bouton[i] = nullptr;
+        bouton[i] = NULL;
 
-    file = nullptr;
-    tools = nullptr;
-    modes = nullptr;
-    quitAction = nullptr;
-    updateAction = nullptr;
-    easyMode = nullptr;
-    mediumMode = nullptr;
-    hardMode = nullptr;
-    actionGroup = nullptr;
-    quit = nullptr;
-    minCloseMenu = nullptr;
-    check = nullptr;
-    widget = nullptr;
-    mapper = nullptr;
-    fen = nullptr;
+    file = NULL;
+    tools = NULL;
+    modes = NULL;
+    quitAction = NULL;
+    updateAction = NULL;
+    easyMode = NULL;
+    mediumMode = NULL;
+    hardMode = NULL;
+    actionGroup = NULL;
+    quit = NULL;
+    minCloseMenu = NULL;
+    check = NULL;
+    widget = NULL;
+    mapper = NULL;
+    fen = NULL;
 }

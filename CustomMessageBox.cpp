@@ -291,5 +291,5 @@ void CustomMessageBox::mousePressEvent(QMouseEvent *event)
 CustomMessageBox::~CustomMessageBox()
 {
     delete label;
-    label = nullptr;
+    label = NULL;
 }

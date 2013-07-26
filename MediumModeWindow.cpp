@@ -304,18 +304,18 @@ void MediumModeWindow::Retry()
 MediumModeWindow::~MediumModeWindow()
 {
     delete corriger;
-    corriger = nullptr;
+    corriger = NULL;
 
     delete quitter;
-    quitter = nullptr;
+    quitter = NULL;
 
     for(int i = 0; i < 10; ++i)
     {
         delete label[i];
-        label[i] = nullptr;
+        label[i] = NULL;
 
         delete labelPoint[i];
-        labelPoint[i] = nullptr;
+        labelPoint[i] = NULL;
 
         /*delete reponses[i];
         reponses[i] = nullptr;*/
@@ -326,7 +326,7 @@ MediumModeWindow::~MediumModeWindow()
         for(int j = 0; j < 10; ++j)
         {
             delete trueFalseLabel[i][j];
-            trueFalseLabel[i][j] = nullptr;
+            trueFalseLabel[i][j] = NULL;
         }
 
         /*delete nextPrev[i];
@@ -340,9 +340,9 @@ MediumModeWindow::~MediumModeWindow()
     //delete chronometre;
 
 
-    chronometre = nullptr;
-    text = nullptr;
-    minute = nullptr;
-    seconde = nullptr;
-    deuxPoint = nullptr;
+    chronometre = NULL;
+    text = NULL;
+    minute = NULL;
+    seconde = NULL;
+    deuxPoint = NULL;
 }

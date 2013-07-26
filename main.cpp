@@ -53,7 +53,7 @@ int main(int argc, char* argv[])
 
         if(arg == "-updated")
         {
-            int answer = QMessageBox::information(nullptr, "Mise à jour achevé", "Multifacile vient d'être mis à jour. Voulez-vous voir les nouveautés ?", QMessageBox::No | QMessageBox::Yes);
+            int answer = QMessageBox::information(NULL, "Mise à jour achevé", "Multifacile vient d'être mis à jour. Voulez-vous voir les nouveautés ?", QMessageBox::No | QMessageBox::Yes);
 
             if(answer == QMessageBox::Yes)
             {
