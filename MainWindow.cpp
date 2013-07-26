@@ -43,7 +43,7 @@ MainWindow::MainWindow() : userAction(false), _mode(EASY), actualWindow(MainWidg
     connect(mapper, SIGNAL(mapped(int)), this, SLOT(open_window(int)));  //connect the signal mapped of QSignalMapper to the custom slot open_window(int)
 
     connect(check, SIGNAL(checkUpdateAnswer(UpdateType)), this, SLOT(checkUpdateReceivedAnswer(UpdateType)));
-    connect(check, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(erreurSocket()));
+    connect(check, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(socketError()));
 
     connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
     connect(updateAction, SIGNAL(triggered()), this, SLOT(verification()));
@@ -256,7 +256,7 @@ void MainWindow::doMenuBar()
     menuBar()->setAttribute(Qt::WA_TranslucentBackground);
 }
 
-void MainWindow::scoketError()
+void MainWindow::socketError()
 {
     if(userAction)
         CustomMessageBox(ConnectionError, this).exec(); //if there is a connection error, it open a QMessageBox for inform the user
