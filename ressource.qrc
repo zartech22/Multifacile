@@ -1,43 +1,43 @@
 <RCC>
     <qresource prefix="/icon">
-        <file>sortie.png</file>
-        <file>update.png</file>
+        <file>icon/sortie.png</file>
+        <file>icon/update.png</file>
     </qresource>
     <qresource prefix="/css">
-        <file>Multifacile.css</file>
-        <file>Application.css</file>
-        <file>Fen2.css</file>
+        <file>css/Application.css</file>
+        <file>css/Fen2.css</file>
+        <file>css/Multifacile.css</file>
     </qresource>
     <qresource prefix="/translation">
-        <file>qt_fr.qm</file>
+        <file>translation/qt_fr.qm</file>
     </qresource>
     <qresource prefix="/application">
-        <file>Add.exe</file>
+        <file>application/Add.exe</file>
     </qresource>
     <qresource prefix="/image">
-        <file>Background_Astuce.png</file>
-        <file>Bouton.png</file>
-        <file>Fond.png</file>
-        <file>Next.png</file>
-        <file>OpacRight.png</file>
-        <file>OpacWrong.png</file>
-        <file>Point.png</file>
-        <file>Previous.png</file>
-        <file>Right.png</file>
-        <file>TextBox.png</file>
-        <file>Underline.png</file>
-        <file>Wrong.png</file>
-        <file>Message_box.png</file>
-        <file>Bouton_succes.png</file>
-        <file>Bouton_inacessible.png</file>
+        <file>image/Background_Astuce.png</file>
+        <file>image/Bouton.png</file>
+        <file>image/Bouton_inacessible.png</file>
+        <file>image/Bouton_succes.png</file>
+        <file>image/Fond.png</file>
+        <file>image/Message_box.png</file>
+        <file>image/Next.png</file>
+        <file>image/OpacRight.png</file>
+        <file>image/OpacWrong.png</file>
+        <file>image/Point.png</file>
+        <file>image/Previous.png</file>
+        <file>image/Right.png</file>
+        <file>image/TextBox.png</file>
+        <file>image/Underline.png</file>
+        <file>image/Wrong.png</file>
     </qresource>
     <qresource prefix="/police">
-        <file>DK Crayon Crumble.ttf</file>
+        <file>police/DK Crayon Crumble.ttf</file>
     </qresource>
     <qresource prefix="/smiley">
-        <file>bien.png</file>
-        <file>excellent.png</file>
-        <file>mauvais.png</file>
-        <file>moyen.png</file>
+        <file>smiley/bien.png</file>
+        <file>smiley/excellent.png</file>
+        <file>smiley/mauvais.png</file>
+        <file>smiley/moyen.png</file>
     </qresource>
 </RCC>
