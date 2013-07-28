@@ -130,14 +130,14 @@ void CustomMessageBox::displayResults(const int &time, const int &note)
     setSmiley(note, smileyPixmap);
     smiley->setPixmap(smileyPixmap);
 
-    noteLabel->move(187, 130);
-    smiley->move(257, 135);
+    noteLabel->move(217, 110);
+    smiley->move(287, 115);
 
 
 
-    label->setText(tr("Tu as mis %1 minute(s) et %2 seconde(s) pour faire ta table.<br />Tu as fait %3 faute(s) et tu as donc eu :").arg(minutes).arg(seconds).arg(10 - note));
+    label->setText(tr("Tu as mis %1 minute(s) et %2 seconde(s) pour faire ta table.<br />Et tu as eu :").arg(minutes).arg(seconds));
     label->setWordWrap(true);
-    label->move(85, 35);
+    label->move(85, 45);
 
     menu->move(376, 0);
     OkBouton->move(386, 135);
