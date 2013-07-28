@@ -116,8 +116,6 @@ MediumModeWindow::MediumModeWindow(const int multiplicateur) : secondes(0), mode
     connect(nextPrev[1], SIGNAL(clicked()), this, SLOT(Next()));
 
     connect(mapper, SIGNAL(mapped(int)), this, SLOT(newSetFocus(int)));
-
-    reponses[0]->setFocus();
 }
 
 void MediumModeWindow::initStyle()
@@ -300,6 +298,12 @@ void MediumModeWindow::Retry()
     minute->setText("00");
     seconde->setText("00");
     startTime();
+}
+
+void MediumModeWindow::showEvent(QShowEvent *event)
+{
+    reponses[0]->setFocus();
+    QWidget::showEvent(event);
 }
 
 MediumModeWindow::~MediumModeWindow()

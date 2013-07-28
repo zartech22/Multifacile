@@ -109,7 +109,6 @@ HardModeWindow::HardModeWindow()
     connect(corriger, SIGNAL(clicked()), this, SLOT(correct()));
 
     connect(mapper, SIGNAL(mapped(int)), this, SLOT(newSetFocus(int)));
-    reponses[0]->setFocus();
 }
 void HardModeWindow::correct()
 {

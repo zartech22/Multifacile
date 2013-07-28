@@ -75,8 +75,6 @@ EasyModeWindow::EasyModeWindow(const int m_multiplicateur)
         labelCorrection[i]->setVisible(false);
     }
 
-    reponses[0]->setFocus();
-
     for(int i = 0; i < 10; ++i)
     {
         label[i] = new QLabel("<span style=\"color: #9FC54D\">"+QString::number(m_multiple)+"</span> x "+QString::number(array[i]), this);

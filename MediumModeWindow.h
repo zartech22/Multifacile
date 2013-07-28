@@ -34,8 +34,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <QVBoxLayout>
 #include <QWidget>
 
-#include <QDebug>
-
 #include "MinCloseMenu.h"
 #include "Shuffle.h"
 #include "Correction.h"
@@ -90,6 +88,7 @@ public slots:
     void Next();
     void Previous();
     virtual void Retry();
+    void showEvent(QShowEvent *);
     void updateLabel(const int temps) const;
 
 };
