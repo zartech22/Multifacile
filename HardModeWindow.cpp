@@ -1,4 +1,4 @@
-/*Copyright (C) <2013> <Plestan> <Kévin>
+/*Copyright (C) <2013> <Plestan> <KÃ©vin>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -23,7 +23,8 @@ HardModeWindow::HardModeWindow()
     shuffle.getNumbers(array, multiple);
     setWindowFlags(Qt::FramelessWindowHint);
 
-    this->setWindowTitle(tr("Table aléatoire"));
+    this->setWindowTitle(tr("Table alÃ©aoire"));
+
 
     quitter = new QPushButton(tr("Retour"));
     quitter->setParent(this);
@@ -55,6 +56,7 @@ HardModeWindow::HardModeWindow()
     for(int i = 0; i < 10; ++i)
     {
         reponses[i] = new QLineEdit(this);
+        reponses[i]->setMaxLength(3);
         reponses[i]->setAttribute(Qt::WA_TranslucentBackground);
         reponses[i]->setFixedSize(302, 69);
         reponses[i]->move(185, (60 + 40 * i));
@@ -62,8 +64,6 @@ HardModeWindow::HardModeWindow()
         connect(reponses[i], SIGNAL(returnPressed()), mapper, SLOT(map()));
         mapper->setMapping(reponses[i], (i + 1));
     }
-
-    reponses[0]->setFocus();
 
     for(int i = 0; i < 10; ++i)
     {
@@ -109,6 +109,7 @@ HardModeWindow::HardModeWindow()
     connect(corriger, SIGNAL(clicked()), this, SLOT(correct()));
 
     connect(mapper, SIGNAL(mapped(int)), this, SLOT(newSetFocus(int)));
+    reponses[0]->setFocus();
 }
 void HardModeWindow::correct()
 {

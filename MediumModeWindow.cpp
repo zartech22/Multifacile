@@ -45,6 +45,7 @@ MediumModeWindow::MediumModeWindow(const int multiplicateur) : secondes(0), mode
     for(int i = 0; i < 10; ++i)
     {
         reponses[i] = new QLineEdit(this);
+        reponses[i]->setMaxLength(3);
         reponses[i]->setAttribute(Qt::WA_TranslucentBackground);
         reponses[i]->setFixedSize(302, 69);
         reponses[i]->move(185, (60 + 40 * i));
