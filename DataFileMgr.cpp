@@ -14,17 +14,11 @@ DataFileMgr::DataFileMgr(const QString &fileName)
 
     xmlFile.setFileName(env.value("appdata") + "/Multifacile/" + fileName);
 #endif
-#ifdef Q_OS_LINUX
+#if defined(Q_OS_LINUX) || defined(Q_OS_MAC)
     if(!QDir(QDir::homePath() + "/.config/Multifacile/").exists())
         QDir(QDir::homePath() + "/.config").mkdir("Multifacile");
 
     xmlFile.setFileName(QDir::homePath() + "/.config/Multifacile/" + fileName);
-#endif
-#ifdef Q_OS_MAC
-    if(!QDir(QDir::homePath() + "/.config/Multifacile/").exists())
-        QDir(QDir::homePath() + "/.config").mkdir("Multifacile");
-
-    xmlFile.setFileName(env.value("$HOME") + "/.config/Multifacile/" + fileName);
 #endif
 
     xmlFile.open(QIODevice::ReadWrite);
@@ -186,10 +180,7 @@ QMap<int, bool>* DataFileMgr::getNoErrorList(const QString &fileName, const QStr
 
     file.setFileName(env.value("appdata") + "/Multifacile/" + fileName);
 #endif
-#ifdef Q_OS_LINUX
-    file.setFileName(QDir::homePath() + "/.config/Multifacile/" + fileName);
-#endif
-#ifdef Q_OS_MAC
+#if defined(Q_OS_LINUX) || defined(Q_OS_MAC)
     file.setFileName(QDir::homePath() + "/.config/Multifacile/" + fileName);
 #endif
 
@@ -226,10 +217,7 @@ bool DataFileMgr::hasNoErrorTrue(const QString &fileName, const QString &mode, c
 
     file.setFileName(env.value("appdata") + "/Multifacile/" + fileName);
 #endif
-#ifdef Q_OS_LINUX
-    file.setFileName(QDir::homePath() + "/.config/Multifacile/" + fileName);
-#endif
-#ifdef Q_OS_MAC
+#if defined(Q_OS_LINUX) || defined(Q_OS_MAC)
     file.setFileName(QDir::homePath() + "/.config/Multifacile/" + fileName);
 #endif
 
@@ -272,5 +260,3 @@ bool DataFileMgr::isAllTableWithNoErrorFalse(const QString &fileName, const QStr
 
     return AllWithError;
 }
-
-DataFileMgr::~DataFileMgr() { xmlFile.close(); }

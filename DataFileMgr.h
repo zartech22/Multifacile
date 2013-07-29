@@ -12,7 +12,7 @@ class DataFileMgr
 {
 public:
     DataFileMgr(const QString &fileName);
-    ~DataFileMgr();
+    ~DataFileMgr() { xmlFile.close(); }
 
     bool setValue(const QString &group, const unsigned int &time, const bool &noError = false, const unsigned int &table = 0);
     const QString value(const QString &group, const int &table = 0);
