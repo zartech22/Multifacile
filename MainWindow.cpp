@@ -290,16 +290,16 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
 
 void MainWindow::open_window(const int nbr)   //open a questionary window with the number given by the map signal of mapper. The questionary window is create in function of the Mode
 {
-    if(_mode == EASY)
+    switch(_mode)
     {
+    case EASY:
         fen = new EasyModeWindow(nbr);
         fen->setFixedSize(650, 560);
         fen->setObjectName("Fen");
         this->setCentralWidget(fen);
         connect(fen, SIGNAL(wasClosed()), this, SLOT(resetCentralWidget()));
-    }
-    else if(_mode == MEDIUM)
-    {
+        break;
+    case MEDIUM:
         if(DataFileMgr::hasNoErrorTrue("Multifacile.xml", "EasyMode", nbr))
         {
             fen = new MediumModeWindow(nbr);
@@ -313,14 +313,14 @@ void MainWindow::open_window(const int nbr)   //open a questionary window with t
             unavailableTable(nbr);
             return;
         }
-    }
-    else if(_mode == HARD)
-    {
+        break;
+    case HARD:
         fen = new HardModeWindow();
         fen->setFixedSize(650, 560);
         fen->setObjectName("Fen");
         this->setCentralWidget(fen);
         connect(fen, SIGNAL(wasClosed()), this, SLOT(resetCentralWidget()));
+        break;
     }
     actualWindow = SecondWidget;
 }
