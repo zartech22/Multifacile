@@ -43,6 +43,7 @@ CustomMessageBox::CustomMessageBox(MessageType msgType, QWidget *parent, const i
         break;
     case Trick:
         displayTricks(table);
+        break;
     case CannotMediumMode:
 
     case CannotHardMode:
