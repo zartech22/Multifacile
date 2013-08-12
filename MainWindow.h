@@ -46,6 +46,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MinCloseMenu.h"
 #include "HardModeWindow.h"
 #include "CustomMessageBox.h"
+#include "Menu.h"
 
 #ifdef Q_OS_WIN32
     #pragma comment(lib, "shell32.lib")
@@ -73,16 +74,15 @@ public :
     ~MainWindow();
 
 private :
-
     bool ClickOnWindow, userAction;
     CheckUpdate *check;
     int version;
     MediumModeWindow *fen;
-    QMenu *file, *tools, *modes;
+    QMenu *file, *tools;
     MinCloseMenu *minCloseMenu;
     Mode _mode;
     Widget actualWindow;
-    QAction *easyMode, *quitAction, *updateAction;
+    QAction  *easyMode, *quitAction, *updateAction;
     QWidgetAction *hardMode, *mediumMode;
     QActionGroup *actionGroup;
     QLabel *point, *texte, *hardModeActionText, *mediumModeActionText;
@@ -90,6 +90,7 @@ private :
     QPoint Diff;
     QSignalMapper *mapper;
     QWidget *widget;
+    Menu *modes;
 
     void createCentralWidget();
     void deleteAddIfExist();

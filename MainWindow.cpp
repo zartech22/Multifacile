@@ -75,7 +75,7 @@ void MainWindow::checkUpdateReceivedAnswer(UpdateType update)    //slot which is
 
         if(userAnswer)  //if the user want to update
         {
-            START_UPDATER()
+            START_UPDATER();
             this->close();  //close this window
         }
         else
@@ -92,7 +92,7 @@ void MainWindow::checkUpdateReceivedAnswer(UpdateType update)    //slot which is
 
         if(userAnswer)
         {
-            START_ADD()
+            START_ADD();
             this->close();
         }
         else
@@ -230,17 +230,18 @@ void MainWindow::doMenuBar()
     file = menuBar()->addMenu(tr("      &Fichier |"));
     file->setObjectName("FileMenu");
     tools = menuBar()->addMenu(tr("&Outils"));
-    modes = menuBar()->addMenu(tr("| &Mode"));
-    modes->setObjectName("ModeMenu");
+    modes = new Menu(tr("| &Mode"));
+    menuBar()->addMenu(modes);
+    modes->setStyleSheet("QMenu { border: 1.5px solid rgb(255, 169, 50); border-radius: 4px; background-color: rgb(54, 103, 59); }");
 
     doActions();
 
     easyMode->setCheckable(true);
-    easyMode->setToolTip("Table de multiplication normale avec astuces");
+    easyMode->setToolTip("Table dans l'ordre avec astuces");
     mediumMode->setCheckable(true);
     mediumMode->setToolTip("Table en désordre sans astuces");
     hardMode->setCheckable(true);
-    hardMode->setToolTip("Une table mélangé avec n'importe quelle table");
+    hardMode->setToolTip("Table mystère...");
     easyMode->setChecked(true);
 
     doActionGroup();
