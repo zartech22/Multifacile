@@ -170,10 +170,13 @@ void CustomMessageBox::displayNewUpdate()
 
 
     OkBouton->setText(tr("Oui"));
-    OkBouton->move(356, 135);
+    OkBouton->move(346, 135);
 
     QPushButton *No = new QPushButton(tr("Non"), this);
-    No->move(386, 135);
+    No->setAttribute(Qt::WA_TranslucentBackground);
+    No->move(386, 140);
+    No->setObjectName("NoButton");
+    No->setStyleSheet("QPushButton#NoButton{background-color: rgba(255, 255, 255, 0);color: rgb(144,191,79); background-image: url(none);}");
 
     disconnect(OkBouton, SIGNAL(clicked()), this, SLOT(close()));
 
