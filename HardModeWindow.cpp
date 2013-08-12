@@ -129,6 +129,7 @@ void HardModeWindow::correct()
 
     chronometre->stop();
     delete chronometre;
+    chronometre = NULL;
 
     CustomMessageBox results(secondes, note, this);
 

@@ -342,7 +342,8 @@ MediumModeWindow::~MediumModeWindow()
     delete minute;
     delete seconde;
     delete deuxPoint;
-    //delete chronometre;
+    if(chronometre != NULL)
+        delete chronometre;
 
 
     chronometre = NULL;
