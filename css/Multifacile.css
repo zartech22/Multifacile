@@ -4,12 +4,11 @@ QMainWindow
 	background-repeat: no-repeat;
 	
 }
- QMenuBar::item, QMenuBar, QMenu 
+ QMenuBar::item, QMenuBar, QMenu
 { 
 	background-color: rgba(255, 255, 255, 0);
 	color: white;
 }
-
 QMenuBar::item 
 { 
 	margin: 0px;
@@ -21,15 +20,11 @@ QMenuBar
 {
 	background-color: rgb(54, 103, 59);
 }
-QMenu 
+QMenu
 { 
 	border: 1.5px solid rgb(255, 169, 50);
 	border-radius: 4px;
 	background-color: rgb(54, 103, 59);
-}
-QMenu::item#unavailable
-{ 
-	color: grey; 
 }
 QPushButton:pressed 
 { 
