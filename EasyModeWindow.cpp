@@ -64,9 +64,9 @@ EasyModeWindow::EasyModeWindow(const int m_multiplicateur)
     {
         reponses[i] = new QLineEdit(this);
         reponses[i]->setAttribute(Qt::WA_TranslucentBackground);
-        reponses[i]->setMaxLength(3);
         reponses[i]->setFixedSize(302, 69);
         reponses[i]->move(185, (60 + 40 * i));
+        reponses[i]->setValidator(new QIntValidator(0, 100, reponses[i]));
 
         connect(reponses[i], SIGNAL(returnPressed()), mapper, SLOT(map()));
         mapper->setMapping(reponses[i], (i + 1));
