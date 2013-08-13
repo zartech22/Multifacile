@@ -9,7 +9,8 @@ SOURCES += \
     MinCloseMenu.cpp \
     DataFileMgr.cpp \
     MainWindow.cpp \
-    CustomMessageBox.cpp
+    CustomMessageBox.cpp \
+    Menu.cpp
 
 HEADERS += \
     CheckUpdate.h \
@@ -22,7 +23,8 @@ HEADERS += \
     DataFileMgr.h \
     MainWindow.h \
     MainWindowEnums.h \
-    CustomMessageBox.h
+    CustomMessageBox.h \
+    Menu.h
 
 RC_FILE = Icon.rc
 
