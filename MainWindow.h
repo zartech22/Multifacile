@@ -74,22 +74,47 @@ public :
     ~MainWindow();
 
 private :
-    bool ClickOnWindow, userAction;
+    bool ClickOnWindow;
+    bool userAction;
+
+    QMenu *file;
+    QMenu *tools;
+
+    QAction *easyMode;
+    QAction *quitAction;
+    QAction *updateAction;
+
+    QWidgetAction *mediumMode;
+    QWidgetAction *hardMode;
+
+    QLabel *point;
+    QLabel *texte;
+    QLabel *mediumModeActionText;
+    QLabel *hardModeActionText;
+
+    QPushButton *bouton[10];
+    QPushButton *quit;
+
     CheckUpdate *check;
+
     int version;
+
     MediumModeWindow *fen;
-    QMenu *file, *tools;
+
     MinCloseMenu *minCloseMenu;
+
     Mode _mode;
+
     Widget actualWindow;
-    QAction  *easyMode, *quitAction, *updateAction;
-    QWidgetAction *hardMode, *mediumMode;
+
     QActionGroup *actionGroup;
-    QLabel *point, *texte, *hardModeActionText, *mediumModeActionText;
-    QPushButton *bouton[10], *quit;
+
     QPoint Diff;
+
     QSignalMapper *mapper;
+
     QWidget *widget;
+
     Menu *modes;
 
     void createCentralWidget();
