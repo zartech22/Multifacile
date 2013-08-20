@@ -47,33 +47,8 @@ int main(int argc, char* argv[])
 
     file.close();
 
-    for(int i = 0; i < argc; ++i)
-    {
-        QString arg(argv[i]);
-
-        if(arg == "-updated")
-        {
-            int answer = QMessageBox::information(NULL, "Mise à jour achevé", "Multifacile vient d'être mis à jour. Voulez-vous voir les nouveautés ?", QMessageBox::No | QMessageBox::Yes);
-
-            if(answer == QMessageBox::Yes)
-            {
-                QWidget *change = new QWidget;
-
-                QFile fichier("change.txt");
-                fichier.open(QIODevice::ReadOnly | QIODevice::Text);
-
-                QTextEdit *textEdit = new QTextEdit(fichier.readAll());
-                textEdit->setParent(change);
-
-                fichier.close();
-
-                change->show();
-            }
-        }
-    }
-
     MainWindow window;
-   window.setWindowIcon(QIcon(":/icon/icone.png"));
+    window.setWindowIcon(QIcon(":/icon/icone.png"));
     window.show();
 
     return app.exec();
