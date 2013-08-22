@@ -180,6 +180,8 @@ void HardModeWindow::Retry()
         delete labelCorrection[i];
     }
 
+    reponses[0]->setFocus();
+
     minute->setText("00");
     seconde->setText("00");
     startTime();
