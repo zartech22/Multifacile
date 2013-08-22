@@ -295,6 +295,8 @@ void MediumModeWindow::Retry()
         trueFalseLabel[1][i]->setPixmap(QPixmap(":/image/OpacWrong.png"));
     }
 
+    reponses[0]->setFocus();
+
     minute->setText("00");
     seconde->setText("00");
     startTime();
