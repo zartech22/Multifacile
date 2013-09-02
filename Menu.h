@@ -9,7 +9,7 @@
 class Menu : public QMenu
 {
 public:
-    Menu(QString &title, QWidget *parent = 0) : QMenu(title, parent) { }
+    Menu(QString title, QWidget *parent = 0) : QMenu(title, parent) { }
     virtual bool event(QEvent *e);
 };
 
