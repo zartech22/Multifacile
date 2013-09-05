@@ -1,0 +1,13 @@
+QToolTip
+{
+    border: 1px solid rgb(255, 169, 50);
+    background-color: rgb(53, 109, 54);
+    color: white;
+    font-size: 21px;
+}
+* 
+{
+	font-family: "DK Crayon Crumble"; 
+	color: white;
+	font-size: 24px; 
+}

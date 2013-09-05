@@ -13,3 +13,5 @@ Multifacile.pro.*
 *.ts
 en.qm
 Thumbs.db
+bin/*
+build/*
