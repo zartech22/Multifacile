@@ -9,7 +9,7 @@ Icon.aps
 Makefile
 Makefile.*
 vc100.pdb
-Multifacile.pro.*
+*.pro.*
 *.ts
 en.qm
 Thumbs.db

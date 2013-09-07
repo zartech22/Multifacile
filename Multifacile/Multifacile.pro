@@ -39,23 +39,21 @@ BUILD_PATH = ../build
 BIN_PATH = ../bin
 
 CONFIG(release, debug|release) {
-OBJECTS_DIR = $${BUILD_PATH}/release
-MOC_DIR = $${BUILD_PATH}/release
-RCC_DIR = $${BUILD_PATH}/release
+OBJECTS_DIR = $${BUILD_PATH}/release/Multifacile
+MOC_DIR = $${BUILD_PATH}/release/Multifacile
+RCC_DIR = $${BUILD_PATH}/release/Multifacile
 DESTDIR = $${BIN_PATH}/release
 DEFINES += RELEASE
+LIBS += -L$${BIN_PATH}/release/ -lnetwork
 }
 CONFIG(debug, debug|release) {
-OBJECTS_DIR = $${BUILD_PATH}/debug
-MOC_DIR = $${BUILD_PATH}/debug
-RCC_DIR = $${BUILD_PATH}/debug
+OBJECTS_DIR = $${BUILD_PATH}/debug/Multifacile
+MOC_DIR = $${BUILD_PATH}/debug/Multifacile
+RCC_DIR = $${BUILD_PATH}/debug/Multifacile
 DESTDIR = $${BIN_PATH}/debug
 DEFINES += DEBUG
+LIBS += -L$${BIN_PATH}/debug/ -lnetworkd
 }
-
-win32:CONFIG(release, debug|release): LIBS += -L$${BIN_PATH}/release/ -lnetwork
-else:win32:CONFIG(debug, debug|release): LIBS += -L$${BIN_PATH}/debug/ -lnetworkd
-else:unix: LIBS += -L$$OUT_PWD/../network/ -lnetworkd
 
 INCLUDEPATH += $$PWD/../network
 DEPENDPATH += $$PWD/../network

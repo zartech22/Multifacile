@@ -17,7 +17,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #ifndef FENETRE_PRINCIPALE_H
 #define FENETRE_PRINCIPALE_H
 
-#include <QAbstractSocket>
 #include <QAction>
 #include <QActionGroup>
 #include <QApplication>

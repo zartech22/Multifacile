@@ -25,7 +25,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
     #define NETWORKLIB "network"
 #endif
 
-#include <QTcpSocket>
 #include <QDataStream>
 #include <QLibrary>
 
