@@ -25,7 +25,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 class Menu : public QMenu
 {
 public:
-    Menu(QString &title, QWidget *parent = 0) : QMenu(title, parent) { }
+    Menu(QString title, QWidget *parent = 0) : QMenu(title, parent) { }
     virtual bool event(QEvent *e);
 };
 
