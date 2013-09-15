@@ -36,7 +36,7 @@ void Shuffle::getNumbers(int tab[])
             for(int i = 0; i<10; ++i)
                 tab[i] = numbers[i];
 }
-void Shuffle::getNumbers(int tab[], int array[])
+void Shuffle::getNumbers(int tab[], unsigned short array[])
 {
     srand(time(0));
 

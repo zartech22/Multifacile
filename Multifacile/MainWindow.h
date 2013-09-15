@@ -58,8 +58,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
                                        QString str(env.value("appdata")+"/Add.exe"); \
                                        QFile::copy(":/application/Add.exe", str); \
                                        ShellExecute(NULL, L"open", str.toStdWString().c_str(), NULL, NULL, SW_SHOWNORMAL);
-#endif
-#ifdef Q_OS_LINUX
+#elif defined(Q_OS_LINUX) || defined(Q_OS_MAC)
     #include <QProcess>
     #define START_UPDATER() QProcess::startDetached("Updater");
     #define START_ADD() QFile::copy(":/application/Add", "Add"); \
@@ -98,7 +97,7 @@ private :
 
     CheckUpdate *check;
 
-    int version;
+    unsigned short int version;
 
     MediumModeWindow *fen;
 
@@ -131,7 +130,7 @@ private :
     void mouseReleaseEvent(QMouseEvent *) { ClickOnWindow = false; }
     void setNewSecondWindow() { open_window(fen->getMultiple()); }
     void unavailableMode(Mode mode);
-    void unavailableTable(const int &table) { CustomMessageBox(CannotDoThisTable, this, table).exec(); }
+    void unavailableTable(const unsigned short int &table) { CustomMessageBox(CannotDoThisTable, this, table).exec(); }
     void updateButtonsLabels();
 
 public slots :

@@ -25,10 +25,10 @@ class Shuffle
 public:
     Shuffle(bool shuffle);
     void getNumbers(int tab[]);
-    void getNumbers(int tab[], int array[]);
+    void getNumbers(int tab[], unsigned short int array[]);
 private:
     bool needShuffle;
-    int numbers[10];
+    unsigned short int numbers[10];
 };
 
 #endif // SHUFFLE_H

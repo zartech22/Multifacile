@@ -36,21 +36,21 @@ class Correction : public QObject
     Q_OBJECT
 
 public:
-    Correction(Mode mode, const int multiple, int* order, int *userAnswers, const int time = 0);
-    Correction(int* multiple, int* order, int* userAnswers, const int time = 0);
+    Correction(Mode mode, const unsigned short int multiple, int* order, unsigned short int *userAnswers, const unsigned short int time = 0);
+    Correction(unsigned short int* multiple, int* order, unsigned short *userAnswers, const unsigned short int time = 0);
 
     ~Correction();
 
     int getCorrection(QString texte[], bool isGood[]);
 
 private:
-    unsigned int seconds;
-    int Multiple;
-    int note;
+    unsigned short int seconds;
+    unsigned short int Multiple;
+    unsigned short int note;
 
     int* orderTab;
-    int* multipleTab;
-    int* answers;
+    unsigned short int* multipleTab;
+    unsigned short int* answers;
 
     bool isHardMode;
 
@@ -59,8 +59,8 @@ private:
     Mode difficultyMode;
 
     void manageTime();
-    void notation(int resultat[], bool isGood[]);
-    void doCorrection(QString texte[], bool isGood[], int resultat[]) const;
+    void notation(unsigned short int resultat[], bool isGood[]);
+    void doCorrection(QString texte[], bool isGood[], unsigned short int resultat[]) const;
 
     QString getModeGroupName() const;
     QString getModeKeyName() const;

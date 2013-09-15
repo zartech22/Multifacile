@@ -199,7 +199,7 @@ void MediumModeWindow::Next()
     setNewNumber(m_multiple);
 }
 
-void MediumModeWindow::setNewNumber(register int newNumber)
+void MediumModeWindow::setNewNumber(const unsigned short int newNumber)
 {
     this->setWindowTitle(tr("Table de ")+QString::number(newNumber));
 
@@ -236,7 +236,7 @@ void MediumModeWindow::correct()
     delete chronometre;
     chronometre = NULL;
 
-    int rep[10];
+    unsigned short int rep[10];
     for(int i = 0; i < 10; ++i)
         rep[i] = reponses[i]->text().toInt();
 

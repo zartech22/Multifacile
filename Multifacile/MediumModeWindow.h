@@ -49,10 +49,13 @@ public :
     MediumModeWindow(const int multiplicateur);
     ~MediumModeWindow();
 
-    virtual const int getMultiple() { return m_multiple; }
+    virtual const unsigned short int getMultiple() { return m_multiple; }
 protected :
 
-    int m_multiple, note, array[10], secondes;
+    unsigned short int m_multiple;
+    unsigned short int note;
+    int array[10];
+    unsigned short int secondes;
 
     bool ClickOnWindow;
 
@@ -73,7 +76,7 @@ protected :
     void initStyle();
     void closeEvent(QCloseEvent *event);
     void paintEvent(QPaintEvent *);
-    void setNewNumber(int newNumber);
+    void setNewNumber(const unsigned short int newNumber);
     void startTime();
 
 signals:

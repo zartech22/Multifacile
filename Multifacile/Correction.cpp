@@ -16,13 +16,13 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "Correction.h"
 
-Correction::Correction(Mode mode, const int multiple, int *order, int* userAnswers, const int time) : Multiple(multiple), orderTab(order), answers(userAnswers), difficultyMode(mode), seconds(time), isHardMode(false) {}
+Correction::Correction(Mode mode, const unsigned short multiple, int *order, unsigned short int* userAnswers, const unsigned short int time) : Multiple(multiple), orderTab(order), answers(userAnswers), difficultyMode(mode), seconds(time), isHardMode(false) {}
 
-Correction::Correction(int *multiple, int *order, int *userAnswers, const int time) : multipleTab(multiple), orderTab(order), answers(userAnswers), seconds(time), isHardMode(true){}
+Correction::Correction(unsigned short *multiple, int *order, unsigned short int *userAnswers, const unsigned short time) : multipleTab(multiple), orderTab(order), answers(userAnswers), seconds(time), isHardMode(true){}
 
 int Correction::getCorrection(QString texte[], bool isGood[])
 {
-    int resultat[10];
+    unsigned short int resultat[10];
     note = 10;
 
     this->notation(resultat, isGood);
@@ -33,7 +33,7 @@ int Correction::getCorrection(QString texte[], bool isGood[])
 
     return note;
 }
-void Correction::notation(int resultat[], bool isGood[])
+void Correction::notation(unsigned short int resultat[], bool isGood[])
 {
     if(!isHardMode)
     {
@@ -64,7 +64,7 @@ void Correction::notation(int resultat[], bool isGood[])
         }
     }
 }
-void Correction::doCorrection(QString texte[], bool isGood[], int resultat[]) const
+void Correction::doCorrection(QString texte[], bool isGood[], unsigned short int resultat[]) const
 {
     for(int i = 0; i < 10; ++i)
         texte[i] = (isGood[i]) ? QString("<span style=\"color: #9FC54D;\">" + QString::number(resultat[i]) + tr(" C'est la bonne réponse !") + "</span>") : QString("<span style=\"color: red;\">" + QString::number(answers[i]) +  "</span> <span style=\"color: #9FC54D;\"> " + tr("La bonne réponse était ") + QString::number(resultat[i]));

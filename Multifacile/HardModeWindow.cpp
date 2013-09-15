@@ -112,7 +112,7 @@ HardModeWindow::HardModeWindow()
 }
 void HardModeWindow::correct()
 {
-    int rep[10];
+    unsigned short int rep[10];
     for(int i = 0; i < 10; ++i)
         rep[i] = reponses[i]->text().toInt();
 

@@ -22,6 +22,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 MainWindow::MainWindow() : userAction(false), _mode(EASY), actualWindow(MainWidget), mapper(NULL)
 {
     setWindowFlags(Qt::FramelessWindowHint);  //Work only on Windows ! ; disallow user to resize the window
+    setWindowTitle("Multifacile");
     resize(650, 650);
 
     initStyle();
@@ -59,8 +60,6 @@ void MainWindow::checkUpdateReceivedAnswer(UpdateType update)    //slot which is
             CustomMessageBox(NoUpdateMsg, this).exec();
             userAction = false;
         }
-
-        //check->disconnectFromHost();
         return;
     }
     else if(update == NormalUpdate) //else if update needed

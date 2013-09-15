@@ -41,7 +41,7 @@ class CheckUpdate : public QObject
 {
     Q_OBJECT
 public:
-    CheckUpdate(QObject *parent, const int version);
+    CheckUpdate(QObject *parent, const unsigned short int version);
     void tryConnection() { net->tryConnection("multifacile.no-ip.org", 8087); }
     void disconnectFromHost() { net->disconnectFromHost(); }
 private:

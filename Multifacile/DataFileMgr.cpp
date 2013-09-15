@@ -42,7 +42,7 @@ DataFileMgr::DataFileMgr(const QString &fileName)
     if(xmlFile.readAll().isEmpty())
         createGroup(true);
 }
-bool DataFileMgr::setValue(const QString &group, const unsigned int &time, const bool &noError, const unsigned int &table)
+bool DataFileMgr::setValue(const QString &group, const unsigned short &time, const bool &noError, const unsigned short &table)
 {
     xmlFile.seek(0);
     QTextStream out(&xmlFile);
@@ -115,7 +115,7 @@ bool DataFileMgr::setValue(const QString &group, const unsigned int &time, const
         return true;
 }
 
-const QString DataFileMgr::value(const QString &group, const int &table)
+const QString DataFileMgr::value(const QString &group, const unsigned short &table)
 {
     if(!doc.setContent(&xmlFile))
         return "Error : cannot set content";
@@ -224,7 +224,7 @@ QMap<int, bool>* DataFileMgr::getNoErrorList(const QString &fileName, const QStr
     return noErrorList;
 }
 
-bool DataFileMgr::hasNoErrorTrue(const QString &fileName, const QString &mode, const int &table)
+bool DataFileMgr::hasNoErrorTrue(const QString &fileName, const QString &mode, const unsigned short int &table)
 {
     QFile file;
 
@@ -251,7 +251,7 @@ bool DataFileMgr::hasNoErrorTrue(const QString &fileName, const QString &mode, c
 
     for(int i = 0; i < childs.size(); ++i)
         if(childs.at(i).toElement().attribute("table").toInt() == table)
-            return (childs.at(i).toElement().attribute("noError", "false") == "true") ? true : false;
+            return (childs.at(i).toElement().attribute("noError", "false") == "true");
     return false;
 }
 

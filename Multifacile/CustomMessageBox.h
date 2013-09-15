@@ -39,8 +39,8 @@ class CustomMessageBox : public QDialog
 {
     Q_OBJECT
 public:
-    CustomMessageBox(MessageType msgType, QWidget *parent = 0, const int table = 0);
-    CustomMessageBox(const int time, const int note, QWidget *parent = 0);
+    CustomMessageBox(MessageType msgType, QWidget *parent = 0, const unsigned short int table = 0);
+    CustomMessageBox(const unsigned short int time, const unsigned short int note, QWidget *parent = 0);
     ~CustomMessageBox();
 private:
     QLabel *label;
@@ -50,16 +50,16 @@ private:
     QPoint Diff;
     MessageType type;
 
-    inline void tricksInit(QMap<int, QString> &tricks);
-    void displayTricks(const int &table);
-    void displayResults(const int &time, const int &note);
+    inline void tricksInit(QMap<unsigned short int, QString> &tricks);
+    void displayTricks(const unsigned short int &table);
+    void displayResults(const unsigned short int &time, const unsigned short int &note);
     void displayConnectionError();
     void displayNoUpdate();
     void displayNewUpdate();
     void displayCannotAMode();
     void displayCannotDoATable(const int &table);
-    void calculTime(const int &time, int &minutes, int &seconds);
-    void setSmiley(const int &note, QPixmap &smiley);
+    void calculTime(const unsigned short int &time, unsigned short int &minutes, unsigned short int &seconds);
+    void setSmiley(const unsigned short int &note, QPixmap &smiley);
 
     void paintEvent(QPaintEvent *);
     void mouseMoveEvent(QMouseEvent *event);

@@ -28,9 +28,9 @@ public:
     HardModeWindow();
     ~HardModeWindow() {}
 
-    const int getMultiple() { return 1; }
+    const unsigned short int getMultiple() { return 1; }
 private:
-    int multiple[10];
+    unsigned short int multiple[10];
     void correct();
 public slots:
     void Retry();

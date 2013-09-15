@@ -25,7 +25,7 @@ class EasyModeWindow : public MediumModeWindow
 {
     Q_OBJECT
 public:
-    EasyModeWindow(const int m_multiplicateur);
+    EasyModeWindow(const unsigned short int m_multiplicateur);
     ~EasyModeWindow();
 protected:
     QPushButton *astuces;

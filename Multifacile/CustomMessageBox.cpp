@@ -16,7 +16,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "CustomMessageBox.h"
 
-CustomMessageBox::CustomMessageBox(MessageType msgType, QWidget *parent, const int table) : QDialog(parent, Qt::FramelessWindowHint), clickOnWindow(false), type(msgType)
+CustomMessageBox::CustomMessageBox(MessageType msgType, QWidget *parent, const unsigned short table) : QDialog(parent, Qt::FramelessWindowHint), clickOnWindow(false), type(msgType)
 {
 
     this->setAttribute(Qt::WA_TranslucentBackground);
@@ -57,7 +57,7 @@ CustomMessageBox::CustomMessageBox(MessageType msgType, QWidget *parent, const i
     connect(OkBouton, SIGNAL(clicked()), this, SLOT(close()));
 }
 
-CustomMessageBox::CustomMessageBox(const int time, const int note, QWidget* parent) : QDialog(parent, Qt::FramelessWindowHint), clickOnWindow(false), type(Results)
+CustomMessageBox::CustomMessageBox(const unsigned short time, const unsigned short note, QWidget* parent) : QDialog(parent, Qt::FramelessWindowHint), clickOnWindow(false), type(Results)
 {
     this->setAttribute(Qt::WA_TranslucentBackground);
 
@@ -76,11 +76,11 @@ CustomMessageBox::CustomMessageBox(const int time, const int note, QWidget* pare
     connect(OkBouton, SIGNAL(clicked()), this, SLOT(close()));
 }
 
-void CustomMessageBox::displayTricks(const int &table)
+void CustomMessageBox::displayTricks(const unsigned short int &table)
 {
     setFixedSize(646, 266);
 
-    QMap<int, QString> tricks;
+    QMap<unsigned short int, QString> tricks;
     tricksInit(tricks);
 
     label->setObjectName("LabelAstuce");
@@ -97,7 +97,7 @@ void CustomMessageBox::displayTricks(const int &table)
         label->setText(tr("Il n'y a pas encore d'astuces pour cette table."));
 }
 
-void CustomMessageBox::tricksInit(QMap<int, QString> &tricks)
+void CustomMessageBox::tricksInit(QMap<unsigned short, QString> &tricks)
 {
     tricks[1] = tr("Pour la table de 1, le résultat sera toujours égal au nombre que multiplie 1.<br /><span style=\"color: #9FC54D\">Ex</span> : 1 x <span style=\"text-decoration: underline;\">7</span> = <span style=\"text-decoration: underline;\">7</span></strong>");
     tricks[2] = tr("Pour la table de 2, le résultat est toujours un nombre paire et les résultats vont de 2 en 2.<br /><span style=\"color: #9FC54D\">Ex</span> : <strong>2 x 1 = <span style=\"text-decoration: underline;\">2</span><br />2 x 2 = <span style=\"text-decoration: underline;\">4</span></strong>");
@@ -116,11 +116,11 @@ void CustomMessageBox::displayConnectionError()
     OkBouton->move(386, 135);
 }
 
-void CustomMessageBox::displayResults(const int &time, const int &note)
+void CustomMessageBox::displayResults(const unsigned short &time, const unsigned short &note)
 {
     setFixedSize(434, 179);
 
-    int seconds, minutes;
+    unsigned short int seconds, minutes;
 
     calculTime(time, minutes, seconds);
 
@@ -209,7 +209,7 @@ void CustomMessageBox::displayCannotDoATable(const int &table)
     OkBouton->move(386, 135);
 }
 
-void CustomMessageBox::calculTime(const int &time, int &minutes, int &seconds)
+void CustomMessageBox::calculTime(const unsigned short &time, unsigned short &minutes, unsigned short &seconds)
 {
     minutes = time/60;
 
@@ -219,7 +219,7 @@ void CustomMessageBox::calculTime(const int &time, int &minutes, int &seconds)
         seconds = time;
 }
 
-void CustomMessageBox::setSmiley(const int &note, QPixmap &smiley)
+void CustomMessageBox::setSmiley(const unsigned short &note, QPixmap &smiley)
 {
     switch(note)
     {

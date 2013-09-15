@@ -16,7 +16,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "EasyModeWindow.h"
 
-EasyModeWindow::EasyModeWindow(const int m_multiplicateur)
+EasyModeWindow::EasyModeWindow(const unsigned short m_multiplicateur)
 {
     initStyle();
 
