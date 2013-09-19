@@ -36,3 +36,5 @@ LIBS += -L$${BIN_PATH}/debug/ -lnetworkd
 
 INCLUDEPATH += $$PWD/../network
 DEPENDPATH += $$PWD/../network
+
+win32: LIBS += -lshell32 # To handle UAC

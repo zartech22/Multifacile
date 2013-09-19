@@ -1,5 +1,9 @@
 #include "Updater.h"
 
+#ifdef Q_OS_WIN32
+    #include <windows.h>
+#endif
+
 Updater::Updater() : QProgressDialog(), lib(NETWORK)
 {
     typedef Network* (*NetworkConstructor)();
@@ -164,7 +168,11 @@ void Updater::finish()
     QFile::setPermissions("Multifacile", QFile::ExeOwner | QFile::ReadOwner | QFile::WriteOwner);
     QProcess::startDetached("Multifacile");
 #elif defined(Q_OS_WIN)
-   QProcess::startDetached("Multifacile.exe");
+    // Handling Windows UAC:
+    QString exe = QApplication::applicationDirPath() + "/Multifacile.exe";
+    ShellExecute(NULL, NULL,
+                 reinterpret_cast<const WCHAR*>(exe.utf16()),
+                 NULL, NULL, SW_SHOWNORMAL);
 #endif
    this->close();
 }
