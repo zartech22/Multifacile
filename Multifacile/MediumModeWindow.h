@@ -63,9 +63,18 @@ protected :
 
     QSignalMapper *mapper;
 
-    QLabel *label[10], *text, *minute, *seconde, *deuxPoint, *labelPoint[10], *trueFalseLabel[2][10], *labelCorrection[10];
+    QLabel *label[10];
+    QLabel *text;
+    QLabel *minute;
+    QLabel *seconde;
+    QLabel *deuxPoint;
+    QLabel *labelPoint[10];
+    QLabel *trueFalseLabel[2][10];
+    QLabel *labelCorrection[10];
 
-    QPushButton *corriger, *quitter, *nextPrev[2];
+    QPushButton *corriger;
+    QPushButton *quitter;
+    QPushButton *nextPrev[2];
 
     QLineEdit *reponses[10];
 
