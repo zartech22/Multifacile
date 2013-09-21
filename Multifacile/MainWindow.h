@@ -49,21 +49,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "CustomMessageBox.h"
 #include "Menu.h"
 
-#ifdef Q_OS_WIN32
-    #pragma comment(lib, "shell32.lib")
-    #include <Windows.h>
-    #define START_UPDATER() ShellExecute(NULL, L"open", L"Updater.exe", NULL, NULL, SW_SHOWNORMAL);
-
-    #define START_ADD() QProcessEnvironment env = QProcessEnvironment::systemEnvironment(); \
-                                       QString str(env.value("appdata")+"/Add.exe"); \
-                                       QFile::copy(":/application/Add.exe", str); \
-                                       ShellExecute(NULL, L"open", str.toStdWString().c_str(), NULL, NULL, SW_SHOWNORMAL);
-#elif defined(Q_OS_LINUX) || defined(Q_OS_MAC)
-    #include <QProcess>
-    #define START_UPDATER() QProcess::startDetached("Updater");
-    #define START_ADD() QFile::copy(":/application/Add", "Add"); \
-                                       QProcess::startDetached("Add");
-#endif
 
 class MainWindow : public QMainWindow
 {
@@ -75,7 +60,6 @@ public :
 
 private :
     bool ClickOnWindow;
-    bool userAction;
 
     QMenu *file;
     QMenu *tools;
@@ -140,7 +124,7 @@ public slots :
     void open_window(const int nbr);
     void resetCentralWidget();
     void setMode(QAction *action);
-    void verification();
+    void verification() { check->tryConnection(true); }
 };
 
 #endif // FENETRE_PRINCIPALE_H

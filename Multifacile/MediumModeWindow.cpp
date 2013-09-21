@@ -55,6 +55,7 @@ MediumModeWindow::MediumModeWindow(const int multiplicateur) : secondes(0), mode
 
         label[i] = new QLabel("<span style=\"color: #9FC54D\">"+QString::number(m_multiple)+"</span> x "+QString::number(array[i]), this);
         label[i]->setFixedSize(100, 30);
+        label[i]->move(120, 78 + i * 40);
 
         labelPoint[i] = new QLabel(this);
         labelPoint[i]->setPixmap(QPixmap(":/image/Point.png"));
@@ -89,9 +90,6 @@ MediumModeWindow::MediumModeWindow(const int multiplicateur) : secondes(0), mode
 
     nextPrev[0]->setFixedSize(58, 58);
     nextPrev[1]->setFixedSize(58, 58);
-
-    for(int i = 0; i < 10; ++i)
-        label[i]->move(120, 78 + i * 40);
 
     nextPrev[0]->move(20, 240);
     nextPrev[1]->move(570, 240);
@@ -206,10 +204,9 @@ void MediumModeWindow::setNewNumber(const unsigned short int newNumber)
     corriger->setText("Corriger");
 
     for(int i = 0; i < 10; ++i)
+    {
         label[i]->setText("<span style=\"color: #9FC54D\">"+QString::number(newNumber)+"</span> x "+QString::number(array[i]));
 
-    for(int i = 0; i < 10; ++i)
-    {
         labelCorrection[i]->setVisible(false);
 
         reponses[i]->clear();
@@ -218,11 +215,13 @@ void MediumModeWindow::setNewNumber(const unsigned short int newNumber)
         trueFalseLabel[0][i]->setPixmap(QPixmap(":/image/OpacRight.png"));
         trueFalseLabel[1][i]->setPixmap(QPixmap(":/image/OpacWrong.png"));
     }
+
     if(chronometre != NULL)
     {
         chronometre->stop();
         delete chronometre;
     }
+
     secondes = 0;
     minute->setText("00");
     seconde->setText("00");

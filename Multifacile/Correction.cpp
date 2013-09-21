@@ -80,12 +80,12 @@ void Correction::manageTime()
 }
 void Correction::isRecordValid(RecordState record, int lastRecordTime)
 {
-    if(record == RECORD && note == 10)
-        emit newRecord(RECORD, lastRecordTime);
-    else if(record == RECORD && note != 10)
-        emit newRecord(UNVALIDRECORD, lastRecordTime);
-    else
+    if(record == NORECORD)
         emit newRecord(NORECORD, lastRecordTime);
+    else if(note == 10)  // if record != NORECORD then record == RECORD
+        emit newRecord(RECORD, lastRecordTime);
+    else
+        emit newRecord(UNVALIDRECORD, lastRecordTime);
 }
 QString Correction::getModeGroupName() const
 {

@@ -19,7 +19,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "Shuffle.h"
 #include "DataFileMgr.h"
 
-MainWindow::MainWindow() : userAction(false), _mode(EASY), actualWindow(MainWidget), mapper(NULL)
+MainWindow::MainWindow() :  _mode(EASY), actualWindow(MainWidget), mapper(NULL)
 {
     setWindowFlags(Qt::FramelessWindowHint);  //Work only on Windows ! ; disallow user to resize the window
     setWindowTitle("Multifacile");
@@ -53,27 +53,22 @@ MainWindow::MainWindow() : userAction(false), _mode(EASY), actualWindow(MainWidg
 
 void MainWindow::checkUpdateReceivedAnswer(UpdateType update)    //slot which is connected to the updateNeeded(UpdateType) signal of check. It processes the answer given by check
 {
+
     if(update == NoUpdate) //if not update needed
     {
-        if(userAction)  //and if it's the user who clicked on "check for updates"
-        {
+        if(check->isUserAction())  //and if it's the user who clicked on "check for updates"
             CustomMessageBox(NoUpdateMsg, this).exec();
-            userAction = false;
-        }
         return;
     }
     else if(update == NormalUpdate) //else if update needed
     {
-        if(userAction)
-            userAction = false;
-
         check->disconnectFromHost();
         CustomMessageBox updateMsgBox(NewUpdate, this);
         bool userAnswer = updateMsgBox.exec();
 
         if(userAnswer)  //if the user want to update
         {
-            START_UPDATER();
+            check->runMultifacileUpdate();
             this->close();  //close this window
         }
         else
@@ -81,16 +76,13 @@ void MainWindow::checkUpdateReceivedAnswer(UpdateType update)    //slot which is
     }
     else if(update == UpdaterUpdate)
     {
-        if(userAction)
-            userAction = false;
-
         check->disconnectFromHost();
         CustomMessageBox updateMsgBox(NewUpdate, this);
         bool userAnswer = updateMsgBox.exec();
 
         if(userAnswer)
         {
-            START_ADD();
+            check->runUpdaterUpdate();
             this->close();
         }
         else
@@ -115,7 +107,7 @@ void MainWindow::createCentralWidget()
     {
         if(_mode == EASY || _mode == MEDIUM)
             bouton[i] = new QPushButton(tr("La table de ")+QString::number(i+1), widget);
-        else if(_mode == HARD)
+        else // _mode == HARD
             bouton[i] = new QPushButton(tr("La table aléatoire"), widget);
 
         bouton[i]->setFixedSize(256, 94);
@@ -148,7 +140,7 @@ void MainWindow::createCentralWidget()
         }
     }
 
-    if(_mode == EASY || _mode == MEDIUM)
+    if(_mode != HARD)
     {
         QMap<int, bool> *list = DataFileMgr::getNoErrorList("Multifacile.xml", (_mode == EASY) ? "EasyMode" : "MediumMode");
 
@@ -257,7 +249,7 @@ void MainWindow::doMenuBar()
 
 void MainWindow::socketError()
 {
-    if(userAction)
+    if(check->isUserAction())
         CustomMessageBox(ConnectionError, this).exec(); //if there is a connection error, it open a QMessageBox for inform the user
 }
 
@@ -396,7 +388,7 @@ void MainWindow::setMode(QAction *action)   //slot call when user change the mod
             updateButtonsLabels();
         }
     }
-    else if(action == hardMode)
+    else
     {
         if(!DataFileMgr::isAllTableWithNoErrorTrue("Multifacile.xml", "EasyMode") || !DataFileMgr::isAllTableWithNoErrorTrue("Multifacile.xml", "MediumMode"))
         {
@@ -423,12 +415,6 @@ void MainWindow::unavailableMode(Mode mode)
 {
     MessageType type = (mode == MEDIUM) ? CannotMediumMode : CannotHardMode;
     CustomMessageBox(type, this).exec();
-}
-
-void MainWindow::verification()
-{
-    check->tryConnection(); //try a connection
-    userAction = true;  //set userAction to true because it's the user who ask update (not the program)
 }
 
 MainWindow::~MainWindow()

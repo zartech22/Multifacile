@@ -73,12 +73,14 @@ EasyModeWindow::EasyModeWindow(const unsigned short m_multiplicateur)
 
         labelCorrection[i] = new QLabel(this);
         labelCorrection[i]->setVisible(false);
-    }
 
-    for(int i = 0; i < 10; ++i)
-    {
         label[i] = new QLabel("<span style=\"color: #9FC54D\">"+QString::number(m_multiple)+"</span> x "+QString::number(array[i]), this);
         label[i]->setFixedSize(100, 30);
+        label[i]->move(120, 78 + (i * 40));
+
+        labelPoint[i] = new QLabel(this);
+        labelPoint[i]->setPixmap(QPixmap(":/image/Point.png"));
+        labelPoint[i]->move(105, (90 + 40 * i));
     }
 
     for(int j = 0; j < 2; ++j)
@@ -97,13 +99,6 @@ EasyModeWindow::EasyModeWindow(const unsigned short m_multiplicateur)
             }
         }
 
-    for(int i = 0; i < 10; ++i)
-    {
-        labelPoint[i] = new QLabel(this);
-        labelPoint[i]->setPixmap(QPixmap(":/image/Point.png"));
-        labelPoint[i]->move(105, (90 + 40 * i));
-    }
-
     nextPrev[0] = new QPushButton(this);
     nextPrev[0]->setObjectName("Precedent");
     nextPrev[0]->setFixedSize(58, 58);
@@ -113,9 +108,6 @@ EasyModeWindow::EasyModeWindow(const unsigned short m_multiplicateur)
     nextPrev[1]->setObjectName("Suivant");
     nextPrev[1]->setFixedSize(58, 58);
     nextPrev[1]->move(570, 240);
-
-    for(int i = 0; i < 10; ++i)
-        label[i]->move(120, 78 + (i * 40));
 
     startTime();
 

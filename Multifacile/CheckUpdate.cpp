@@ -16,7 +16,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "CheckUpdate.h"
 
-CheckUpdate::CheckUpdate(QObject *parent, const unsigned short version) : QObject(parent), actualVersion(version), messageSize(0), lib(NETWORKLIB)
+CheckUpdate::CheckUpdate(QObject *parent, const unsigned short version, bool isUserAction) : QObject(parent), actualVersion(version), messageSize(0), lib(NETWORKLIB), _isUserAction(isUserAction)
 {
     typedef Network* (*NetworkConstructor) ();
 

@@ -63,18 +63,17 @@ HardModeWindow::HardModeWindow()
 
         connect(reponses[i], SIGNAL(returnPressed()), mapper, SLOT(map()));
         mapper->setMapping(reponses[i], (i + 1));
-    }
 
-    for(int i = 0; i < 10; ++i)
-    {
         label[i] = new QLabel("<span style=\"color: #9FC54D\">"+QString::number(multiple[i])+"</span> x "+QString::number(array[i]), this);
         label[i]->setFixedSize(100, 30);
-    }
+        label[i]->move(120, (78 + 40 * i));
 
-    for(int i = 0; i < 10; ++i)
-    {
         labelCorrection[i] = new QLabel(this);
         labelCorrection[i]->setVisible(false);
+
+        labelPoint[i] = new QLabel(this);
+        labelPoint[i]->setPixmap(QPixmap(":/image/Point.png"));
+        labelPoint[i]->move(105, (90 + 40 * i));
     }
 
     for(int j = 0; j < 2; ++j)
@@ -92,16 +91,6 @@ HardModeWindow::HardModeWindow()
                 trueFalseLabel[j][i]->move(525, (75 + 40 * i));
             }
         }
-
-    for(int i = 0; i < 10; ++i)
-    {
-        labelPoint[i] = new QLabel(this);
-        labelPoint[i]->setPixmap(QPixmap(":/image/Point.png"));
-        labelPoint[i]->move(105, (90 + 40 * i));
-    }
-
-    for(int i = 0; i < 10; ++i)
-        label[i]->move(120, (78 + 40 * i));
 
     startTime();
 

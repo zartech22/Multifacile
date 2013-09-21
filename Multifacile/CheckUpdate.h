@@ -25,10 +25,30 @@ with this program; if not, write to the Free Software Foundation, Inc.,
     #define NETWORKLIB "network"
 #endif
 
+
 #include <QDataStream>
 #include <QLibrary>
+#include <QProcessEnvironment>
+#include <QFile>
 
 #include "../libnetwork/Network.h"
+
+#ifdef Q_OS_WIN
+    #pragma comment(lib, "shell32.lib")
+    #include <Windows.h>
+    #define START_UPDATER() ShellExecute(NULL, L"open", L"Updater.exe", NULL, NULL, SW_SHOWNORMAL);
+
+    #define START_ADD() QProcessEnvironment env = QProcessEnvironment::systemEnvironment(); \
+                                       QString str(env.value("appdata")+"/Add.exe"); \
+                                       QFile::copy(":/application/Add.exe", str); \
+                                       ShellExecute(NULL, L"open", str.toStdWString().c_str(), NULL, NULL, SW_SHOWNORMAL);
+#elif defined(Q_OS_LINUX) || defined(Q_OS_MAC)
+    #include <QProcess>
+    #define START_UPDATER() QProcess::startDetached("Updater");
+    #define START_ADD() QFile::copy(":/application/Add", "Add"); \
+                                       QProcess::startDetached("Add");
+#endif
+
 
 enum UpdateType
 {
@@ -41,14 +61,18 @@ class CheckUpdate : public QObject
 {
     Q_OBJECT
 public:
-    CheckUpdate(QObject *parent, const unsigned short int version);
-    void tryConnection() { net->tryConnection("multifacile.no-ip.org", 8087); }
+    CheckUpdate(QObject *parent, const unsigned short int version, bool isUserAction = false);
+    void tryConnection(bool isUserAction = false) { _isUserAction = isUserAction; net->tryConnection("multifacile.no-ip.org", 8087); }
     void disconnectFromHost() { net->disconnectFromHost(); }
+    bool isUserAction() const { return _isUserAction; }
+    void runMultifacileUpdate() { START_UPDATER(); }
+    void runUpdaterUpdate() { START_ADD(); }
 private:
     QLibrary lib;
     Network *net;
     quint16 messageSize;
     int actualVersion;
+    bool _isUserAction;
 public slots:
     void dataReceived(QByteArray*);
     void Connected() { net->sendVersion(actualVersion); }
