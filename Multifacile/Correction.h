@@ -44,19 +44,19 @@ public:
     int getCorrection(QString texte[], bool isGood[]);
 
 private:
-    unsigned short int seconds;
-    unsigned short int Multiple;
-    unsigned short int note;
+    unsigned short int _seconds;
+    unsigned short int _Multiple;
+    unsigned short int _note;
 
-    int* orderTab;
-    unsigned short int* multipleTab;
-    unsigned short int* answers;
+    int* _orderTab;
+    unsigned short int* _multipleTab;
+    unsigned short int* _answers;
 
-    bool isHardMode;
+    bool _isHardMode;
 
-    DataFileMgr *manager;
+    DataFileMgr *_manager;
 
-    Mode difficultyMode;
+    Mode _difficultyMode;
 
     void manageTime();
     void notation(unsigned short int resultat[], bool isGood[]);

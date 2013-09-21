@@ -43,12 +43,12 @@ public:
     CustomMessageBox(const unsigned short int time, const unsigned short int note, QWidget *parent = 0);
     ~CustomMessageBox();
 private:
-    QLabel *label;
-    QPushButton *OkBouton;
-    MinCloseMenu *menu;
-    bool clickOnWindow;
-    QPoint Diff;
-    MessageType type;
+    QLabel *_label;
+    QPushButton *_okBouton;
+    MinCloseMenu *_menu;
+    bool _clickOnWindow;
+    QPoint _Diff;
+    MessageType _type;
 
     inline void tricksInit(QMap<unsigned short int, QString> &tricks);
     void displayTricks(const unsigned short int &table);
@@ -64,7 +64,7 @@ private:
     void paintEvent(QPaintEvent *);
     void mouseMoveEvent(QMouseEvent *event);
     void mousePressEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *) { clickOnWindow = false; }
+    void mouseReleaseEvent(QMouseEvent *) { _clickOnWindow = false; }
 
 };
 

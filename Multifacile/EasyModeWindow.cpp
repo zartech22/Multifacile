@@ -20,114 +20,114 @@ EasyModeWindow::EasyModeWindow(const unsigned short m_multiplicateur)
 {
     initStyle();
 
-    mode = EASY;
-    m_multiple = m_multiplicateur;
-    secondes = 0;
+    _mode = EASY;
+    _multiple = m_multiplicateur;
+    _secondes = 0;
 
     setWindowFlags(Qt::FramelessWindowHint);
     Shuffle shuffle(false);
-    shuffle.getNumbers(array);
+    shuffle.getNumbers(_array);
 
-    setWindowTitle(tr("Table de ")+QString::number(m_multiple));
+    setWindowTitle(tr("Table de ")+QString::number(_multiple));
 
-    quitter = new QPushButton(tr("Retour"));
-    quitter->setParent(this);
-    quitter->setFixedSize(70, 40);
-    quitter->move(490, 490);
-    quitter->setObjectName("Quitter");
+    _quitter = new QPushButton(tr("Retour"));
+    _quitter->setParent(this);
+    _quitter->setFixedSize(70, 40);
+    _quitter->move(490, 490);
+    _quitter->setObjectName("Quitter");
 
-    corriger = new QPushButton(tr("Corriger"));
-    corriger->setParent(this);
-    corriger->setFixedSize(80, 40);
-    corriger->move(400, 490);
-    corriger->setObjectName("Corriger");
+    _corriger = new QPushButton(tr("Corriger"));
+    _corriger->setParent(this);
+    _corriger->setFixedSize(80, 40);
+    _corriger->move(400, 490);
+    _corriger->setObjectName("Corriger");
 
-    astuces = new QPushButton(tr("Astuce"));
-    astuces->setParent(this);
-    astuces->setFixedSize(70, 40);
-    astuces->move(310, 490);
-    astuces->setObjectName("Astuce");
+    _astuces = new QPushButton(tr("Astuce"));
+    _astuces->setParent(this);
+    _astuces->setFixedSize(70, 40);
+    _astuces->move(310, 490);
+    _astuces->setObjectName("Astuce");
 
-    text = new QLabel(tr("Temps : "), this);
-    minute = new QLabel("00", this);
-    deuxPoint = new QLabel(":", this);
-    seconde = new QLabel("00", this);
+    _text = new QLabel(tr("Temps : "), this);
+    _minute = new QLabel("00", this);
+    _deuxPoint = new QLabel(":", this);
+    _seconde = new QLabel("00", this);
 
-    text->move(235, 15);
-    minute->move(330, 15);
-    deuxPoint->move(355, 15);
-    seconde->move(380, 15);
+    _text->move(235, 15);
+    _minute->move(330, 15);
+    _deuxPoint->move(355, 15);
+    _seconde->move(380, 15);
 
-    mapper = new QSignalMapper(this);
+    _mapper = new QSignalMapper(this);
 
     for(int i = 0; i < 10; ++i)
     {
-        reponses[i] = new QLineEdit(this);
-        reponses[i]->setAttribute(Qt::WA_TranslucentBackground);
-        reponses[i]->setFixedSize(302, 69);
-        reponses[i]->move(185, (60 + 40 * i));
-        reponses[i]->setValidator(new QRegExpValidator(QRegExp("\\d{0,3}"), reponses[i]));
+        _reponses[i] = new QLineEdit(this);
+        _reponses[i]->setAttribute(Qt::WA_TranslucentBackground);
+        _reponses[i]->setFixedSize(302, 69);
+        _reponses[i]->move(185, (60 + 40 * i));
+        _reponses[i]->setValidator(new QRegExpValidator(QRegExp("\\d{0,3}"), _reponses[i]));
 
-        connect(reponses[i], SIGNAL(returnPressed()), mapper, SLOT(map()));
-        mapper->setMapping(reponses[i], (i + 1));
+        connect(_reponses[i], SIGNAL(returnPressed()), _mapper, SLOT(map()));
+        _mapper->setMapping(_reponses[i], (i + 1));
 
-        labelCorrection[i] = new QLabel(this);
-        labelCorrection[i]->setVisible(false);
+        _labelCorrection[i] = new QLabel(this);
+        _labelCorrection[i]->setVisible(false);
 
-        label[i] = new QLabel("<span style=\"color: #9FC54D\">"+QString::number(m_multiple)+"</span> x "+QString::number(array[i]), this);
-        label[i]->setFixedSize(100, 30);
-        label[i]->move(120, 78 + (i * 40));
+        _label[i] = new QLabel("<span style=\"color: #9FC54D\">"+QString::number(_multiple)+"</span> x "+QString::number(_array[i]), this);
+        _label[i]->setFixedSize(100, 30);
+        _label[i]->move(120, 78 + (i * 40));
 
-        labelPoint[i] = new QLabel(this);
-        labelPoint[i]->setPixmap(QPixmap(":/image/Point.png"));
-        labelPoint[i]->move(105, (90 + 40 * i));
+        _labelPoint[i] = new QLabel(this);
+        _labelPoint[i]->setPixmap(QPixmap(":/image/Point.png"));
+        _labelPoint[i]->move(105, (90 + 40 * i));
     }
 
     for(int j = 0; j < 2; ++j)
         for(int i = 0; i < 10; ++i)
         {
-            trueFalseLabel[j][i] = new QLabel(this);
+            _trueFalseLabel[j][i] = new QLabel(this);
             if(j == 0)
             {
-                trueFalseLabel[j][i]->setPixmap(QPixmap(":/image/OpacRight.png"));
-                trueFalseLabel[j][i]->move(475, (70 + 40 * i));
+                _trueFalseLabel[j][i]->setPixmap(QPixmap(":/image/OpacRight.png"));
+                _trueFalseLabel[j][i]->move(475, (70 + 40 * i));
             }
             if(j == 1)
             {
-                trueFalseLabel[j][i]->setPixmap(QPixmap(":/image/OpacWrong.png"));
-                trueFalseLabel[j][i]->move(525, (75 + 40 * i));
+                _trueFalseLabel[j][i]->setPixmap(QPixmap(":/image/OpacWrong.png"));
+                _trueFalseLabel[j][i]->move(525, (75 + 40 * i));
             }
         }
 
-    nextPrev[0] = new QPushButton(this);
-    nextPrev[0]->setObjectName("Precedent");
-    nextPrev[0]->setFixedSize(58, 58);
-    nextPrev[0]->move(20, 240);
+    _nextPrev[0] = new QPushButton(this);
+    _nextPrev[0]->setObjectName("Precedent");
+    _nextPrev[0]->setFixedSize(58, 58);
+    _nextPrev[0]->move(20, 240);
 
-    nextPrev[1] = new QPushButton(this);
-    nextPrev[1]->setObjectName("Suivant");
-    nextPrev[1]->setFixedSize(58, 58);
-    nextPrev[1]->move(570, 240);
+    _nextPrev[1] = new QPushButton(this);
+    _nextPrev[1]->setObjectName("Suivant");
+    _nextPrev[1]->setFixedSize(58, 58);
+    _nextPrev[1]->move(570, 240);
 
     startTime();
 
-    connect(quitter, SIGNAL(clicked()), this, SIGNAL(wasClosed()));
-    connect(corriger, SIGNAL(clicked()), this, SLOT(correct()));
-    connect(astuces, SIGNAL(clicked()), this, SLOT(openAstuce()));
+    connect(_quitter, SIGNAL(clicked()), this, SIGNAL(wasClosed()));
+    connect(_corriger, SIGNAL(clicked()), this, SLOT(correct()));
+    connect(_astuces, SIGNAL(clicked()), this, SLOT(openAstuce()));
 
-    connect(nextPrev[0], SIGNAL(clicked()), this, SLOT(Previous()));
-    connect(nextPrev[1], SIGNAL(clicked()), this, SLOT(Next()));
+    connect(_nextPrev[0], SIGNAL(clicked()), this, SLOT(Previous()));
+    connect(_nextPrev[1], SIGNAL(clicked()), this, SLOT(Next()));
 
-    connect(mapper, SIGNAL(mapped(int)), this, SLOT(newSetFocus(int)));
+    connect(_mapper, SIGNAL(mapped(int)), this, SLOT(newSetFocus(int)));
 }
 void EasyModeWindow::openAstuce() const
 {
-    CustomMessageBox trick (Trick, 0, m_multiple);
+    CustomMessageBox trick (Trick, 0, _multiple);
     trick.setObjectName("AstuceFen");
     trick.exec();
 }
 EasyModeWindow::~EasyModeWindow()
 {
-    delete astuces;
-    astuces = NULL;
+    delete _astuces;
+    _astuces = NULL;
 }

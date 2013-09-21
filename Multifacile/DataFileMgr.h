@@ -28,7 +28,7 @@ class DataFileMgr
 {
 public:
     DataFileMgr(const QString &fileName);
-    ~DataFileMgr() { xmlFile.close(); }
+    ~DataFileMgr() { _xmlFile.close(); }
 
     bool setValue(const QString &group, const unsigned short int &time, const bool &noError = false, const unsigned short int &table = 0);
     const QString value(const QString &group, const unsigned short int &table = 0);
@@ -39,8 +39,8 @@ public:
     static bool isAllTableWithNoErrorFalse(const QString &fileName, const QString &mode);
 
 private:
-    QFile xmlFile;
-    QDomDocument doc;
+    QFile _xmlFile;
+    QDomDocument _doc;
 
     bool exist(const QString &group);
     void createGroup(bool createAllGroups, const QString &group = QString());

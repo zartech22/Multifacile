@@ -19,7 +19,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "Shuffle.h"
 #include "DataFileMgr.h"
 
-MainWindow::MainWindow() :  _mode(EASY), actualWindow(MainWidget), mapper(NULL)
+MainWindow::MainWindow() :  _mode(EASY), _actualWindow(MainWidget), _mapper(NULL)
 {
     setWindowFlags(Qt::FramelessWindowHint);  //Work only on Windows ! ; disallow user to resize the window
     setWindowTitle("Multifacile");
@@ -31,24 +31,24 @@ MainWindow::MainWindow() :  _mode(EASY), actualWindow(MainWidget), mapper(NULL)
 
     createCentralWidget();
 
-    check = new CheckUpdate(this, VERSION);  //create a new CheckUpdate object with VERSION defined in header
+    _check = new CheckUpdate(this);  //create a new CheckUpdate object with VERSION defined in header
 
-    minCloseMenu = new MinCloseMenu(this);
+    _minCloseMenu = new MinCloseMenu(this);
 
-    menuBar()->setCornerWidget(minCloseMenu);
+    menuBar()->setCornerWidget(_minCloseMenu);
 
-    this->setCentralWidget(widget);
+    this->setCentralWidget(_widget);
 
 
 
-    connect(mapper, SIGNAL(mapped(int)), this, SLOT(open_window(int)));  //connect the signal mapped of QSignalMapper to the custom slot open_window(int)
+    connect(_mapper, SIGNAL(mapped(int)), this, SLOT(open_window(int)));  //connect the signal mapped of QSignalMapper to the custom slot open_window(int)
 
-    connect(check, SIGNAL(checkUpdateAnswer(UpdateType)), this, SLOT(checkUpdateReceivedAnswer(UpdateType)));
-    connect(check, SIGNAL(error()), this, SLOT(socketError()));
+    connect(_check, SIGNAL(checkUpdateAnswer(UpdateType)), this, SLOT(checkUpdateReceivedAnswer(UpdateType)));
+    connect(_check, SIGNAL(error()), this, SLOT(socketError()));
 
-    connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
-    connect(updateAction, SIGNAL(triggered()), this, SLOT(verification()));
-    connect(actionGroup, SIGNAL(triggered(QAction*)), this, SLOT(setMode(QAction*)));
+    connect(_quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
+    connect(_updateAction, SIGNAL(triggered()), this, SLOT(verification()));
+    connect(_actionGroup, SIGNAL(triggered(QAction*)), this, SLOT(setMode(QAction*)));
 }
 
 void MainWindow::checkUpdateReceivedAnswer(UpdateType update)    //slot which is connected to the updateNeeded(UpdateType) signal of check. It processes the answer given by check
@@ -56,19 +56,19 @@ void MainWindow::checkUpdateReceivedAnswer(UpdateType update)    //slot which is
 
     if(update == NoUpdate) //if not update needed
     {
-        if(check->isUserAction())  //and if it's the user who clicked on "check for updates"
+        if(_check->isUserAction())  //and if it's the user who clicked on "check for updates"
             CustomMessageBox(NoUpdateMsg, this).exec();
         return;
     }
     else if(update == NormalUpdate) //else if update needed
     {
-        check->disconnectFromHost();
+        _check->disconnectFromHost();
         CustomMessageBox updateMsgBox(NewUpdate, this);
         bool userAnswer = updateMsgBox.exec();
 
         if(userAnswer)  //if the user want to update
         {
-            check->runMultifacileUpdate();
+            _check->runMultifacileUpdate();
             this->close();  //close this window
         }
         else
@@ -76,13 +76,13 @@ void MainWindow::checkUpdateReceivedAnswer(UpdateType update)    //slot which is
     }
     else if(update == UpdaterUpdate)
     {
-        check->disconnectFromHost();
+        _check->disconnectFromHost();
         CustomMessageBox updateMsgBox(NewUpdate, this);
         bool userAnswer = updateMsgBox.exec();
 
         if(userAnswer)
         {
-            check->runUpdaterUpdate();
+            _check->runUpdaterUpdate();
             this->close();
         }
         else
@@ -92,50 +92,50 @@ void MainWindow::checkUpdateReceivedAnswer(UpdateType update)    //slot which is
 
 void MainWindow::createCentralWidget()
 {
-    widget = new QWidget();
+    _widget = new QWidget();
 
-    texte = new QLabel(tr("Choisis la table de multiplication que tu souhaites travailler !"));
-    texte->setAttribute(Qt::WA_TranslucentBackground);
+    _texte = new QLabel(tr("Choisis la table de multiplication que tu souhaites travailler !"));
+    _texte->setAttribute(Qt::WA_TranslucentBackground);
 
-    point = new QLabel;
-    point->setPixmap(QPixmap(":/image/Point.png"));
+    _point = new QLabel;
+    _point->setPixmap(QPixmap(":/image/Point.png"));
 
-    if(mapper == NULL)
-        mapper = new QSignalMapper(this);
+    if(_mapper == NULL)
+        _mapper = new QSignalMapper(this);
 
     for(int i = 0; i < 10; ++i)
     {
         if(_mode == EASY || _mode == MEDIUM)
-            bouton[i] = new QPushButton(tr("La table de ")+QString::number(i+1), widget);
+            _bouton[i] = new QPushButton(tr("La table de ")+QString::number(i+1), _widget);
         else // _mode == HARD
-            bouton[i] = new QPushButton(tr("La table aléatoire"), widget);
+            _bouton[i] = new QPushButton(tr("La table aléatoire"), _widget);
 
-        bouton[i]->setFixedSize(256, 94);
+        _bouton[i]->setFixedSize(256, 94);
 
-        connect(bouton[i], SIGNAL(clicked()), mapper, SLOT(map()));
-        mapper->setMapping(bouton[i], i+1);
+        connect(_bouton[i], SIGNAL(clicked()), _mapper, SLOT(map()));
+        _mapper->setMapping(_bouton[i], i+1);
     }
 
-    quit = new QPushButton(tr("Quitter"));
-    quit->setFixedSize(70, 40);
-    quit->setObjectName("QuitButton");
+    _quit = new QPushButton(tr("Quitter"));
+    _quit->setFixedSize(70, 40);
+    _quit->setObjectName("QuitButton");
 
-    texte->setParent(widget);
-    texte->move(68, 25);
+    _texte->setParent(_widget);
+    _texte->move(68, 25);
 
-    point->setParent(widget);
-    point->move(50, 38);
+    _point->setParent(_widget);
+    _point->move(50, 38);
 
-    quit->setParent(widget);
-    quit->move(490, 480);
+    _quit->setParent(_widget);
+    _quit->move(490, 480);
 
     for(int i = 0, j = 0; i < 10; ++i)
     {
         if(i % 2 == 0)
-            bouton[i]->move(80, (75 + 80 * j));
+            _bouton[i]->move(80, (75 + 80 * j));
         else
         {
-            bouton[i]->move(320, (75 + 80 * j));
+            _bouton[i]->move(320, (75 + 80 * j));
             ++j;
         }
     }
@@ -146,29 +146,29 @@ void MainWindow::createCentralWidget()
 
         for(QMap<int, bool>::Iterator it = list->begin(); it != list->end(); ++it)
             if(it.value())
-                bouton[ (it.key() - 1)]->setStyleSheet("background-image: url(\":/image/Bouton_succes.png\");");
+                _bouton[ (it.key() - 1)]->setStyleSheet("background-image: url(\":/image/Bouton_succes.png\");");
 
         delete list;
 
         if(_mode == MEDIUM)
             for(int i = 0; i < 10; ++i)
                 if(!DataFileMgr::hasNoErrorTrue("Multifacile.xml", "EasyMode", (i + 1)))
-                    bouton[i]->setStyleSheet("background-image: url(\":/image/Bouton_inacessible.png\"); color: grey;");
+                    _bouton[i]->setStyleSheet("background-image: url(\":/image/Bouton_inacessible.png\"); color: grey;");
     }
 
     if(!DataFileMgr::isAllTableWithNoErrorTrue("Multifacile.xml", "EasyMode") || !DataFileMgr::isAllTableWithNoErrorTrue("Multifacile.xml", "MediumMode"))
-        hardModeActionText->setStyleSheet("color: grey; padding-left: 12px;");
+        _hardModeActionText->setStyleSheet("color: grey; padding-left: 12px;");
     else
-        hardModeActionText->setStyleSheet("color: white; padding-left: 12px;");
+        _hardModeActionText->setStyleSheet("color: white; padding-left: 12px;");
 
     if(DataFileMgr::isAllTableWithNoErrorFalse("Multifacile.xml", "EasyMode"))
-        mediumModeActionText->setStyleSheet("color: grey; padding-left: 12px;");
+        _mediumModeActionText->setStyleSheet("color: grey; padding-left: 12px;");
     else
-        mediumModeActionText->setStyleSheet("color: white; padding-left: 12px;");
+        _mediumModeActionText->setStyleSheet("color: white; padding-left: 12px;");
 
-    connect(quit, SIGNAL(clicked()), qApp, SLOT(quit()));
+    connect(_quit, SIGNAL(clicked()), qApp, SLOT(quit()));
 
-    actualWindow = MainWidget;
+    _actualWindow = MainWidget;
 }
 void MainWindow::deleteAddIfExist()
 {
@@ -185,60 +185,60 @@ void MainWindow::deleteAddIfExist()
 
 void MainWindow::doActions()
 {
-    quitAction = new QAction(QIcon(":/icon/sortie.png"), tr("&Quitter"), this); //the file comes of a Qt ressource file (it's faster than charge a directory's file)
-    updateAction = new QAction(QIcon(":/icon/update.png"), tr("&Vérifier les mise à jours"), this);  //idem
-    easyMode = new QAction(tr("&Facile"), this);
-    mediumMode = new QWidgetAction(this);
-    mediumModeActionText = new QLabel("Moyen");
-    mediumMode->setDefaultWidget(mediumModeActionText);
-    hardMode = new QWidgetAction(this);
-    hardModeActionText = new QLabel("Difficile");
-    hardMode->setDefaultWidget(hardModeActionText);
+    _quitAction = new QAction(QIcon(":/icon/sortie.png"), tr("&Quitter"), this); //the file comes of a Qt ressource file (it's faster than charge a directory's file)
+    _updateAction = new QAction(QIcon(":/icon/update.png"), tr("&Vérifier les mise à jours"), this);  //idem
+    _easyMode = new QAction(tr("&Facile"), this);
+    _mediumMode = new QWidgetAction(this);
+    _mediumModeActionText = new QLabel("Moyen");
+    _mediumMode->setDefaultWidget(_mediumModeActionText);
+    _hardMode = new QWidgetAction(this);
+    _hardModeActionText = new QLabel("Difficile");
+    _hardMode->setDefaultWidget(_hardModeActionText);
 
     if(!DataFileMgr::isAllTableWithNoErrorTrue("Multifacile.xml", "EasyMode") || !DataFileMgr::isAllTableWithNoErrorTrue("Multifacile.xml", "MediumMode"))
-        hardModeActionText->setStyleSheet("color: grey; padding-left: 12px;");
+        _hardModeActionText->setStyleSheet("color: grey; padding-left: 12px;");
     else
-        hardModeActionText->setStyleSheet("color: white; padding-left: 12px;");
+        _hardModeActionText->setStyleSheet("color: white; padding-left: 12px;");
 
     if(DataFileMgr::isAllTableWithNoErrorFalse("Multifacile.xml", "EasyMode"))
-        mediumModeActionText->setStyleSheet("color: grey; padding-left: 12px;");
+        _mediumModeActionText->setStyleSheet("color: grey; padding-left: 12px;");
     else
-        mediumModeActionText->setStyleSheet("color: white; padding-left: 12px;");
+        _mediumModeActionText->setStyleSheet("color: white; padding-left: 12px;");
 }
 
 void MainWindow::doActionGroup()
 {
-    actionGroup = new QActionGroup(this);
-    actionGroup->addAction(easyMode);
-    actionGroup->addAction(mediumMode);
-    actionGroup->addAction(hardMode);
-    actionGroup->setExclusive(true);
+    _actionGroup = new QActionGroup(this);
+    _actionGroup->addAction(_easyMode);
+    _actionGroup->addAction(_mediumMode);
+    _actionGroup->addAction(_hardMode);
+    _actionGroup->setExclusive(true);
 }
 
 void MainWindow::doMenuBar()
 {
-    file = menuBar()->addMenu(tr("      &Fichier |"));
-    file->setObjectName("FileMenu");
-    tools = menuBar()->addMenu(tr("&Outils"));
-    modes = new Menu(tr("| &Mode"));
-    menuBar()->addMenu(modes);
-    modes->setStyleSheet("QMenu { border: 1.5px solid rgb(255, 169, 50); border-radius: 4px; background-color: rgb(54, 103, 59); }");
+    _file = menuBar()->addMenu(tr("      &Fichier |"));
+    _file->setObjectName("FileMenu");
+    _tools = menuBar()->addMenu(tr("&Outils"));
+    _modes = new Menu(tr("| &Mode"));
+    menuBar()->addMenu(_modes);
+    _modes->setStyleSheet("QMenu { border: 1.5px solid rgb(255, 169, 50); border-radius: 4px; background-color: rgb(54, 103, 59); }");
 
     doActions();
 
-    easyMode->setCheckable(true);
-    easyMode->setToolTip("Table dans l'ordre avec astuces");
-    mediumMode->setCheckable(true);
-    mediumMode->setToolTip("Table en désordre sans astuces");
-    hardMode->setCheckable(true);
-    hardMode->setToolTip("Table mystère...");
-    easyMode->setChecked(true);
+    _easyMode->setCheckable(true);
+    _easyMode->setToolTip("Table dans l'ordre avec astuces");
+    _mediumMode->setCheckable(true);
+    _mediumMode->setToolTip("Table en désordre sans astuces");
+    _hardMode->setCheckable(true);
+    _hardMode->setToolTip("Table mystère...");
+    _easyMode->setChecked(true);
 
     doActionGroup();
 
-    file->addAction(quitAction);
-    tools->addAction(updateAction);
-    modes->addActions(actionGroup->actions());
+    _file->addAction(_quitAction);
+    _tools->addAction(_updateAction);
+    _modes->addActions(_actionGroup->actions());
 
 #ifndef Q_OS_WIN32
     menuBar()->setNativeMenuBar(false);
@@ -249,7 +249,7 @@ void MainWindow::doMenuBar()
 
 void MainWindow::socketError()
 {
-    if(check->isUserAction())
+    if(_check->isUserAction())
         CustomMessageBox(ConnectionError, this).exec(); //if there is a connection error, it open a QMessageBox for inform the user
 }
 
@@ -269,14 +269,14 @@ void MainWindow::closeEvent(QCloseEvent * event)
 
 void MainWindow::mouseMoveEvent(QMouseEvent *event)
 {
-    if(ClickOnWindow)
-        window()->move(event->globalPos() - Diff);
+    if(_ClickOnWindow)
+        window()->move(event->globalPos() - _Diff);
 }
 
 void MainWindow::mousePressEvent(QMouseEvent *event)
 {
-    ClickOnWindow = true;
-    Diff = event->pos();
+    _ClickOnWindow = true;
+    _Diff = event->pos();
 }
 
 void MainWindow::open_window(const int nbr)   //open a questionary window with the number given by the map signal of mapper. The questionary window is create in function of the Mode
@@ -284,20 +284,20 @@ void MainWindow::open_window(const int nbr)   //open a questionary window with t
     switch(_mode)
     {
     case EASY:
-        fen = new EasyModeWindow(nbr);
-        fen->setFixedSize(650, 560);
-        fen->setObjectName("Fen");
-        this->setCentralWidget(fen);
-        connect(fen, SIGNAL(wasClosed()), this, SLOT(resetCentralWidget()));
+        _fen = new EasyModeWindow(nbr);
+        _fen->setFixedSize(650, 560);
+        _fen->setObjectName("Fen");
+        this->setCentralWidget(_fen);
+        connect(_fen, SIGNAL(wasClosed()), this, SLOT(resetCentralWidget()));
         break;
     case MEDIUM:
         if(DataFileMgr::hasNoErrorTrue("Multifacile.xml", "EasyMode", nbr))
         {
-            fen = new MediumModeWindow(nbr);
-            fen->setFixedSize(650, 560);
-            fen->setObjectName("Fen");
-            this->setCentralWidget(fen);
-            connect(fen, SIGNAL(wasClosed()), this, SLOT(resetCentralWidget()));
+            _fen = new MediumModeWindow(nbr);
+            _fen->setFixedSize(650, 560);
+            _fen->setObjectName("Fen");
+            this->setCentralWidget(_fen);
+            connect(_fen, SIGNAL(wasClosed()), this, SLOT(resetCentralWidget()));
         }
         else
         {
@@ -306,52 +306,52 @@ void MainWindow::open_window(const int nbr)   //open a questionary window with t
         }
         break;
     case HARD:
-        fen = new HardModeWindow();
-        fen->setFixedSize(650, 560);
-        fen->setObjectName("Fen");
-        this->setCentralWidget(fen);
-        connect(fen, SIGNAL(wasClosed()), this, SLOT(resetCentralWidget()));
+        _fen = new HardModeWindow();
+        _fen->setFixedSize(650, 560);
+        _fen->setObjectName("Fen");
+        this->setCentralWidget(_fen);
+        connect(_fen, SIGNAL(wasClosed()), this, SLOT(resetCentralWidget()));
         break;
     }
-    actualWindow = SecondWidget;
+    _actualWindow = SecondWidget;
 }
 
 void MainWindow::resetCentralWidget()
 {
     createCentralWidget();
-    this->setCentralWidget(widget);
+    this->setCentralWidget(_widget);
 }
 
 void MainWindow::updateButtonsLabels()    //change the Buttons's text when changing mode
 {
-    if((_mode == EASY || _mode == MEDIUM) && actualWindow == MainWidget)
+    if((_mode == EASY || _mode == MEDIUM) && _actualWindow == MainWidget)
     {
         for(int i = 0; i < 10; ++i)
         {
-            bouton[i]->setText(tr("La table de ") + QString::number(i+1));
-            bouton[i]->setStyleSheet("");
+            _bouton[i]->setText(tr("La table de ") + QString::number(i+1));
+            _bouton[i]->setStyleSheet("");
         }
 
         QMap<int, bool> *list = DataFileMgr::getNoErrorList("Multifacile.xml", (_mode == EASY) ? "EasyMode" : "MediumMode");
 
         for(QMap<int, bool>::Iterator it = list->begin(); it != list->end(); ++it)
             if(it.value())
-                bouton[ (it.key() - 1)]->setStyleSheet("background-image: url(\":/image/Bouton_succes.png\");");
+                _bouton[ (it.key() - 1)]->setStyleSheet("background-image: url(\":/image/Bouton_succes.png\");");
 
         delete list;
 
         if(_mode == MEDIUM)
             for(int i = 0; i < 10; ++i)
                 if(!DataFileMgr::hasNoErrorTrue("Multifacile.xml", "EasyMode", (i + 1)))
-                    bouton[i]->setStyleSheet("background-image: url(\":/image/Bouton_inacessible.png\"); color: grey;");
+                    _bouton[i]->setStyleSheet("background-image: url(\":/image/Bouton_inacessible.png\"); color: grey;");
 
     }
-    else if(_mode == HARD && actualWindow == MainWidget)
+    else if(_mode == HARD && _actualWindow == MainWidget)
     {
         for(int i = 0; i < 10; ++i)
         {
-            bouton[i]->setText(tr("La table aléatoire"));
-            bouton[i]->setStyleSheet("");
+            _bouton[i]->setText(tr("La table aléatoire"));
+            _bouton[i]->setStyleSheet("");
         }
     }
     else
@@ -360,26 +360,26 @@ void MainWindow::updateButtonsLabels()    //change the Buttons's text when chang
 
 void MainWindow::setMode(QAction *action)   //slot call when user change the mode
 {
-    if(action == easyMode)
+    if(action == _easyMode)
     {
         _mode = EASY;
-        if(actualWindow == SecondWidget)
+        if(_actualWindow == SecondWidget)
                 setNewSecondWindow();
         else
             updateButtonsLabels();
     }
-    else if(action == mediumMode)
+    else if(action == _mediumMode)
     {
 
         if(DataFileMgr::isAllTableWithNoErrorFalse("Multifacile.xml", "EasyMode"))
         {
             unavailableMode(MEDIUM);
-            easyMode->setChecked(true);
+            _easyMode->setChecked(true);
         }
-        else if(actualWindow == SecondWidget)
+        else if(_actualWindow == SecondWidget)
         {
             _mode = MEDIUM;
-            mediumMode->setChecked(true);
+            _mediumMode->setChecked(true);
             setNewSecondWindow();
         }
         else
@@ -394,11 +394,11 @@ void MainWindow::setMode(QAction *action)   //slot call when user change the mod
         {
             unavailableMode(HARD);
             if(_mode == MEDIUM)
-                mediumMode->setChecked(true);
+                _mediumMode->setChecked(true);
             else
-                easyMode->setChecked(true);
+                _easyMode->setChecked(true);
         }
-        else if(actualWindow == SecondWidget)
+        else if(_actualWindow == SecondWidget)
         {
             _mode = HARD;
             setNewSecondWindow();
@@ -419,29 +419,29 @@ void MainWindow::unavailableMode(Mode mode)
 
 MainWindow::~MainWindow()
 {
-    delete file, tools, modes;
-    delete quitAction, updateAction, easyMode, mediumMode, hardMode;
-    delete actionGroup;
-    delete check;
-    delete mapper;
-    delete minCloseMenu;
+    delete _file, _tools, _modes;
+    delete _quitAction, _updateAction, _easyMode, _mediumMode, _hardMode;
+    delete _actionGroup;
+    delete _check;
+    delete _mapper;
+    delete _minCloseMenu;
 
     for(int i = 0; i < 10; ++i)
-        bouton[i] = NULL;
+        _bouton[i] = NULL;
 
-    file = NULL;
-    tools = NULL;
-    modes = NULL;
-    quitAction = NULL;
-    updateAction = NULL;
-    easyMode = NULL;
-    mediumMode = NULL;
-    hardMode = NULL;
-    actionGroup = NULL;
-    quit = NULL;
-    minCloseMenu = NULL;
-    check = NULL;
-    widget = NULL;
-    mapper = NULL;
-    fen = NULL;
+    _file = NULL;
+    _tools = NULL;
+    _modes = NULL;
+    _quitAction = NULL;
+    _updateAction = NULL;
+    _easyMode = NULL;
+    _mediumMode = NULL;
+    _hardMode = NULL;
+    _actionGroup = NULL;
+    _quit = NULL;
+    _minCloseMenu = NULL;
+    _check = NULL;
+    _widget = NULL;
+    _mapper = NULL;
+    _fen = NULL;
 }

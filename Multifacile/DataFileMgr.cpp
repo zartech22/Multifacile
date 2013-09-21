@@ -28,39 +28,39 @@ DataFileMgr::DataFileMgr(const QString &fileName)
         appdata.mkdir("Multifacile");
     }
 
-    xmlFile.setFileName(env.value("appdata") + "/Multifacile/" + fileName);
+    _xmlFile.setFileName(env.value("appdata") + "/Multifacile/" + fileName);
 #endif
 #if defined(Q_OS_LINUX) || defined(Q_OS_MAC)
     if(!QDir(QDir::homePath() + "/.config/Multifacile/").exists())
         QDir(QDir::homePath() + "/.config").mkdir("Multifacile");
 
-    xmlFile.setFileName(QDir::homePath() + "/.config/Multifacile/" + fileName);
+    _xmlFile.setFileName(QDir::homePath() + "/.config/Multifacile/" + fileName);
 #endif
 
-    xmlFile.open(QIODevice::ReadWrite);
+    _xmlFile.open(QIODevice::ReadWrite);
 
-    if(xmlFile.readAll().isEmpty())
+    if(_xmlFile.readAll().isEmpty())
         createGroup(true);
 }
 bool DataFileMgr::setValue(const QString &group, const unsigned short &time, const bool &noError, const unsigned short &table)
 {
-    xmlFile.seek(0);
-    QTextStream out(&xmlFile);
+    _xmlFile.seek(0);
+    QTextStream out(&_xmlFile);
 
-    if(!doc.setContent(&xmlFile))
+    if(!_doc.setContent(&_xmlFile))
         return false;
     if(!exist(group))
         createGroup(false, group);
 
-    QDomElement data = doc.documentElement();
+    QDomElement data = _doc.documentElement();
 
     QDomElement groupElement = data.elementsByTagName(group).at(0).toElement();
 
     if(group == "HardMode")
     {
 
-        QDomElement timeElement = doc.createElement("time");
-        timeElement.appendChild(doc.createTextNode(QString::number(time)));
+        QDomElement timeElement = _doc.createElement("time");
+        timeElement.appendChild(_doc.createTextNode(QString::number(time)));
 
         if(groupElement.elementsByTagName("time").isEmpty())
             groupElement.appendChild(timeElement);
@@ -70,9 +70,9 @@ bool DataFileMgr::setValue(const QString &group, const unsigned short &time, con
 
     else
     {
-        QDomElement timeElement = doc.createElement("time");
+        QDomElement timeElement = _doc.createElement("time");
         timeElement.setAttribute("table", table);
-        timeElement.appendChild(doc.createTextNode(QString::number(time)));
+        timeElement.appendChild(_doc.createTextNode(QString::number(time)));
 
         if(noError)
             timeElement.setAttribute("noError", "true");
@@ -110,19 +110,19 @@ bool DataFileMgr::setValue(const QString &group, const unsigned short &time, con
         }
     }
 
-    xmlFile.resize(0);
-        doc.save(out, 4);
-        return true;
+    _xmlFile.resize(0);
+    _doc.save(out, 4);
+    return true;
 }
 
 const QString DataFileMgr::value(const QString &group, const unsigned short &table)
 {
-    if(!doc.setContent(&xmlFile))
+    if(!_doc.setContent(&_xmlFile))
         return "Error : cannot set content";
     else if(!exist(group))
         return QString("no value");
 
-    QDomElement data = doc.documentElement();
+    QDomElement data = _doc.documentElement();
 
     QDomElement groupElement = data.elementsByTagName(group).at(0).toElement();
 
@@ -145,11 +145,11 @@ const QString DataFileMgr::value(const QString &group, const unsigned short &tab
 }
 bool DataFileMgr::exist(const QString &group)
 {
-    xmlFile.flush();
-    xmlFile.seek(0);
-    doc.setContent(&xmlFile);
+    _xmlFile.flush();
+    _xmlFile.seek(0);
+    _doc.setContent(&_xmlFile);
 
-    QDomElement data = doc.documentElement();
+    QDomElement data = _doc.documentElement();
 
     if(data.elementsByTagName(group).isEmpty())
         return false;
@@ -158,32 +158,32 @@ bool DataFileMgr::exist(const QString &group)
 }
 void DataFileMgr::createGroup(bool createAllGroups, const QString &group)
 {
-    QTextStream out(&xmlFile);
+    QTextStream out(&_xmlFile);
 
     if(createAllGroups)
     {
-        doc.appendChild(doc.createProcessingInstruction("xml", "version=\"1.0\""));
+        _doc.appendChild(_doc.createProcessingInstruction("xml", "version=\"1.0\""));
 
-        QDomElement data = doc.createElement("data");
+        QDomElement data = _doc.createElement("data");
 
-        QDomElement EasyMode = doc.createElement("EasyMode");
-        QDomElement MediumMode = doc.createElement("MediumMode");
-        QDomElement HardMode = doc.createElement("HardMode");
+        QDomElement EasyMode = _doc.createElement("EasyMode");
+        QDomElement MediumMode = _doc.createElement("MediumMode");
+        QDomElement HardMode = _doc.createElement("HardMode");
 
         data.appendChild(EasyMode);
         data.appendChild(MediumMode);
         data.appendChild(HardMode);
 
-        doc.appendChild(data);
+        _doc.appendChild(data);
 
-        doc.save(out, 4);
+        _doc.save(out, 4);
     }
 
     else
     {
-        QDomElement data = doc.documentElement();
-        data.appendChild(doc.createElement(group));
-        doc.save(out, 4);
+        QDomElement data = _doc.documentElement();
+        data.appendChild(_doc.createElement(group));
+        _doc.save(out, 4);
     }
 }
 

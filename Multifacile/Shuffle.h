@@ -27,8 +27,8 @@ public:
     void getNumbers(int tab[]);
     void getNumbers(int tab[], unsigned short int array[]);
 private:
-    bool needShuffle;
-    unsigned short int numbers[10];
+    bool _needShuffle;
+    unsigned short int _numbers[10];
 };
 
 #endif // SHUFFLE_H

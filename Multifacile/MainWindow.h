@@ -59,47 +59,45 @@ public :
     ~MainWindow();
 
 private :
-    bool ClickOnWindow;
+    bool _ClickOnWindow;
 
-    QMenu *file;
-    QMenu *tools;
+    QMenu *_file;
+    QMenu *_tools;
 
-    QAction *easyMode;
-    QAction *quitAction;
-    QAction *updateAction;
+    QAction *_easyMode;
+    QAction *_quitAction;
+    QAction *_updateAction;
 
-    QWidgetAction *mediumMode;
-    QWidgetAction *hardMode;
+    QWidgetAction *_mediumMode;
+    QWidgetAction *_hardMode;
 
-    QLabel *point;
-    QLabel *texte;
-    QLabel *mediumModeActionText;
-    QLabel *hardModeActionText;
+    QLabel *_point;
+    QLabel *_texte;
+    QLabel *_mediumModeActionText;
+    QLabel *_hardModeActionText;
 
-    QPushButton *bouton[10];
-    QPushButton *quit;
+    QPushButton *_bouton[10];
+    QPushButton *_quit;
 
-    CheckUpdate *check;
+    CheckUpdate *_check;
 
-    unsigned short int version;
+    MediumModeWindow *_fen;
 
-    MediumModeWindow *fen;
-
-    MinCloseMenu *minCloseMenu;
+    MinCloseMenu *_minCloseMenu;
 
     Mode _mode;
 
-    Widget actualWindow;
+    Widget _actualWindow;
 
-    QActionGroup *actionGroup;
+    QActionGroup *_actionGroup;
 
-    QPoint Diff;
+    QPoint _Diff;
 
-    QSignalMapper *mapper;
+    QSignalMapper *_mapper;
 
-    QWidget *widget;
+    QWidget *_widget;
 
-    Menu *modes;
+    Menu *_modes;
 
     void createCentralWidget();
     void deleteAddIfExist();
@@ -111,8 +109,8 @@ private :
     void closeEvent(QCloseEvent * event);
     void mouseMoveEvent(QMouseEvent *event);
     void mousePressEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *) { ClickOnWindow = false; }
-    void setNewSecondWindow() { open_window(fen->getMultiple()); }
+    void mouseReleaseEvent(QMouseEvent *) { _ClickOnWindow = false; }
+    void setNewSecondWindow() { open_window(_fen->getMultiple()); }
     void unavailableMode(Mode mode);
     void unavailableTable(const unsigned short int &table) { CustomMessageBox(CannotDoThisTable, this, table).exec(); }
     void updateButtonsLabels();
@@ -124,7 +122,7 @@ public slots :
     void open_window(const int nbr);
     void resetCentralWidget();
     void setMode(QAction *action);
-    void verification() { check->tryConnection(true); }
+    void verification() { _check->tryConnection(true); }
 };
 
 #endif // FENETRE_PRINCIPALE_H

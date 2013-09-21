@@ -28,7 +28,7 @@ public:
     EasyModeWindow(const unsigned short int m_multiplicateur);
     ~EasyModeWindow();
 protected:
-    QPushButton *astuces;
+    QPushButton *_astuces;
 public slots:
     void openAstuce() const;
 };

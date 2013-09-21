@@ -30,7 +30,7 @@ public:
 
     const unsigned short int getMultiple() { return 1; }
 private:
-    unsigned short int multiple[10];
+    unsigned short int _multiple[10];
     void correct();
 public slots:
     void Retry();

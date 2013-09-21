@@ -49,38 +49,34 @@ public :
     MediumModeWindow(const int multiplicateur);
     ~MediumModeWindow();
 
-    virtual const unsigned short int getMultiple() { return m_multiple; }
+    virtual const unsigned short int getMultiple() { return _multiple; }
 protected :
 
-    unsigned short int m_multiple;
-    unsigned short int note;
-    int array[10];
-    unsigned short int secondes;
+    unsigned short int _multiple;
+    unsigned short int _note;
+    int _array[10];
+    unsigned short int _secondes;
 
-    bool ClickOnWindow;
+    Mode _mode;
 
-    Mode mode;
+    QSignalMapper *_mapper;
 
-    QSignalMapper *mapper;
+    QLabel *_label[10];
+    QLabel *_text;
+    QLabel *_minute;
+    QLabel *_seconde;
+    QLabel *_deuxPoint;
+    QLabel *_labelPoint[10];
+    QLabel *_trueFalseLabel[2][10];
+    QLabel *_labelCorrection[10];
 
-    QLabel *label[10];
-    QLabel *text;
-    QLabel *minute;
-    QLabel *seconde;
-    QLabel *deuxPoint;
-    QLabel *labelPoint[10];
-    QLabel *trueFalseLabel[2][10];
-    QLabel *labelCorrection[10];
+    QPushButton *_corriger;
+    QPushButton *_quitter;
+    QPushButton *_nextPrev[2];
 
-    QPushButton *corriger;
-    QPushButton *quitter;
-    QPushButton *nextPrev[2];
+    QLineEdit *_reponses[10];
 
-    QLineEdit *reponses[10];
-
-    QTimer *chronometre;
-
-    QPoint Diff;
+    QTimer *_chronometre;
 
     void initStyle();
     void closeEvent(QCloseEvent *event);

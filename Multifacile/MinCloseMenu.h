@@ -30,11 +30,11 @@ public:
     MinCloseMenu(QWidget *parent = 0);
     ~MinCloseMenu();
 private:
-    QHBoxLayout *layout;
+    QHBoxLayout *_layout;
 
-    QPushButton *mini, *cross;
+    QPushButton *_mini, *_cross;
 
-    QWidget *ParentWidget;
+    QWidget *_ParentWidget;
 };
 
 #endif // MINCLOSEMENU_H

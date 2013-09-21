@@ -16,32 +16,32 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "MinCloseMenu.h"
 
-MinCloseMenu::MinCloseMenu(QWidget *parent) : QWidget(parent), ParentWidget(parent)
+MinCloseMenu::MinCloseMenu(QWidget *parent) : QWidget(parent), _ParentWidget(parent)
 {
-    cross = new QPushButton("X");
-    mini = new QPushButton("_");
+    _cross = new QPushButton("X");
+    _mini = new QPushButton("_");
 
-    cross->setObjectName("Cross");
-    mini->setObjectName("mini");
+    _cross->setObjectName("Cross");
+    _mini->setObjectName("mini");
 
-    cross->setDefault(false);
-    mini->setDefault(false);
+    _cross->setDefault(false);
+    _mini->setDefault(false);
 
-    layout = new QHBoxLayout;
+    _layout = new QHBoxLayout;
 
-    layout->addWidget(mini);
-    layout->addWidget(cross);
+    _layout->addWidget(_mini);
+    _layout->addWidget(_cross);
 
-    this->setLayout(layout);
+    this->setLayout(_layout);
 
-    connect(cross, SIGNAL(clicked()), parent, SLOT(close()));
-    connect(mini, SIGNAL(clicked()), ParentWidget, SLOT(showMinimized()));
+    connect(_cross, SIGNAL(clicked()), _ParentWidget, SLOT(close()));
+    connect(_mini, SIGNAL(clicked()), _ParentWidget, SLOT(showMinimized()));
 }
 MinCloseMenu::~MinCloseMenu()
 {
-    delete cross, mini, layout;
+    delete _cross, _mini, _layout;
 
-    cross = NULL;
-    mini = NULL;
-    layout = NULL;
+    _cross = NULL;
+    _mini = NULL;
+    _layout = NULL;
 }

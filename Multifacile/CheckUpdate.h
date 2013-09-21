@@ -61,21 +61,20 @@ class CheckUpdate : public QObject
 {
     Q_OBJECT
 public:
-    CheckUpdate(QObject *parent, const unsigned short int version, bool isUserAction = false);
-    void tryConnection(bool isUserAction = false) { _isUserAction = isUserAction; net->tryConnection("multifacile.no-ip.org", 8087); }
-    void disconnectFromHost() { net->disconnectFromHost(); }
+    CheckUpdate(QObject *parent,  bool isUserAction = false);
+    void tryConnection(bool isUserAction = false) { _isUserAction = isUserAction; _net->tryConnection("multifacile.no-ip.org", 8087); }
+    void disconnectFromHost() { _net->disconnectFromHost(); }
     bool isUserAction() const { return _isUserAction; }
     void runMultifacileUpdate() { START_UPDATER(); }
     void runUpdaterUpdate() { START_ADD(); }
 private:
-    QLibrary lib;
-    Network *net;
-    quint16 messageSize;
-    int actualVersion;
+    QLibrary _lib;
+    Network *_net;
+    int _actualVersion;
     bool _isUserAction;
 public slots:
     void dataReceived(QByteArray*);
-    void Connected() { net->sendVersion(actualVersion); }
+    void Connected() { _net->sendVersion(_actualVersion); }
 signals:
     void checkUpdateAnswer(UpdateType);
     void error();

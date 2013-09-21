@@ -16,21 +16,21 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "CustomMessageBox.h"
 
-CustomMessageBox::CustomMessageBox(MessageType msgType, QWidget *parent, const unsigned short table) : QDialog(parent, Qt::FramelessWindowHint), clickOnWindow(false), type(msgType)
+CustomMessageBox::CustomMessageBox(MessageType msgType, QWidget *parent, const unsigned short table) : QDialog(parent, Qt::FramelessWindowHint), _clickOnWindow(false), _type(msgType)
 {
 
     this->setAttribute(Qt::WA_TranslucentBackground);
 
-    menu = new MinCloseMenu(this);
-    menu->setStyleSheet("QPushButton#Cross{background-image: url(none);}QPushButton#mini{margin-right: 5px;}QPushButton{background-color: rgba(255, 255, 255, 0);margin: 0px;padding: 0px;}QPushButton:pressed{color: rgb(255,169,50);}");
-    label = new QLabel(this);
+    _menu = new MinCloseMenu(this);
+    _menu->setStyleSheet("QPushButton#Cross{background-image: url(none);}QPushButton#mini{margin-right: 5px;}QPushButton{background-color: rgba(255, 255, 255, 0);margin: 0px;padding: 0px;}QPushButton:pressed{color: rgb(255,169,50);}");
+    _label = new QLabel(this);
 
-    OkBouton = new QPushButton("Ok", this);
-    OkBouton->setAttribute(Qt::WA_TranslucentBackground);
-    OkBouton->setObjectName("OkBouton");
-    OkBouton->setStyleSheet("QPushButton#OkBouton{background-color: rgba(255, 255, 255, 0);color: rgb(144,191,79);}");
+    _okBouton = new QPushButton("Ok", this);
+    _okBouton->setAttribute(Qt::WA_TranslucentBackground);
+    _okBouton->setObjectName("OkBouton");
+    _okBouton->setStyleSheet("QPushButton#OkBouton{background-color: rgba(255, 255, 255, 0);color: rgb(144,191,79);}");
 
-    switch(type)
+    switch(_type)
     {
     case ConnectionError:
         displayConnectionError();
@@ -54,26 +54,26 @@ CustomMessageBox::CustomMessageBox(MessageType msgType, QWidget *parent, const u
         break;
     }
 
-    connect(OkBouton, SIGNAL(clicked()), this, SLOT(close()));
+    connect(_okBouton, SIGNAL(clicked()), this, SLOT(close()));
 }
 
-CustomMessageBox::CustomMessageBox(const unsigned short time, const unsigned short note, QWidget* parent) : QDialog(parent, Qt::FramelessWindowHint), clickOnWindow(false), type(Results)
+CustomMessageBox::CustomMessageBox(const unsigned short time, const unsigned short note, QWidget* parent) : QDialog(parent, Qt::FramelessWindowHint), _clickOnWindow(false), _type(Results)
 {
     this->setAttribute(Qt::WA_TranslucentBackground);
 
-    menu = new MinCloseMenu(this);
-    menu->setStyleSheet("QPushButton#Cross{background-image: url(none);}QPushButton#mini{margin-right: 5px;}QPushButton{background-color: rgba(255, 255, 255, 0);margin: 0px;padding: 0px;}QPushButton:pressed{color: rgb(255,169,50);}");
+    _menu = new MinCloseMenu(this);
+    _menu->setStyleSheet("QPushButton#Cross{background-image: url(none);}QPushButton#mini{margin-right: 5px;}QPushButton{background-color: rgba(255, 255, 255, 0);margin: 0px;padding: 0px;}QPushButton:pressed{color: rgb(255,169,50);}");
 
-    label = new QLabel(this);
+    _label = new QLabel(this);
 
-    OkBouton = new QPushButton("Ok", this);
-    OkBouton->setAttribute(Qt::WA_TranslucentBackground);
-    OkBouton->setObjectName("OkBouton");
-    OkBouton->setStyleSheet("QPushButton#OkBouton{background-color: rgba(255, 255, 255, 0);color: rgb(144,191,79);}");
+    _okBouton = new QPushButton("Ok", this);
+    _okBouton->setAttribute(Qt::WA_TranslucentBackground);
+    _okBouton->setObjectName("OkBouton");
+    _okBouton->setStyleSheet("QPushButton#OkBouton{background-color: rgba(255, 255, 255, 0);color: rgb(144,191,79);}");
 
     displayResults(time, note);
 
-    connect(OkBouton, SIGNAL(clicked()), this, SLOT(close()));
+    connect(_okBouton, SIGNAL(clicked()), this, SLOT(close()));
 }
 
 void CustomMessageBox::displayTricks(const unsigned short int &table)
@@ -83,18 +83,18 @@ void CustomMessageBox::displayTricks(const unsigned short int &table)
     QMap<unsigned short int, QString> tricks;
     tricksInit(tricks);
 
-    label->setObjectName("LabelAstuce");
-    label->setFixedWidth(625);
-    label->setWordWrap(true);
-    label->move(10, 40);
+    _label->setObjectName("LabelAstuce");
+    _label->setFixedWidth(625);
+    _label->setWordWrap(true);
+    _label->move(10, 40);
 
-    menu->move(560, 0);
-    OkBouton->move(575, 200);
+    _menu->move(560, 0);
+    _okBouton->move(575, 200);
 
     if(tricks.contains(table))
-        label->setText(tricks[table]);
+        _label->setText(tricks[table]);
     else
-        label->setText(tr("Il n'y a pas encore d'astuces pour cette table."));
+        _label->setText(tr("Il n'y a pas encore d'astuces pour cette table."));
 }
 
 void CustomMessageBox::tricksInit(QMap<unsigned short int, QString> &tricks)
@@ -109,11 +109,11 @@ void CustomMessageBox::tricksInit(QMap<unsigned short int, QString> &tricks)
 void CustomMessageBox::displayConnectionError()
 {
     setFixedSize(434, 179);
-    label->setText(tr("Impossible de vérifier les mise à jours"));
-    label->move(45, 65);
+    _label->setText(tr("Impossible de vérifier les mise à jours"));
+    _label->move(45, 65);
 
-    menu->move(376, 0);
-    OkBouton->move(386, 135);
+    _menu->move(376, 0);
+    _okBouton->move(386, 135);
 }
 
 void CustomMessageBox::displayResults(const unsigned short &time, const unsigned short &note)
@@ -136,41 +136,41 @@ void CustomMessageBox::displayResults(const unsigned short &time, const unsigned
 
 
 
-    label->setText(tr("Tu as mis %1 minute(s) et %2 seconde(s) pour faire ta table.<br />Et tu as eu :").arg(minutes).arg(seconds));
-    label->setWordWrap(true);
-    label->move(85, 45);
+    _label->setText(tr("Tu as mis %1 minute(s) et %2 seconde(s) pour faire ta table.<br />Et tu as eu :").arg(minutes).arg(seconds));
+    _label->setWordWrap(true);
+    _label->move(85, 45);
 
-    menu->move(376, 0);
-    OkBouton->move(386, 135);
-    OkBouton->setDefault(true);
-    OkBouton->setFocus();
+    _menu->move(376, 0);
+    _okBouton->move(386, 135);
+    _okBouton->setDefault(true);
+    _okBouton->setFocus();
 }
 
 void CustomMessageBox::displayNoUpdate()
 {
     setFixedSize(434, 179);
 
-    label->setText("Il n'y a aucune mise à jour disponible pour le moment.");
-    label->setWordWrap(true);
-    label->move(45, 50);
+    _label->setText("Il n'y a aucune mise à jour disponible pour le moment.");
+    _label->setWordWrap(true);
+    _label->move(45, 50);
 
-    menu->move(376, 0);
-    OkBouton->move(386, 135);
+    _menu->move(376, 0);
+    _okBouton->move(386, 135);
 }
 
 void CustomMessageBox::displayNewUpdate()
 {
     setFixedSize(434, 179);
 
-    label->setText("Une version plus récente de Multifacile est disponible, veux-tu la télécharger ?");
-    label->setWordWrap(true);
-    label->move(45, 50);
+    _label->setText("Une version plus récente de Multifacile est disponible, veux-tu la télécharger ?");
+    _label->setWordWrap(true);
+    _label->move(45, 50);
 
-    menu->move(376, 0);
+    _menu->move(376, 0);
 
 
-    OkBouton->setText(tr("Oui"));
-    OkBouton->move(346, 135);
+    _okBouton->setText(tr("Oui"));
+    _okBouton->move(346, 135);
 
     QPushButton *No = new QPushButton(tr("Non"), this);
     No->setAttribute(Qt::WA_TranslucentBackground);
@@ -178,9 +178,9 @@ void CustomMessageBox::displayNewUpdate()
     No->setObjectName("NoButton");
     No->setStyleSheet("QPushButton#NoButton{background-color: rgba(255, 255, 255, 0);color: rgb(144,191,79); background-image: url(none);}");
 
-    disconnect(OkBouton, SIGNAL(clicked()), this, SLOT(close()));
+    disconnect(_okBouton, SIGNAL(clicked()), this, SLOT(close()));
 
-    connect(OkBouton, SIGNAL(clicked()), this, SLOT(accept()));
+    connect(_okBouton, SIGNAL(clicked()), this, SLOT(accept()));
     connect(No, SIGNAL(clicked()), this, SLOT(reject()));
 }
 
@@ -188,25 +188,25 @@ void CustomMessageBox::displayCannotAMode()
 {
     setFixedSize(434, 179);
 
-    (type == CannotMediumMode) ? label->setText("Réussis au moins une table du mode Facile sans faire de faute pour accéder au mode Moyen.") : label->setText("Réussis toutes les tables du mode Moyen et du mode Facile sans faire de faute pour accéder au mode Difficile.");
-    label->setWordWrap(true);
-    label->move(45, 50);
+    (_type == CannotMediumMode) ? _label->setText("Réussis au moins une table du mode Facile sans faire de faute pour accéder au mode Moyen.") : _label->setText("Réussis toutes les tables du mode Moyen et du mode Facile sans faire de faute pour accéder au mode Difficile.");
+    _label->setWordWrap(true);
+    _label->move(45, 50);
 
-    menu->move(376, 0);
-    OkBouton->move(386, 135);
+    _menu->move(376, 0);
+    _okBouton->move(386, 135);
 }
 
 void CustomMessageBox::displayCannotDoATable(const int &table)
 {
     setFixedSize(434, 179);
 
-    label->setText("Réussis d'abords à faire la table de " + QString::number(table) + " sans faute pour la faire en mode Moyen.");
-    label->setWordWrap(true);
-    label->move(45, 50);
+    _label->setText("Réussis d'abords à faire la table de " + QString::number(table) + " sans faute pour la faire en mode Moyen.");
+    _label->setWordWrap(true);
+    _label->move(45, 50);
 
-    menu->move(376, 0);
+    _menu->move(376, 0);
 
-    OkBouton->move(386, 135);
+    _okBouton->move(386, 135);
 }
 
 void CustomMessageBox::calculTime(const unsigned short &time, unsigned short &minutes, unsigned short &seconds)
@@ -262,7 +262,7 @@ void CustomMessageBox::paintEvent(QPaintEvent *)
     QRectF imgRect;
     QRectF deviceRect;
     QImage img;
-    if(type == Trick)
+    if(_type == Trick)
     {
         imgRect.setCoords(0, 0, 646, 266);
         deviceRect.setCoords(0, 0, 646, 266);
@@ -282,18 +282,18 @@ void CustomMessageBox::paintEvent(QPaintEvent *)
 
 void CustomMessageBox::mouseMoveEvent(QMouseEvent *event)
 {
-    if(clickOnWindow)
-        window()->move(event->globalPos() - Diff);
+    if(_clickOnWindow)
+        window()->move(event->globalPos() - _Diff);
 }
 
 void CustomMessageBox::mousePressEvent(QMouseEvent *event)
 {
-    clickOnWindow = true;
-    Diff = event->pos();
+    _clickOnWindow = true;
+    _Diff = event->pos();
 }
 
 CustomMessageBox::~CustomMessageBox()
 {
-    delete label;
-    label = NULL;
+    delete _label;
+    _label = NULL;
 }

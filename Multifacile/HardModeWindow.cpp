@@ -20,128 +20,128 @@ HardModeWindow::HardModeWindow()
 {
     initStyle();
     Shuffle shuffle(true);
-    shuffle.getNumbers(array, multiple);
+    shuffle.getNumbers(_array, _multiple);
     setWindowFlags(Qt::FramelessWindowHint);
 
     this->setWindowTitle(tr("Table aléaoire"));
 
 
-    quitter = new QPushButton(tr("Retour"));
-    quitter->setParent(this);
-    quitter->setFixedSize(70, 40);
-    quitter->move(490, 490);
-    quitter->setObjectName("Quitter");
+    _quitter = new QPushButton(tr("Retour"));
+    _quitter->setParent(this);
+    _quitter->setFixedSize(70, 40);
+    _quitter->move(490, 490);
+    _quitter->setObjectName("Quitter");
 
-    corriger = new QPushButton(tr("Corriger"));
-    corriger->setParent(this);
-    corriger->setFixedSize(80, 40);
-    corriger->move(400, 490);
-    corriger->setObjectName("Corriger");
+    _corriger = new QPushButton(tr("Corriger"));
+    _corriger->setParent(this);
+    _corriger->setFixedSize(80, 40);
+    _corriger->move(400, 490);
+    _corriger->setObjectName("Corriger");
 
-    text = new QLabel(tr("Temps : "), this);
-    minute = new QLabel("00", this);
-    deuxPoint = new QLabel(":", this);
-    seconde = new QLabel("00", this);
+    _text = new QLabel(tr("Temps : "), this);
+    _minute = new QLabel("00", this);
+    _deuxPoint = new QLabel(":", this);
+    _seconde = new QLabel("00", this);
 
-    secondes = 0;
+    _secondes = 0;
 
-    text->move(235, 15);
-    minute->move(330, 15);
-    deuxPoint->move(355, 15);
-    seconde->move(380, 15);
+    _text->move(235, 15);
+    _minute->move(330, 15);
+    _deuxPoint->move(355, 15);
+    _seconde->move(380, 15);
 
-    mapper = new QSignalMapper(this);
+    _mapper = new QSignalMapper(this);
 
 
     for(int i = 0; i < 10; ++i)
     {
-        reponses[i] = new QLineEdit(this);
-        reponses[i]->setAttribute(Qt::WA_TranslucentBackground);
-        reponses[i]->setFixedSize(302, 69);
-        reponses[i]->move(185, (60 + 40 * i));
-        reponses[i]->setValidator(new QRegExpValidator(QRegExp("\\d{0,3}"), reponses[i]));
+        _reponses[i] = new QLineEdit(this);
+        _reponses[i]->setAttribute(Qt::WA_TranslucentBackground);
+        _reponses[i]->setFixedSize(302, 69);
+        _reponses[i]->move(185, (60 + 40 * i));
+        _reponses[i]->setValidator(new QRegExpValidator(QRegExp("\\d{0,3}"), _reponses[i]));
 
-        connect(reponses[i], SIGNAL(returnPressed()), mapper, SLOT(map()));
-        mapper->setMapping(reponses[i], (i + 1));
+        connect(_reponses[i], SIGNAL(returnPressed()), _mapper, SLOT(map()));
+        _mapper->setMapping(_reponses[i], (i + 1));
 
-        label[i] = new QLabel("<span style=\"color: #9FC54D\">"+QString::number(multiple[i])+"</span> x "+QString::number(array[i]), this);
-        label[i]->setFixedSize(100, 30);
-        label[i]->move(120, (78 + 40 * i));
+        _label[i] = new QLabel("<span style=\"color: #9FC54D\">"+QString::number(_multiple[i])+"</span> x "+QString::number(_array[i]), this);
+        _label[i]->setFixedSize(100, 30);
+        _label[i]->move(120, (78 + 40 * i));
 
-        labelCorrection[i] = new QLabel(this);
-        labelCorrection[i]->setVisible(false);
+        _labelCorrection[i] = new QLabel(this);
+        _labelCorrection[i]->setVisible(false);
 
-        labelPoint[i] = new QLabel(this);
-        labelPoint[i]->setPixmap(QPixmap(":/image/Point.png"));
-        labelPoint[i]->move(105, (90 + 40 * i));
+        _labelPoint[i] = new QLabel(this);
+        _labelPoint[i]->setPixmap(QPixmap(":/image/Point.png"));
+        _labelPoint[i]->move(105, (90 + 40 * i));
     }
 
     for(int j = 0; j < 2; ++j)
         for(int i = 0; i < 10; ++i)
         {
-            trueFalseLabel[j][i] = new QLabel(this);
+            _trueFalseLabel[j][i] = new QLabel(this);
             if(j == 0)
             {
-                trueFalseLabel[j][i]->setPixmap(QPixmap(":/image/OpacRight.png"));
-                trueFalseLabel[j][i]->move(475, (70 + 40 * i));
+                _trueFalseLabel[j][i]->setPixmap(QPixmap(":/image/OpacRight.png"));
+                _trueFalseLabel[j][i]->move(475, (70 + 40 * i));
             }
             if(j == 1)
             {
-                trueFalseLabel[j][i]->setPixmap(QPixmap(":/image/OpacWrong.png"));
-                trueFalseLabel[j][i]->move(525, (75 + 40 * i));
+                _trueFalseLabel[j][i]->setPixmap(QPixmap(":/image/OpacWrong.png"));
+                _trueFalseLabel[j][i]->move(525, (75 + 40 * i));
             }
         }
 
     startTime();
 
-    connect(quitter, SIGNAL(clicked()), this, SIGNAL(wasClosed()));
-    connect(corriger, SIGNAL(clicked()), this, SLOT(correct()));
+    connect(_quitter, SIGNAL(clicked()), this, SIGNAL(wasClosed()));
+    connect(_corriger, SIGNAL(clicked()), this, SLOT(correct()));
 
-    connect(mapper, SIGNAL(mapped(int)), this, SLOT(newSetFocus(int)));
+    connect(_mapper, SIGNAL(mapped(int)), this, SLOT(newSetFocus(int)));
 }
 void HardModeWindow::correct()
 {
     unsigned short int rep[10];
     for(int i = 0; i < 10; ++i)
-        rep[i] = reponses[i]->text().toInt();
+        rep[i] = _reponses[i]->text().toInt();
 
-    Correction correction(multiple, array, rep, secondes);
+    Correction correction(_multiple, _array, rep, _secondes);
 
     bool isGood[10];
     QString texte[10];
 
-    note = correction.getCorrection(texte, isGood);
+    _note = correction.getCorrection(texte, isGood);
 
-    corriger->setText(tr("Retenter"));
-    disconnect(corriger, SIGNAL(clicked()), this, SLOT(correct()));
-    connect(corriger, SIGNAL(clicked()), this, SLOT(Retry()));
+    _corriger->setText(tr("Retenter"));
+    disconnect(_corriger, SIGNAL(clicked()), this, SLOT(correct()));
+    connect(_corriger, SIGNAL(clicked()), this, SLOT(Retry()));
 
-    chronometre->stop();
-    delete chronometre;
-    chronometre = NULL;
+    _chronometre->stop();
+    delete _chronometre;
+    _chronometre = NULL;
 
-    CustomMessageBox results(secondes, note, this);
+    CustomMessageBox results(_secondes, _note, this);
 
-    secondes = 0;
+    _secondes = 0;
 
     for(int i = 0; i < 10; ++i)
     {
-        reponses[i]->setVisible(false);
+        _reponses[i]->setVisible(false);
 
-        labelCorrection[i]->setText(texte[i]);
-        labelCorrection[i]->move(200, (80 + (i * 40)));
-        labelCorrection[i]->setVisible(true);
+        _labelCorrection[i]->setText(texte[i]);
+        _labelCorrection[i]->move(200, (80 + (i * 40)));
+        _labelCorrection[i]->setVisible(true);
 
         if(isGood[i])
         {
-            trueFalseLabel[0][i]->setPixmap(QPixmap(":/image/Right.png"));
-            trueFalseLabel[1][i]->setPixmap(QPixmap(":/image/OpacWrong.png"));
+            _trueFalseLabel[0][i]->setPixmap(QPixmap(":/image/Right.png"));
+            _trueFalseLabel[1][i]->setPixmap(QPixmap(":/image/OpacWrong.png"));
         }
 
         else
         {
-            trueFalseLabel[0][i]->setPixmap(QPixmap(":/image/OpacRight.png"));
-            trueFalseLabel[1][i]->setPixmap(QPixmap(":/image/Wrong.png"));
+            _trueFalseLabel[0][i]->setPixmap(QPixmap(":/image/OpacRight.png"));
+            _trueFalseLabel[1][i]->setPixmap(QPixmap(":/image/Wrong.png"));
         }
 
         this->repaint();
@@ -151,27 +151,27 @@ void HardModeWindow::correct()
 }
 void HardModeWindow::Retry()
 {
-    corriger->setText(tr("Corriger"));
-    disconnect(corriger, SIGNAL(clicked()), this, SLOT(Retry()));
-    connect(corriger, SIGNAL(clicked()), this, SLOT(correct()));
+    _corriger->setText(tr("Corriger"));
+    disconnect(_corriger, SIGNAL(clicked()), this, SLOT(Retry()));
+    connect(_corriger, SIGNAL(clicked()), this, SLOT(correct()));
 
     Shuffle shuffle(true);
-    shuffle.getNumbers(array, multiple);
+    shuffle.getNumbers(_array, _multiple);
 
 
     for(int i = 0; i < 10; ++i)
     {
-        label[i]->setText("<span style=\"color: #9FC54D\">"+QString::number(multiple[i])+"</span> x "+QString::number(array[i]));
-        trueFalseLabel[0][i]->setPixmap(QPixmap(":/image/OpacRight.png"));
-        trueFalseLabel[1][i]->setPixmap(QPixmap(":/image/OpacWrong.png"));
-        reponses[i]->clear();
-        reponses[i]->setVisible(true);
-        delete labelCorrection[i];
+        _label[i]->setText("<span style=\"color: #9FC54D\">"+QString::number(_multiple[i])+"</span> x "+QString::number(_array[i]));
+        _trueFalseLabel[0][i]->setPixmap(QPixmap(":/image/OpacRight.png"));
+        _trueFalseLabel[1][i]->setPixmap(QPixmap(":/image/OpacWrong.png"));
+        _reponses[i]->clear();
+        _reponses[i]->setVisible(true);
+        delete _labelCorrection[i];
     }
 
-    reponses[0]->setFocus();
+    _reponses[0]->setFocus();
 
-    minute->setText("00");
-    seconde->setText("00");
+    _minute->setText("00");
+    _seconde->setText("00");
     startTime();
 }
