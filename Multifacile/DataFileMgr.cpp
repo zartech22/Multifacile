@@ -117,7 +117,6 @@ bool DataFileMgr::setValue(const QString &group, const unsigned short &time, con
 
 bool DataFileMgr::setValue(const QString &group, const QString &key, const QString &value)
 {
-    //qDebug() << "dans le setValue";
     _xmlFile.seek(0);
     QTextStream out(&_xmlFile);
 
@@ -200,8 +199,6 @@ bool DataFileMgr::exist(const QString &group)
 
     QDomElement data = _doc.documentElement();
 
-    //qDebug() << "Valeur de isEmpty " << data.elementsByTagName(group).isEmpty();
-
     if(data.elementsByTagName(group).isEmpty())
         return false;
     else
@@ -214,7 +211,6 @@ void DataFileMgr::createGroup(bool createAllGroups, const QString &group)
 
     if(createAllGroups)
     {
-        //qDebug() << "Dans createGroup : if";
         _doc.appendChild(_doc.createProcessingInstruction("xml", "version=\"1.0\""));
 
         QDomElement data = _doc.createElement("data");
@@ -234,7 +230,6 @@ void DataFileMgr::createGroup(bool createAllGroups, const QString &group)
 
     else
     {
-        //qDebug() << "Dans createGroup : else";
         QDomElement data = _doc.documentElement();
         data.appendChild(_doc.createElement(group));
         _doc.save(out, 4);
