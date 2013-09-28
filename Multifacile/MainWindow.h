@@ -60,13 +60,17 @@ public :
 
 private :
     bool _ClickOnWindow;
+    bool _isProgressifMode;
 
     QMenu *_file;
     QMenu *_tools;
 
     QAction *_easyMode;
+    QAction *_freeMode;
+    QAction *_progressifMode;
     QAction *_quitAction;
     QAction *_updateAction;
+
 
     QWidgetAction *_mediumMode;
     QWidgetAction *_hardMode;
@@ -90,6 +94,7 @@ private :
     Widget _actualWindow;
 
     QActionGroup *_actionGroup;
+    QActionGroup *_progressifModeActionGroup;
 
     QPoint _Diff;
 
@@ -99,6 +104,10 @@ private :
 
     Menu *_modes;
 
+    DataFileMgr _mgr;
+
+    void checkSucceedTables();
+    void verifyModesPermissions(bool hasProgressifModeChanged = false);
     void createCentralWidget();
     void deleteAddIfExist();
     void doActions();
@@ -117,6 +126,7 @@ private :
 
 public slots :
 
+    void changeProgressifMode(QAction*);
     void checkUpdateReceivedAnswer(UpdateType update);
     void socketError();
     void open_window(const int nbr);

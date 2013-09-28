@@ -115,6 +115,38 @@ bool DataFileMgr::setValue(const QString &group, const unsigned short &time, con
     return true;
 }
 
+bool DataFileMgr::setValue(const QString &group, const QString &key, const QString &value)
+{
+    //qDebug() << "dans le setValue";
+    _xmlFile.seek(0);
+    QTextStream out(&_xmlFile);
+
+    if(!_doc.setContent(&_xmlFile))
+        return false;
+    if(!exist(group))
+        createGroup(false, group);
+
+    QDomElement data = _doc.documentElement();
+
+    QDomElement groupElement = data.elementsByTagName(group).at(0).toElement();
+
+    QDomElement keyElement = _doc.createElement(key);
+    keyElement.appendChild(_doc.createTextNode(value));
+
+    if(groupElement.elementsByTagName(key).isEmpty())
+        groupElement.appendChild(keyElement);
+    else
+    {
+        QDomElement previousValue = groupElement.elementsByTagName(key).at(0).toElement();
+        groupElement.replaceChild(keyElement, previousValue);
+    }
+
+    _xmlFile.resize(0);
+    _doc.save(out, 4);
+
+    return true;
+}
+
 const QString DataFileMgr::value(const QString &group, const unsigned short &table)
 {
     if(!_doc.setContent(&_xmlFile))
@@ -143,6 +175,23 @@ const QString DataFileMgr::value(const QString &group, const unsigned short &tab
     }
 
 }
+
+const QString DataFileMgr::value(const QString &group, const QString &key)
+{
+    _xmlFile.seek(0);
+    if(!_doc.setContent(&_xmlFile))
+        return "Error : cannot set content";
+    else if(!exist(group))
+        return QString("no value");
+
+    QDomElement data = _doc.documentElement();
+    QDomElement groupElement = data.elementsByTagName(group).at(0).toElement();
+
+    QDomElement keyElement = groupElement.elementsByTagName(key).at(0).toElement();
+
+    return keyElement.text();
+}
+
 bool DataFileMgr::exist(const QString &group)
 {
     _xmlFile.flush();
@@ -151,6 +200,8 @@ bool DataFileMgr::exist(const QString &group)
 
     QDomElement data = _doc.documentElement();
 
+    //qDebug() << "Valeur de isEmpty " << data.elementsByTagName(group).isEmpty();
+
     if(data.elementsByTagName(group).isEmpty())
         return false;
     else
@@ -158,10 +209,12 @@ bool DataFileMgr::exist(const QString &group)
 }
 void DataFileMgr::createGroup(bool createAllGroups, const QString &group)
 {
+    _xmlFile.seek(0);
     QTextStream out(&_xmlFile);
 
     if(createAllGroups)
     {
+        //qDebug() << "Dans createGroup : if";
         _doc.appendChild(_doc.createProcessingInstruction("xml", "version=\"1.0\""));
 
         QDomElement data = _doc.createElement("data");
@@ -181,6 +234,7 @@ void DataFileMgr::createGroup(bool createAllGroups, const QString &group)
 
     else
     {
+        //qDebug() << "Dans createGroup : else";
         QDomElement data = _doc.documentElement();
         data.appendChild(_doc.createElement(group));
         _doc.save(out, 4);

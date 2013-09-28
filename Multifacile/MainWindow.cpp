@@ -19,11 +19,15 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "Shuffle.h"
 #include "DataFileMgr.h"
 
-MainWindow::MainWindow() :  _mode(EASY), _actualWindow(MainWidget), _mapper(NULL)
+MainWindow::MainWindow() :  _mode(EASY), _actualWindow(MainWidget), _mapper(NULL), _mgr("Multifacile.xml")
 {
-    setWindowFlags(Qt::FramelessWindowHint);  //Work only on Windows ! ; disallow user to resize the window
+    setWindowFlags(Qt::FramelessWindowHint);
     setWindowTitle("Multifacile");
     resize(650, 650);
+
+    if(_mgr.value("settings", "progressifMode") == "no value")
+        qDebug() << "_mgr.setValue" << _mgr.setValue("settings", "progressifMode", "true");
+    _isProgressifMode = (_mgr.value("settings", "progressifMode") == "true");
 
     initStyle();
 
@@ -49,6 +53,71 @@ MainWindow::MainWindow() :  _mode(EASY), _actualWindow(MainWidget), _mapper(NULL
     connect(_quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
     connect(_updateAction, SIGNAL(triggered()), this, SLOT(verification()));
     connect(_actionGroup, SIGNAL(triggered(QAction*)), this, SLOT(setMode(QAction*)));
+    connect(_progressifModeActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeProgressifMode(QAction*)));
+}
+
+void MainWindow::checkSucceedTables()
+{
+    if(_mode != HARD)
+    {
+        QMap<int, bool> *list = DataFileMgr::getNoErrorList("Multifacile.xml", (_mode == EASY) ? "EasyMode" : "MediumMode");
+
+        for(QMap<int, bool>::Iterator it = list->begin(); it != list->end(); ++it)
+            if(it.value())
+                _bouton[ (it.key() - 1)]->setStyleSheet("background-image: url(\":/image/Bouton_succes.png\");");
+
+        delete list;
+
+    }
+
+    verifyModesPermissions();
+}
+
+void MainWindow::verifyModesPermissions(bool hasProgressifModeChanged)
+{
+     _isProgressifMode = (_mgr.value("settings", "progressifMode") == "true");
+
+    if(_mode == MEDIUM && _isProgressifMode)
+    {
+        for(int i = 0; i < 10; ++i)
+            if(!DataFileMgr::hasNoErrorTrue("Multifacile.xml", "EasyMode", (i + 1)))
+                _bouton[i]->setStyleSheet("background-image: url(\":/image/Bouton_inacessible.png\"); color: grey;");
+    }
+    else if(_mode == MEDIUM && !_isProgressifMode)
+        for(int i = 0; i < 10; ++i)
+            if(!DataFileMgr::hasNoErrorTrue("Multifacile.xml", "EasyMode", (i + 1)))
+                _bouton[i]->setStyleSheet("");
+
+
+    if( (!DataFileMgr::isAllTableWithNoErrorTrue("Multifacile.xml", "EasyMode") || !DataFileMgr::isAllTableWithNoErrorTrue("Multifacile.xml", "MediumMode")) && _isProgressifMode )
+    {
+        _hardModeActionText->setStyleSheet("color: grey; padding-left: 12px;");
+        if(_mode == HARD && !DataFileMgr::isAllTableWithNoErrorFalse("Multifacile.xml", "EasyMode") && hasProgressifModeChanged)
+            _mediumMode->trigger();
+        else if(_mode == HARD && hasProgressifModeChanged)
+            _easyMode->trigger();
+    }
+    else
+        _hardModeActionText->setStyleSheet("color: white; padding-left: 12px;");
+
+    if(DataFileMgr::isAllTableWithNoErrorFalse("Multifacile.xml", "EasyMode") && _isProgressifMode)
+    {
+        _mediumModeActionText->setStyleSheet("color: grey; padding-left: 12px;");
+        if(_mode == MEDIUM && hasProgressifModeChanged)
+            _easyMode->trigger();
+    }
+    else
+        _mediumModeActionText->setStyleSheet("color: white; padding-left: 12px;");
+}
+
+void MainWindow::changeProgressifMode(QAction *action)
+{
+    if(action == _progressifMode)
+        _mgr.setValue("settings", "progressifMode", "true");
+    else
+        _mgr.setValue("settings", "progressifMode", "false");
+
+    verifyModesPermissions(true);
 }
 
 void MainWindow::checkUpdateReceivedAnswer(UpdateType update)    //slot which is connected to the updateNeeded(UpdateType) signal of check. It processes the answer given by check
@@ -116,6 +185,8 @@ void MainWindow::createCentralWidget()
         _mapper->setMapping(_bouton[i], i+1);
     }
 
+    checkSucceedTables();
+
     _quit = new QPushButton(tr("Quitter"));
     _quit->setFixedSize(70, 40);
     _quit->setObjectName("QuitButton");
@@ -140,31 +211,6 @@ void MainWindow::createCentralWidget()
         }
     }
 
-    if(_mode != HARD)
-    {
-        QMap<int, bool> *list = DataFileMgr::getNoErrorList("Multifacile.xml", (_mode == EASY) ? "EasyMode" : "MediumMode");
-
-        for(QMap<int, bool>::Iterator it = list->begin(); it != list->end(); ++it)
-            if(it.value())
-                _bouton[ (it.key() - 1)]->setStyleSheet("background-image: url(\":/image/Bouton_succes.png\");");
-
-        delete list;
-
-        if(_mode == MEDIUM)
-            for(int i = 0; i < 10; ++i)
-                if(!DataFileMgr::hasNoErrorTrue("Multifacile.xml", "EasyMode", (i + 1)))
-                    _bouton[i]->setStyleSheet("background-image: url(\":/image/Bouton_inacessible.png\"); color: grey;");
-    }
-
-    if(!DataFileMgr::isAllTableWithNoErrorTrue("Multifacile.xml", "EasyMode") || !DataFileMgr::isAllTableWithNoErrorTrue("Multifacile.xml", "MediumMode"))
-        _hardModeActionText->setStyleSheet("color: grey; padding-left: 12px;");
-    else
-        _hardModeActionText->setStyleSheet("color: white; padding-left: 12px;");
-
-    if(DataFileMgr::isAllTableWithNoErrorFalse("Multifacile.xml", "EasyMode"))
-        _mediumModeActionText->setStyleSheet("color: grey; padding-left: 12px;");
-    else
-        _mediumModeActionText->setStyleSheet("color: white; padding-left: 12px;");
 
     connect(_quit, SIGNAL(clicked()), qApp, SLOT(quit()));
 
@@ -186,24 +232,22 @@ void MainWindow::deleteAddIfExist()
 void MainWindow::doActions()
 {
     _quitAction = new QAction(QIcon(":/icon/sortie.png"), tr("&Quitter"), this); //the file comes of a Qt ressource file (it's faster than charge a directory's file)
+
     _updateAction = new QAction(QIcon(":/icon/update.png"), tr("&Vérifier les mise à jours"), this);  //idem
+
     _easyMode = new QAction(tr("&Facile"), this);
+
     _mediumMode = new QWidgetAction(this);
     _mediumModeActionText = new QLabel("Moyen");
     _mediumMode->setDefaultWidget(_mediumModeActionText);
+
     _hardMode = new QWidgetAction(this);
     _hardModeActionText = new QLabel("Difficile");
     _hardMode->setDefaultWidget(_hardModeActionText);
 
-    if(!DataFileMgr::isAllTableWithNoErrorTrue("Multifacile.xml", "EasyMode") || !DataFileMgr::isAllTableWithNoErrorTrue("Multifacile.xml", "MediumMode"))
-        _hardModeActionText->setStyleSheet("color: grey; padding-left: 12px;");
-    else
-        _hardModeActionText->setStyleSheet("color: white; padding-left: 12px;");
+    _progressifMode = new QAction(tr("Progression pas à pas"), this);
 
-    if(DataFileMgr::isAllTableWithNoErrorFalse("Multifacile.xml", "EasyMode"))
-        _mediumModeActionText->setStyleSheet("color: grey; padding-left: 12px;");
-    else
-        _mediumModeActionText->setStyleSheet("color: white; padding-left: 12px;");
+    _freeMode = new QAction(tr("Progression libre"), this);
 }
 
 void MainWindow::doActionGroup()
@@ -213,6 +257,11 @@ void MainWindow::doActionGroup()
     _actionGroup->addAction(_mediumMode);
     _actionGroup->addAction(_hardMode);
     _actionGroup->setExclusive(true);
+
+    _progressifModeActionGroup = new QActionGroup(this);
+    _progressifModeActionGroup->addAction(_progressifMode);
+    _progressifModeActionGroup->addAction(_freeMode);
+    _progressifModeActionGroup->setExclusive(true);
 }
 
 void MainWindow::doMenuBar()
@@ -232,6 +281,12 @@ void MainWindow::doMenuBar()
     _mediumMode->setToolTip("Table en désordre sans astuces");
     _hardMode->setCheckable(true);
     _hardMode->setToolTip("Table mystère...");
+    _progressifMode->setCheckable(true);
+    _progressifMode->setChecked(_isProgressifMode);
+    _progressifMode->setToolTip("Tu est obligé de faire \nles tables par modes \n(du plus facile au plus difficile)");
+    _freeMode->setCheckable(true);
+    _freeMode->setChecked(!_isProgressifMode);
+    _freeMode->setToolTip("Tu fait la table que tu veux \ndans le mode que tu veux");
     _easyMode->setChecked(true);
 
     doActionGroup();
@@ -239,6 +294,8 @@ void MainWindow::doMenuBar()
     _file->addAction(_quitAction);
     _tools->addAction(_updateAction);
     _modes->addActions(_actionGroup->actions());
+    _modes->addSeparator();
+    _modes->addActions(_progressifModeActionGroup->actions());
 
 #ifndef Q_OS_WIN32
     menuBar()->setNativeMenuBar(false);
@@ -291,7 +348,7 @@ void MainWindow::open_window(const int nbr)   //open a questionary window with t
         connect(_fen, SIGNAL(wasClosed()), this, SLOT(resetCentralWidget()));
         break;
     case MEDIUM:
-        if(DataFileMgr::hasNoErrorTrue("Multifacile.xml", "EasyMode", nbr))
+        if(DataFileMgr::hasNoErrorTrue("Multifacile.xml", "EasyMode", nbr) || !_isProgressifMode)
         {
             _fen = new MediumModeWindow(nbr);
             _fen->setFixedSize(650, 560);
@@ -332,19 +389,7 @@ void MainWindow::updateButtonsLabels()    //change the Buttons's text when chang
             _bouton[i]->setStyleSheet("");
         }
 
-        QMap<int, bool> *list = DataFileMgr::getNoErrorList("Multifacile.xml", (_mode == EASY) ? "EasyMode" : "MediumMode");
-
-        for(QMap<int, bool>::Iterator it = list->begin(); it != list->end(); ++it)
-            if(it.value())
-                _bouton[ (it.key() - 1)]->setStyleSheet("background-image: url(\":/image/Bouton_succes.png\");");
-
-        delete list;
-
-        if(_mode == MEDIUM)
-            for(int i = 0; i < 10; ++i)
-                if(!DataFileMgr::hasNoErrorTrue("Multifacile.xml", "EasyMode", (i + 1)))
-                    _bouton[i]->setStyleSheet("background-image: url(\":/image/Bouton_inacessible.png\"); color: grey;");
-
+        checkSucceedTables();
     }
     else if(_mode == HARD && _actualWindow == MainWidget)
     {
@@ -371,7 +416,7 @@ void MainWindow::setMode(QAction *action)   //slot call when user change the mod
     else if(action == _mediumMode)
     {
 
-        if(DataFileMgr::isAllTableWithNoErrorFalse("Multifacile.xml", "EasyMode"))
+        if(DataFileMgr::isAllTableWithNoErrorFalse("Multifacile.xml", "EasyMode") && _isProgressifMode)
         {
             unavailableMode(MEDIUM);
             _easyMode->setChecked(true);
@@ -390,7 +435,7 @@ void MainWindow::setMode(QAction *action)   //slot call when user change the mod
     }
     else
     {
-        if(!DataFileMgr::isAllTableWithNoErrorTrue("Multifacile.xml", "EasyMode") || !DataFileMgr::isAllTableWithNoErrorTrue("Multifacile.xml", "MediumMode"))
+        if( (!DataFileMgr::isAllTableWithNoErrorTrue("Multifacile.xml", "EasyMode") || !DataFileMgr::isAllTableWithNoErrorTrue("Multifacile.xml", "MediumMode")) && _isProgressifMode)
         {
             unavailableMode(HARD);
             if(_mode == MEDIUM)

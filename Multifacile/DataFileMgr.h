@@ -24,6 +24,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <QTextStream>
 #include <QDir>
 
+#include <QDebug>
+
 class DataFileMgr
 {
 public:
@@ -31,7 +33,9 @@ public:
     ~DataFileMgr() { _xmlFile.close(); }
 
     bool setValue(const QString &group, const unsigned short int &time, const bool &noError = false, const unsigned short int &table = 0);
+    bool setValue(const QString &group, const QString &key, const QString &value);
     const QString value(const QString &group, const unsigned short int &table = 0);
+    const QString value(const QString &group, const QString &key);
 
     static QMap<int, bool>* getNoErrorList(const QString &fileName, const QString &mode);
     static bool hasNoErrorTrue(const QString &fileName, const QString &mode, const unsigned short int &table);
