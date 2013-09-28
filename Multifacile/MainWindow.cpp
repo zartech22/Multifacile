@@ -235,7 +235,10 @@ void MainWindow::doActions()
 
     _updateAction = new QAction(QIcon(":/icon/update.png"), tr("&Vérifier les mise à jours"), this);  //idem
 
-    _easyMode = new QAction(tr("&Facile"), this);
+    _easyMode = new QWidgetAction(this);
+    _easyModeActionText = new QLabel("Facile");
+    _easyMode->setDefaultWidget(_easyModeActionText);
+    _easyModeActionText->setStyleSheet("color: white; padding-left: 12px; text-decoration: underline; font-style: italic;");
 
     _mediumMode = new QWidgetAction(this);
     _mediumModeActionText = new QLabel("Moyen");
@@ -407,19 +410,32 @@ void MainWindow::setMode(QAction *action)   //slot call when user change the mod
 {
     if(action == _easyMode)
     {
+        if(_mode == MEDIUM)
+            _mediumModeActionText->setStyleSheet("color: white; padding-left: 12px;");
+        else
+             _hardModeActionText->setStyleSheet("color: white; padding-left: 12px;");
+
         _mode = EASY;
+
         if(_actualWindow == SecondWidget)
                 setNewSecondWindow();
         else
             updateButtonsLabels();
+
+        _easyModeActionText->setStyleSheet("color: white; padding-left: 12px; text-decoration: underline; font-style: italic;");
     }
     else if(action == _mediumMode)
     {
+        if(_mode == EASY)
+            _easyModeActionText->setStyleSheet("color: white; padding-left: 12px;");
+        else
+            _hardModeActionText->setStyleSheet("color: white; padding-left: 12px;");
 
         if(DataFileMgr::isAllTableWithNoErrorFalse("Multifacile.xml", "EasyMode") && _isProgressifMode)
         {
             unavailableMode(MEDIUM);
             _easyMode->setChecked(true);
+            return;
         }
         else if(_actualWindow == SecondWidget)
         {
@@ -432,16 +448,25 @@ void MainWindow::setMode(QAction *action)   //slot call when user change the mod
             _mode = MEDIUM;
             updateButtonsLabels();
         }
+
+        _mediumModeActionText->setStyleSheet("color: white; padding-left: 12px; text-decoration: underline; font-style: italic;");
+
     }
     else
     {
+        if(_mode == EASY)
+            _easyModeActionText->setStyleSheet("color: white; padding-left: 12px;");
+        else
+            _mediumModeActionText->setStyleSheet("color: white; padding-left: 12px;");
+
         if( (!DataFileMgr::isAllTableWithNoErrorTrue("Multifacile.xml", "EasyMode") || !DataFileMgr::isAllTableWithNoErrorTrue("Multifacile.xml", "MediumMode")) && _isProgressifMode)
         {
             unavailableMode(HARD);
             if(_mode == MEDIUM)
-                _mediumMode->setChecked(true);
+                _mediumMode->trigger();
             else
-                _easyMode->setChecked(true);
+                _easyMode->trigger();
+            return;
         }
         else if(_actualWindow == SecondWidget)
         {
@@ -453,6 +478,8 @@ void MainWindow::setMode(QAction *action)   //slot call when user change the mod
             _mode = HARD;
             updateButtonsLabels();
         }
+
+        _hardModeActionText->setStyleSheet("color: white; padding-left: 12px; text-decoration: underline; font-style: italic;");
     }
 }
 

@@ -65,18 +65,19 @@ private :
     QMenu *_file;
     QMenu *_tools;
 
-    QAction *_easyMode;
     QAction *_freeMode;
     QAction *_progressifMode;
     QAction *_quitAction;
     QAction *_updateAction;
 
 
+    QWidgetAction *_easyMode;
     QWidgetAction *_mediumMode;
     QWidgetAction *_hardMode;
 
     QLabel *_point;
     QLabel *_texte;
+    QLabel *_easyModeActionText;
     QLabel *_mediumModeActionText;
     QLabel *_hardModeActionText;
 
