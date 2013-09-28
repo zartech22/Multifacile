@@ -64,7 +64,10 @@ void MainWindow::checkSucceedTables()
 
         for(QMap<int, bool>::Iterator it = list->begin(); it != list->end(); ++it)
             if(it.value())
+            {
                 _bouton[ (it.key() - 1)]->setStyleSheet("background-image: url(\":/image/Bouton_succes.png\");");
+                qDebug() << it.key() << it.value()<< _bouton[(it.key() - 1)]->styleSheet();
+            }
 
         delete list;
 
@@ -85,9 +88,12 @@ void MainWindow::verifyModesPermissions(bool hasProgressifModeChanged)
     }
     else if(_mode == MEDIUM && !_isProgressifMode)
         for(int i = 0; i < 10; ++i)
-            if(!DataFileMgr::hasNoErrorTrue("Multifacile.xml", "EasyMode", (i + 1)))
+        {
+            if(!DataFileMgr::hasNoErrorTrue("Multifacile.xml", "EasyMode", (i + 1)) && !DataFileMgr::hasNoErrorTrue("Multifacile.xml", "MediumMode", (i + 1)))
                 _bouton[i]->setStyleSheet("");
-
+            else
+                _bouton[i]->setStyleSheet("background-image: url(\":/image/Bouton_succes.png\");");
+        }
 
     if( (!DataFileMgr::isAllTableWithNoErrorTrue("Multifacile.xml", "EasyMode") || !DataFileMgr::isAllTableWithNoErrorTrue("Multifacile.xml", "MediumMode")) && _isProgressifMode )
     {
