@@ -64,10 +64,7 @@ void MainWindow::checkSucceedTables()
 
         for(QMap<int, bool>::Iterator it = list->begin(); it != list->end(); ++it)
             if(it.value())
-            {
                 _bouton[ (it.key() - 1)]->setStyleSheet("background-image: url(\":/image/Bouton_succes.png\");");
-                qDebug() << it.key() << it.value()<< _bouton[(it.key() - 1)]->styleSheet();
-            }
 
         delete list;
 
