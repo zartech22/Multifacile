@@ -115,7 +115,7 @@ private :
     void mouseMoveEvent(QMouseEvent *event);
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *) { _ClickOnWindow = false; }
-    void setNewSecondWindow() { open_window(_fen->getMultiple()); }
+    void setNewSecondWindow() { openWindow(_fen->getMultiple()); }
     void unavailableMode(Mode mode);
     void unavailableTable(const unsigned short int &table) { CustomMessageBox(CannotDoThisTable, this, table).exec(); }
     void updateButtonsLabels();
@@ -125,7 +125,7 @@ public slots :
     void changeProgressifMode(QAction*);
     void checkUpdateReceivedAnswer(UpdateType update);
     void socketError();
-    void open_window(const int nbr);
+    void openWindow(const int nbr);
     void resetCentralWidget();
     void setMode(QAction *action);
     void verification() { _check->tryConnection(true); }

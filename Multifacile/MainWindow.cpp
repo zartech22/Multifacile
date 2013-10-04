@@ -141,7 +141,7 @@ void MainWindow::createCentralWidget()
 
     _widget = new MainWidget(_mode);
 
-    connect(_widget, SIGNAL(clicked(int)),  this, SLOT(open_window(int)));
+    connect(_widget, SIGNAL(clicked(int)),  this, SLOT(openWindow(int)));
 
     checkSucceedTables();
 }
@@ -269,7 +269,7 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
     _Diff = event->pos();
 }
 
-void MainWindow::open_window(const int nbr)   //open a questionary window with the number given by the map signal of mapper. The questionary window is create in function of the Mode
+void MainWindow::openWindow(const int nbr)   //open a questionary window with the number given by the map signal of mapper. The questionary window is create in function of the Mode
 {
     switch(_mode)
     {
