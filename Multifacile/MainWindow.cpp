@@ -19,14 +19,12 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "Shuffle.h"
 #include "DataFileMgr.h"
 
-MainWindow::MainWindow() :  _mode(EASY), _actualWindow(MainWidget), _mapper(NULL), _mgr("Multifacile.xml")
+MainWindow::MainWindow() :  _mode(EASY), _actualWindow(FirstWidget),  _mgr("Multifacile.xml")
 {
     setWindowFlags(Qt::FramelessWindowHint);
     setWindowTitle("Multifacile");
     resize(650, 650);
 
-    if(_mgr.value("settings", "progressifMode") == "no value")
-        qDebug() << "_mgr.setValue" << _mgr.setValue("settings", "progressifMode", "true");
     _isProgressifMode = (_mgr.value("settings", "progressifMode") == "true");
 
     initStyle();
@@ -45,8 +43,6 @@ MainWindow::MainWindow() :  _mode(EASY), _actualWindow(MainWidget), _mapper(NULL
 
 
 
-    connect(_mapper, SIGNAL(mapped(int)), this, SLOT(open_window(int)));  //connect the signal mapped of QSignalMapper to the custom slot open_window(int)
-
     connect(_check, SIGNAL(checkUpdateAnswer(UpdateType)), this, SLOT(checkUpdateReceivedAnswer(UpdateType)));
     connect(_check, SIGNAL(error()), this, SLOT(socketError()));
 
@@ -58,18 +54,7 @@ MainWindow::MainWindow() :  _mode(EASY), _actualWindow(MainWidget), _mapper(NULL
 
 void MainWindow::checkSucceedTables()
 {
-    if(_mode != HARD)
-    {
-        QMap<int, bool> *list = DataFileMgr::getNoErrorList("Multifacile.xml", (_mode == EASY) ? "EasyMode" : "MediumMode");
-
-        for(QMap<int, bool>::Iterator it = list->begin(); it != list->end(); ++it)
-            if(it.value())
-                _bouton[ (it.key() - 1)]->setStyleSheet("background-image: url(\":/image/Bouton_succes.png\");");
-
-        delete list;
-
-    }
-
+    _widget->checkSucceedTables(_mode);
     verifyModesPermissions();
 }
 
@@ -77,20 +62,8 @@ void MainWindow::verifyModesPermissions(bool hasProgressifModeChanged)
 {
      _isProgressifMode = (_mgr.value("settings", "progressifMode") == "true");
 
-    if(_mode == MEDIUM && _isProgressifMode)
-    {
-        for(int i = 0; i < 10; ++i)
-            if(!DataFileMgr::hasNoErrorTrue("Multifacile.xml", "EasyMode", (i + 1)))
-                _bouton[i]->setStyleSheet("background-image: url(\":/image/Bouton_inacessible.png\"); color: grey;");
-    }
-    else if(_mode == MEDIUM && !_isProgressifMode)
-        for(int i = 0; i < 10; ++i)
-        {
-            if(!DataFileMgr::hasNoErrorTrue("Multifacile.xml", "EasyMode", (i + 1)) && !DataFileMgr::hasNoErrorTrue("Multifacile.xml", "MediumMode", (i + 1)))
-                _bouton[i]->setStyleSheet("");
-            else
-                _bouton[i]->setStyleSheet("background-image: url(\":/image/Bouton_succes.png\");");
-        }
+     if(_actualWindow == FirstWidget)
+         _widget->updateButtonsLabels(_mode, _isProgressifMode);
 
     if( (!DataFileMgr::isAllTableWithNoErrorTrue("Multifacile.xml", "EasyMode") || !DataFileMgr::isAllTableWithNoErrorTrue("Multifacile.xml", "MediumMode")) && _isProgressifMode )
     {
@@ -164,61 +137,15 @@ void MainWindow::checkUpdateReceivedAnswer(UpdateType update)    //slot which is
 
 void MainWindow::createCentralWidget()
 {
-    _widget = new QWidget();
+    _actualWindow = FirstWidget;
 
-    _texte = new QLabel(tr("Choisis la table de multiplication que tu souhaites travailler !"));
-    _texte->setAttribute(Qt::WA_TranslucentBackground);
+    _widget = new MainWidget(_mode);
 
-    _point = new QLabel;
-    _point->setPixmap(QPixmap(":/image/Point.png"));
-
-    if(_mapper == NULL)
-        _mapper = new QSignalMapper(this);
-
-    for(int i = 0; i < 10; ++i)
-    {
-        if(_mode == EASY || _mode == MEDIUM)
-            _bouton[i] = new QPushButton(tr("La table de ")+QString::number(i+1), _widget);
-        else // _mode == HARD
-            _bouton[i] = new QPushButton(tr("La table aléatoire"), _widget);
-
-        _bouton[i]->setFixedSize(256, 94);
-
-        connect(_bouton[i], SIGNAL(clicked()), _mapper, SLOT(map()));
-        _mapper->setMapping(_bouton[i], i+1);
-    }
+    connect(_widget, SIGNAL(clicked(int)),  this, SLOT(open_window(int)));
 
     checkSucceedTables();
-
-    _quit = new QPushButton(tr("Quitter"));
-    _quit->setFixedSize(70, 40);
-    _quit->setObjectName("QuitButton");
-
-    _texte->setParent(_widget);
-    _texte->move(68, 25);
-
-    _point->setParent(_widget);
-    _point->move(50, 38);
-
-    _quit->setParent(_widget);
-    _quit->move(490, 480);
-
-    for(int i = 0, j = 0; i < 10; ++i)
-    {
-        if(i % 2 == 0)
-            _bouton[i]->move(80, (75 + 80 * j));
-        else
-        {
-            _bouton[i]->move(320, (75 + 80 * j));
-            ++j;
-        }
-    }
-
-
-    connect(_quit, SIGNAL(clicked()), qApp, SLOT(quit()));
-
-    _actualWindow = MainWidget;
 }
+
 void MainWindow::deleteAddIfExist()
 {
 #ifdef Q_OS_LINUX
@@ -387,23 +314,10 @@ void MainWindow::resetCentralWidget()
 
 void MainWindow::updateButtonsLabels()    //change the Buttons's text when changing mode
 {
-    if((_mode == EASY || _mode == MEDIUM) && _actualWindow == MainWidget)
+    if( _actualWindow == FirstWidget)
     {
-        for(int i = 0; i < 10; ++i)
-        {
-            _bouton[i]->setText(tr("La table de ") + QString::number(i+1));
-            _bouton[i]->setStyleSheet("");
-        }
-
+       _widget->updateButtonsLabels(_mode);
         checkSucceedTables();
-    }
-    else if(_mode == HARD && _actualWindow == MainWidget)
-    {
-        for(int i = 0; i < 10; ++i)
-        {
-            _bouton[i]->setText(tr("La table aléatoire"));
-            _bouton[i]->setStyleSheet("");
-        }
     }
     else
         return;
@@ -498,11 +412,8 @@ MainWindow::~MainWindow()
     delete _quitAction, _updateAction, _easyMode, _mediumMode, _hardMode;
     delete _actionGroup;
     delete _check;
-    delete _mapper;
     delete _minCloseMenu;
 
-    for(int i = 0; i < 10; ++i)
-        _bouton[i] = NULL;
 
     _file = NULL;
     _tools = NULL;
@@ -513,10 +424,8 @@ MainWindow::~MainWindow()
     _mediumMode = NULL;
     _hardMode = NULL;
     _actionGroup = NULL;
-    _quit = NULL;
     _minCloseMenu = NULL;
     _check = NULL;
     _widget = NULL;
-    _mapper = NULL;
     _fen = NULL;
 }

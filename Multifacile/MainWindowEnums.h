@@ -26,7 +26,7 @@ typedef enum Mode Mode;
 
 enum Widget
 {
-    MainWidget, SecondWidget
+    FirstWidget, SecondWidget
 };
 
 typedef enum Widget Widget;

@@ -48,6 +48,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "HardModeWindow.h"
 #include "CustomMessageBox.h"
 #include "Menu.h"
+#include "MainWidget.h"
 
 
 class MainWindow : public QMainWindow
@@ -75,14 +76,10 @@ private :
     QWidgetAction *_mediumMode;
     QWidgetAction *_hardMode;
 
-    QLabel *_point;
-    QLabel *_texte;
+
     QLabel *_easyModeActionText;
     QLabel *_mediumModeActionText;
     QLabel *_hardModeActionText;
-
-    QPushButton *_bouton[10];
-    QPushButton *_quit;
 
     CheckUpdate *_check;
 
@@ -99,9 +96,7 @@ private :
 
     QPoint _Diff;
 
-    QSignalMapper *_mapper;
-
-    QWidget *_widget;
+    MainWidget *_widget;
 
     Menu *_modes;
 

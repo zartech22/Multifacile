@@ -10,7 +10,8 @@ SOURCES += \
     DataFileMgr.cpp \
     MainWindow.cpp \
     CustomMessageBox.cpp \
-    Menu.cpp
+    Menu.cpp \
+    MainWidget.cpp
 
 HEADERS += \
     CheckUpdate.h \
@@ -24,7 +25,8 @@ HEADERS += \
     MainWindow.h \
     MainWindowEnums.h \
     CustomMessageBox.h \
-    Menu.h
+    Menu.h \
+    MainWidget.h
 
 RC_FILE = Icon.rc
 
