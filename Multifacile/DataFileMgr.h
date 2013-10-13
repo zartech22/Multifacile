@@ -41,6 +41,8 @@ public:
     static bool hasNoErrorTrue(const QString &fileName, const QString &mode, const unsigned short int &table);
     static bool isAllTableWithNoErrorTrue(const QString &fileName, const QString &mode);
     static bool isAllTableWithNoErrorFalse(const QString &fileName, const QString &mode);
+    static int nextTableWithNoErrorTrue(const QString &fileName, const QString &mode, const unsigned short int table);
+    static int previousTableWithNoErrorTrue(const QString &fileName, const QString &mode, const unsigned short int table);
 
 private:
     QFile _xmlFile;

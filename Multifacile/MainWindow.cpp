@@ -65,13 +65,19 @@ void MainWindow::verifyModesPermissions(bool hasProgressifModeChanged)
      if(_actualWindow == FirstWidget)
          _widget->updateButtonsLabels(_mode, _isProgressifMode);
 
-    if( (!DataFileMgr::isAllTableWithNoErrorTrue("Multifacile.xml", "EasyMode") || !DataFileMgr::isAllTableWithNoErrorTrue("Multifacile.xml", "MediumMode")) && _isProgressifMode )
+    if( !(DataFileMgr::isAllTableWithNoErrorTrue("Multifacile.xml", "EasyMode") && DataFileMgr::isAllTableWithNoErrorTrue("Multifacile.xml", "MediumMode")) && _isProgressifMode )
     {
         _hardModeActionText->setStyleSheet("color: grey; padding-left: 12px;");
         if(_mode == HARD && !DataFileMgr::isAllTableWithNoErrorFalse("Multifacile.xml", "EasyMode") && hasProgressifModeChanged)
+        {
+            unavailableMode(HARD);
             _mediumMode->trigger();
+        }
         else if(_mode == HARD && hasProgressifModeChanged)
+        {
+            unavailableMode(HARD);
             _easyMode->trigger();
+        }
     }
     else
         _hardModeActionText->setStyleSheet("color: white; padding-left: 12px;");
@@ -79,8 +85,12 @@ void MainWindow::verifyModesPermissions(bool hasProgressifModeChanged)
     if(DataFileMgr::isAllTableWithNoErrorFalse("Multifacile.xml", "EasyMode") && _isProgressifMode)
     {
         _mediumModeActionText->setStyleSheet("color: grey; padding-left: 12px;");
+
         if(_mode == MEDIUM && hasProgressifModeChanged)
+        {
+            unavailableMode(MEDIUM);
             _easyMode->trigger();
+        }
     }
     else
         _mediumModeActionText->setStyleSheet("color: white; padding-left: 12px;");
@@ -94,6 +104,9 @@ void MainWindow::changeProgressifMode(QAction *action)
         _mgr.setValue("settings", "progressifMode", "false");
 
     verifyModesPermissions(true);
+
+    if(_actualWindow == SecondWidget)
+        _fen->progressifModeHasChanged(_isProgressifMode);
 }
 
 void MainWindow::checkUpdateReceivedAnswer(UpdateType update)    //slot which is connected to the updateNeeded(UpdateType) signal of check. It processes the answer given by check
@@ -283,7 +296,7 @@ void MainWindow::openWindow(const int nbr)   //open a questionary window with th
     case MEDIUM:
         if(DataFileMgr::hasNoErrorTrue("Multifacile.xml", "EasyMode", nbr) || !_isProgressifMode)
         {
-            _fen = new MediumModeWindow(nbr);
+            _fen = new MediumModeWindow(nbr, _isProgressifMode);
             _fen->setFixedSize(650, 560);
             _fen->setObjectName("Fen");
             this->setCentralWidget(_fen);
@@ -376,7 +389,7 @@ void MainWindow::setMode(QAction *action)   //slot call when user change the mod
         else
             _mediumModeActionText->setStyleSheet("color: white; padding-left: 12px;");
 
-        if( (!DataFileMgr::isAllTableWithNoErrorTrue("Multifacile.xml", "EasyMode") || !DataFileMgr::isAllTableWithNoErrorTrue("Multifacile.xml", "MediumMode")) && _isProgressifMode)
+        if( !(DataFileMgr::isAllTableWithNoErrorTrue("Multifacile.xml", "EasyMode") && DataFileMgr::isAllTableWithNoErrorTrue("Multifacile.xml", "MediumMode")) && _isProgressifMode)
         {
             unavailableMode(HARD);
             if(_mode == MEDIUM)

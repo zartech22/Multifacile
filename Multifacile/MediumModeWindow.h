@@ -46,16 +46,19 @@ class MediumModeWindow : public QWidget
 public :
 
     MediumModeWindow() {}
-    MediumModeWindow(const int multiplicateur);
+    MediumModeWindow(const int multiplicateur, bool actualProgressifMode);
     ~MediumModeWindow();
 
     virtual const unsigned short int getMultiple() { return _multiple; }
+    void progressifModeHasChanged(const bool actualProgressifMode) { _progressifMode = actualProgressifMode; checkTableAvailable();}
 protected :
 
     unsigned short int _multiple;
     unsigned short int _note;
     int _array[10];
     unsigned short int _secondes;
+
+    bool _progressifMode;
 
     Mode _mode;
 
@@ -83,6 +86,7 @@ protected :
     void paintEvent(QPaintEvent *);
     void setNewNumber(const unsigned short int newNumber);
     void startTime();
+    virtual void checkTableAvailable();
 
 signals:
 

@@ -16,7 +16,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "MediumModeWindow.h"
 
-MediumModeWindow::MediumModeWindow(const int multiplicateur) : _secondes(0), _mode(MEDIUM)
+MediumModeWindow::MediumModeWindow(const int multiplicateur, bool actualProgressifMode) : _secondes(0), _mode(MEDIUM), _progressifMode(actualProgressifMode)
 {
     initStyle();
     this->setWindowFlags(Qt::FramelessWindowHint);
@@ -185,14 +185,18 @@ void MediumModeWindow::paintEvent(QPaintEvent *)
 
 void MediumModeWindow::Previous()
 {
-    if(_multiple > 1)
+    if(_progressifMode && _mode == MEDIUM)
+        _multiple = DataFileMgr::previousTableWithNoErrorTrue("Multifacile.xml", "MediumMode", _multiple);
+    else if(_multiple > 1)
         --_multiple;
     setNewNumber(_multiple);
 }
 
 void MediumModeWindow::Next()
 {
-    if(_multiple < 10)
+    if(_progressifMode && _mode == MEDIUM)
+        _multiple = DataFileMgr::nextTableWithNoErrorTrue("Multifacile.xml", "MediumMode", _multiple);
+    else if(_multiple < 10)
        ++ _multiple;
     setNewNumber(_multiple);
 }
@@ -305,6 +309,16 @@ void MediumModeWindow::showEvent(QShowEvent *event)
 {
     _reponses[0]->setFocus();
     QWidget::showEvent(event);
+}
+
+void MediumModeWindow::checkTableAvailable()
+{
+    if(!DataFileMgr::hasNoErrorTrue("Multifacile.xml", "MediumMode", _multiple))
+    {
+        _chronometre->stop();
+        CustomMessageBox(CannotDoThisTable, this, _multiple).exec();
+        emit wasClosed();
+    }
 }
 
 MediumModeWindow::~MediumModeWindow()

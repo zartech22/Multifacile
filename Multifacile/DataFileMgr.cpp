@@ -325,3 +325,40 @@ bool DataFileMgr::isAllTableWithNoErrorFalse(const QString &fileName, const QStr
 
     return AllWithError;
 }
+
+int DataFileMgr::nextTableWithNoErrorTrue(const QString &fileName, const QString &mode, const unsigned short table)
+{
+    QMap<int, bool> *list = DataFileMgr::getNoErrorList(fileName, mode);
+
+    qDebug() << "Next.. function";
+
+    int min = 11;
+
+    for(QMap<int, bool>::iterator it = list->begin(); it != list->end(); ++it)
+    {
+        qDebug() << it.key();
+        if(it.key() <= table)
+            continue;
+        else if((it.key() < min) && it.value())
+            min = it.key();
+    }
+    return (min != 11) ? min : table;
+}
+int DataFileMgr::previousTableWithNoErrorTrue(const QString &fileName, const QString &mode, const unsigned short table)
+{
+    QMap<int, bool> *list = DataFileMgr::getNoErrorList(fileName, mode);
+
+    qDebug() << "Next.. function";
+
+    int min = 0;
+
+    for(QMap<int, bool>::iterator it = list->begin(); it != list->end(); ++it)
+    {
+        qDebug() << it.key();
+        if(it.key() >= table)
+            continue;
+        else if((it.key() > min) && it.value())
+            min = it.key();
+    }
+    return (min != 0) ? min : table;
+}

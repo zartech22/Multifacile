@@ -29,6 +29,8 @@ public:
     ~EasyModeWindow();
 protected:
     QPushButton *_astuces;
+
+    void checkTableAvailable() {}
 public slots:
     void openAstuce() const;
 };
