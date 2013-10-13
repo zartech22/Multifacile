@@ -200,7 +200,7 @@ void CustomMessageBox::displayCannotDoATable(const int &table)
 {
     setFixedSize(434, 179);
 
-    _label->setText("Réussis d'abords à faire la table de " + QString::number(table) + " sans faute pour la faire en mode Moyen.");
+    _label->setText("Réussis d'abords à faire la table de " + QString::number(table) + " sans faute en mode Facile pour la faire en mode Moyen.");
     _label->setWordWrap(true);
     _label->move(45, 50);
 
