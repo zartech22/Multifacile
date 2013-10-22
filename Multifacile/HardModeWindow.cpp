@@ -161,12 +161,13 @@ void HardModeWindow::Retry()
 
     for(int i = 0; i < 10; ++i)
     {
+        _labelCorrection[i]->setVisible(false);
+
         _label[i]->setText("<span style=\"color: #9FC54D\">"+QString::number(_multiple[i])+"</span> x "+QString::number(_array[i]));
         _trueFalseLabel[0][i]->setPixmap(QPixmap(":/image/OpacRight.png"));
         _trueFalseLabel[1][i]->setPixmap(QPixmap(":/image/OpacWrong.png"));
         _reponses[i]->clear();
         _reponses[i]->setVisible(true);
-        delete _labelCorrection[i];
     }
 
     _reponses[0]->setFocus();
