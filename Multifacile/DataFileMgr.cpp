@@ -330,8 +330,6 @@ int DataFileMgr::nextTableWithNoErrorTrue(const QString &fileName, const QString
 {
     QMap<int, bool> *list = DataFileMgr::getNoErrorList(fileName, mode);
 
-    qDebug() << "Next.. function";
-
     int min = 11;
 
     for(QMap<int, bool>::iterator it = list->begin(); it != list->end(); ++it)
@@ -347,8 +345,6 @@ int DataFileMgr::nextTableWithNoErrorTrue(const QString &fileName, const QString
 int DataFileMgr::previousTableWithNoErrorTrue(const QString &fileName, const QString &mode, const unsigned short table)
 {
     QMap<int, bool> *list = DataFileMgr::getNoErrorList(fileName, mode);
-
-    qDebug() << "Next.. function";
 
     int min = 0;
 
