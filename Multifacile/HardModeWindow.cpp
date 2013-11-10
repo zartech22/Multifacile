@@ -19,86 +19,32 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 HardModeWindow::HardModeWindow()
 {
     initStyle();
+    initButtons();
+    initTimer();
+
     Shuffle shuffle(true);
     shuffle.getNumbers(_array, _multiple);
     setWindowFlags(Qt::FramelessWindowHint);
 
     this->setWindowTitle(tr("Table aléaoire"));
 
-
-    _quitter = new QPushButton(tr("Retour"));
-    _quitter->setParent(this);
-    _quitter->setFixedSize(70, 40);
-    _quitter->move(490, 490);
-    _quitter->setObjectName("Quitter");
-
-    _corriger = new QPushButton(tr("Corriger"));
-    _corriger->setParent(this);
-    _corriger->setFixedSize(80, 40);
-    _corriger->move(400, 490);
-    _corriger->setObjectName("Corriger");
-
-    _text = new QLabel(tr("Temps : "), this);
-    _minute = new QLabel("00", this);
-    _deuxPoint = new QLabel(":", this);
-    _seconde = new QLabel("00", this);
-
-    _secondes = 0;
-
-    _text->move(235, 15);
-    _minute->move(330, 15);
-    _deuxPoint->move(355, 15);
-    _seconde->move(380, 15);
-
-    _mapper = new QSignalMapper(this);
-
-
-    for(int i = 0; i < 10; ++i)
-    {
-        _reponses[i] = new QLineEdit(this);
-        _reponses[i]->setAttribute(Qt::WA_TranslucentBackground);
-        _reponses[i]->setFixedSize(302, 69);
-        _reponses[i]->move(185, (60 + 40 * i));
-        _reponses[i]->setValidator(new QRegExpValidator(QRegExp("\\d{0,3}"), _reponses[i]));
-
-        connect(_reponses[i], SIGNAL(returnPressed()), _mapper, SLOT(map()));
-        _mapper->setMapping(_reponses[i], (i + 1));
-
-        _label[i] = new QLabel("<span style=\"color: #9FC54D\">"+QString::number(_multiple[i])+"</span> x "+QString::number(_array[i]), this);
-        _label[i]->setFixedSize(100, 30);
-        _label[i]->move(120, (78 + 40 * i));
-
-        _labelCorrection[i] = new QLabel(this);
-        _labelCorrection[i]->setVisible(false);
-
-        _labelPoint[i] = new QLabel(this);
-        _labelPoint[i]->setPixmap(QPixmap(":/image/Point.png"));
-        _labelPoint[i]->move(105, (90 + 40 * i));
-    }
-
-    for(int j = 0; j < 2; ++j)
-        for(int i = 0; i < 10; ++i)
-        {
-            _trueFalseLabel[j][i] = new QLabel(this);
-            if(j == 0)
-            {
-                _trueFalseLabel[j][i]->setPixmap(QPixmap(":/image/OpacRight.png"));
-                _trueFalseLabel[j][i]->move(475, (70 + 40 * i));
-            }
-            if(j == 1)
-            {
-                _trueFalseLabel[j][i]->setPixmap(QPixmap(":/image/OpacWrong.png"));
-                _trueFalseLabel[j][i]->move(525, (75 + 40 * i));
-            }
-        }
+    initLineEdit();
+    initLabels();
 
     startTime();
 
-    connect(_quitter, SIGNAL(clicked()), this, SIGNAL(wasClosed()));
-    connect(_corriger, SIGNAL(clicked()), this, SLOT(correct()));
-
-    connect(_mapper, SIGNAL(mapped(int)), this, SLOT(newSetFocus(int)));
 }
+
+void HardModeWindow::initTableLabels()
+{
+    for(int i = 0; i < 10; ++i)
+    {
+        _label[i] = new QLabel("<span style=\"color: #9FC54D\">"+QString::number(_multiple[i])+"</span> x "+QString::number(_array[i]), this);
+        _label[i]->setFixedSize(100, 30);
+        _label[i]->move(120, 78 + i * 40);
+    }
+}
+
 void HardModeWindow::correct()
 {
     unsigned short int rep[10];
@@ -149,6 +95,7 @@ void HardModeWindow::correct()
 
     results.exec();
 }
+
 void HardModeWindow::Retry()
 {
     _corriger->setText(tr("Corriger"));

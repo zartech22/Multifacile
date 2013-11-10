@@ -16,9 +16,12 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "MediumModeWindow.h"
 
-MediumModeWindow::MediumModeWindow(const int multiplicateur, bool actualProgressifMode) : _secondes(0), _mode(MEDIUM), _progressifMode(actualProgressifMode)
+MediumModeWindow::MediumModeWindow(const int multiplicateur, bool actualProgressifMode) : _mode(MEDIUM), _progressifMode(actualProgressifMode)
 {
     initStyle();
+    initButtons();
+    initTimer();
+
     this->setWindowFlags(Qt::FramelessWindowHint);
 
     _multiple = multiplicateur;
@@ -28,6 +31,24 @@ MediumModeWindow::MediumModeWindow(const int multiplicateur, bool actualProgress
 
     this->setWindowTitle(tr("Table de ")+QString::number(_multiple));
 
+    initLineEdit();
+    initLabels();
+    initNextPrev();
+
+
+    startTime();
+}
+
+void MediumModeWindow::initStyle()
+{
+    QFile css(":/css/Fen2.css");
+    css.open(QIODevice::ReadOnly);
+    setStyleSheet(css.readAll());
+    css.close();
+}
+
+void MediumModeWindow::initButtons()
+{
     _quitter = new QPushButton(tr("Retour"));
     _quitter->setParent(this);
     _quitter->setFixedSize(70, 40);
@@ -40,6 +61,29 @@ MediumModeWindow::MediumModeWindow(const int multiplicateur, bool actualProgress
     _corriger->move(400, 490);
     _corriger->setObjectName("Corriger");
 
+    connect(_corriger, SIGNAL(clicked()), this, SLOT(correct()));
+    connect(_quitter, SIGNAL(clicked()), this, SIGNAL(wasClosed()));
+}
+
+void MediumModeWindow::initTimer()
+{
+    _text = new QLabel(tr("Temps :"),this);
+    _minute = new QLabel("00", this);
+    _deuxPoint = new QLabel(":", this);
+    _seconde = new QLabel("00", this);
+
+    _text->move(235, 15);
+    _minute->move(330, 15);
+    _deuxPoint->move(355, 15);
+    _seconde->move(380, 15);
+
+    _seconde->setFixedWidth(25);
+
+    _secondes = 0;
+}
+
+void MediumModeWindow::initLineEdit()
+{
     _mapper = new QSignalMapper(this);
 
     for(int i = 0; i < 10; ++i)
@@ -52,11 +96,17 @@ MediumModeWindow::MediumModeWindow(const int multiplicateur, bool actualProgress
 
         connect(_reponses[i], SIGNAL(returnPressed()), _mapper, SLOT(map()));
         _mapper->setMapping(_reponses[i], (i + 1));
+    }
 
-        _label[i] = new QLabel("<span style=\"color: #9FC54D\">"+QString::number(_multiple)+"</span> x "+QString::number(_array[i]), this);
-        _label[i]->setFixedSize(100, 30);
-        _label[i]->move(120, 78 + i * 40);
+    connect(_mapper, SIGNAL(mapped(int)), this, SLOT(newSetFocus(int)));
+}
 
+void MediumModeWindow::initLabels()
+{
+    initTableLabels();
+
+    for(int i = 0; i < 10; ++i)
+    {
         _labelPoint[i] = new QLabel(this);
         _labelPoint[i]->setPixmap(QPixmap(":/image/Point.png"));
         _labelPoint[i]->move(105, (90 + 40 * i));
@@ -80,8 +130,20 @@ MediumModeWindow::MediumModeWindow(const int multiplicateur, bool actualProgress
                 _trueFalseLabel[j][i]->move(525, (75 + 40 * i));
             }
         }
+}
 
+void MediumModeWindow::initTableLabels()
+{
+    for(int i = 0; i < 10; ++i)
+    {
+        _label[i] = new QLabel("<span style=\"color: #9FC54D\">"+QString::number(_multiple)+"</span> x "+QString::number(_array[i]), this);
+        _label[i]->setFixedSize(100, 30);
+        _label[i]->move(120, 78 + i * 40);
+    }
+}
 
+void MediumModeWindow::initNextPrev()
+{
     for(int i = 0; i < 2; ++i)
         _nextPrev[i] = new QPushButton(this);
 
@@ -94,34 +156,8 @@ MediumModeWindow::MediumModeWindow(const int multiplicateur, bool actualProgress
     _nextPrev[0]->move(20, 240);
     _nextPrev[1]->move(570, 240);
 
-    _text = new QLabel(tr("Temps :"),this);
-    _minute = new QLabel("00", this);
-    _deuxPoint = new QLabel(":", this);
-    _seconde = new QLabel("00", this);
-
-    _text->move(235, 15);
-    _minute->move(330, 15);
-    _deuxPoint->move(355, 15);
-    _seconde->move(380, 15);
-
-    startTime();
-
-    connect(_corriger, SIGNAL(clicked()), this, SLOT(correct()));
-    connect(_quitter, SIGNAL(clicked()), this, SIGNAL(wasClosed()));
-
-
     connect(_nextPrev[0], SIGNAL(clicked()), this, SLOT(Previous()));
     connect(_nextPrev[1], SIGNAL(clicked()), this, SLOT(Next()));
-
-    connect(_mapper, SIGNAL(mapped(int)), this, SLOT(newSetFocus(int)));
-}
-
-void MediumModeWindow::initStyle()
-{
-    QFile css(":/css/Fen2.css");
-    css.open(QIODevice::ReadOnly);
-    setStyleSheet(css.readAll());
-    css.close();
 }
 
 void MediumModeWindow::newSetFocus(const int number)
