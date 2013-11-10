@@ -40,7 +40,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "Correction.h"
 #include "CustomMessageBox.h"
 
-class MediumModeWindow : public QWidget
+class MediumModeWindow : public QWidget  // Classe representant la fenetre des tables de mode moyen.
 {
     Q_OBJECT
 public :
@@ -49,8 +49,8 @@ public :
     MediumModeWindow(const int multiplicateur, bool actualProgressifMode);
     ~MediumModeWindow();
 
-    virtual const unsigned short int getMultiple() { return _multiple; }
-    void progressifModeHasChanged(const bool actualProgressifMode) { _progressifMode = actualProgressifMode; checkTableAvailable();}
+    virtual const unsigned short int getMultiple() { return _multiple; }  //retourne la table en cours
+    void progressifModeHasChanged(const bool actualProgressifMode) { _progressifMode = actualProgressifMode; checkTableAvailable();}  //si changement de mode de progression, on verifie si la table est disponible
 protected :
 
     unsigned short int _multiple;
@@ -81,28 +81,34 @@ protected :
 
     QTimer *_chronometre;
 
-    void initStyle();
-    void closeEvent(QCloseEvent *event);
-    void paintEvent(QPaintEvent *);
-    void setNewNumber(const unsigned short int newNumber);
-    void startTime();
+    void initStyle();  //initialise le style
+    virtual void initButtons();  //initialise les boutons
+    void initTimer();  //initialise l'affichage du temps
+    void initLineEdit();  //initailise les lineEdit
+    void initLabels();  //Initialise le texte
+    virtual void initTableLabels();  //initialise le texte des multiplications
+    void initNextPrev();  //initialise les boutons suivant et precedent
+    void closeEvent(QCloseEvent *event);  //reimplementation
+    void paintEvent(QPaintEvent *);  //reimplementation pour prise en charge du css
+    void setNewNumber(const unsigned short int newNumber);  //change de table
+    void startTime();  //lance le timer
     virtual void checkTableAvailable();
 
 signals:
 
-    void addSeconde(int);
-    void wasClosed();
+    void addSeconde(int);  //emis lorsqu'on doit ajouter une seconde
+    void wasClosed();  //emis losrqu'on quitte la fenetre de table
 
 public slots:
 
-    virtual void correct();
-    void newSecond();
-    void newSetFocus(const int number);
-    void Next();
-    void Previous();
-    virtual void Retry();
-    void showEvent(QShowEvent *);
-    void updateLabel(const int temps) const;
+    virtual void correct();  //Fait la correction
+    void newSecond();  //ajoute une seconde
+    void newSetFocus(const int number);  //fait passer le focus d'un lineEdit a un autre
+    void Next();  //fait passer à la table suivante
+    void Previous();  //fait passer à la table precedente
+    virtual void Retry();  //remet tout à zero pour un nouvel essai
+    void showEvent(QShowEvent *);  //reimplementation pour donner le focus a la premiere lineEdit au debut
+    void updateLabel(const int temps) const;  //met a jour le texte donnant le temps
 
 };
 

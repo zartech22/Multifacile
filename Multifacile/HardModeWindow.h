@@ -14,13 +14,14 @@ You should have received a copy of the GNU General Public License along
 with this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.*/
 
+
 #ifndef HARDMODEWINDOW_H
 #define HARDMODEWINDOW_H
 
 #include "MediumModeWindow.h"
 #include "CustomMessageBox.h"
 
-class HardModeWindow : public MediumModeWindow
+class HardModeWindow : public MediumModeWindow  // Classe representant la fenetre de la table mode difficile. Herite de MediumModeWindow
 {
     Q_OBJECT
 
@@ -28,12 +29,13 @@ public:
     HardModeWindow();
     ~HardModeWindow() {}
 
-    const unsigned short int getMultiple() { return 1; }
+    const unsigned short int getMultiple() { return 1; } //reimplementation
 private:
     unsigned short int _multiple[10];
-    void correct();
+    void correct();  //reimplementation
+    void initTableLabels();
 public slots:
-    void Retry();
+    void Retry();  //reimplementation
 };
 
 #endif // HARDMODEWINDOW_H

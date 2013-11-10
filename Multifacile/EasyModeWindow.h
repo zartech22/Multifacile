@@ -21,7 +21,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "Shuffle.h"
 #include "CustomMessageBox.h"
 
-class EasyModeWindow : public MediumModeWindow
+class EasyModeWindow : public MediumModeWindow  // Classe representant la fenetre de table en mode facile. Herite de MediumModeWindow
 {
     Q_OBJECT
 public:
@@ -30,9 +30,10 @@ public:
 protected:
     QPushButton *_astuces;
 
-    void checkTableAvailable() {}
+    void checkTableAvailable() {} //reimplementation
+    void initButtons();
 public slots:
-    void openAstuce() const;
+    void openAstuce() const;  //ouvre la fenetre astuce
 };
 
 #endif // SHUFFLEQUESTIONNAIRE_H
