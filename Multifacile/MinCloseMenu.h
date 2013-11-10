@@ -22,7 +22,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <QHBoxLayout>
 #include <QApplication>
 
-class MinCloseMenu : public QWidget
+class MinCloseMenu : public QWidget  // Classe regroupant la croix (fermer) de la fenetre et son underscore (reduire)
 {
     Q_OBJECT
 

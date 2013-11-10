@@ -270,18 +270,6 @@ void MainWindow::closeEvent(QCloseEvent * event)
     event->accept();
 }
 
-void MainWindow::mouseMoveEvent(QMouseEvent *event)
-{
-    if(_ClickOnWindow)
-        window()->move(event->globalPos() - _Diff);
-}
-
-void MainWindow::mousePressEvent(QMouseEvent *event)
-{
-    _ClickOnWindow = true;
-    _Diff = event->pos();
-}
-
 void MainWindow::openWindow(const int nbr)   //open a questionary window with the number given by the map signal of mapper. The questionary window is create in function of the Mode
 {
     switch(_mode)
@@ -317,12 +305,6 @@ void MainWindow::openWindow(const int nbr)   //open a questionary window with th
         break;
     }
     _actualWindow = SecondWidget;
-}
-
-void MainWindow::resetCentralWidget()
-{
-    createCentralWidget();
-    this->setCentralWidget(_widget);
 }
 
 void MainWindow::updateButtonsLabels()    //change the Buttons's text when changing mode

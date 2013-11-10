@@ -22,11 +22,11 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <QEvent>
 #include <QToolTip>
 
-class Menu : public QMenu
+class Menu : public QMenu  // Classe qui reimplement une fonction de la classe QMenu pour affciher des textes contextuel sur les modes
 {
 public:
     Menu(QString title, QWidget *parent = 0) : QMenu(title, parent) { }
-    virtual bool event(QEvent *e);
+    virtual bool event(QEvent *e);  //reimplementation
 };
 
 #endif // MENUBAR_H

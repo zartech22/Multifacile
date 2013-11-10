@@ -17,7 +17,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #ifndef CHECKUPDATE_H
 #define CHECKUPDATE_H
 
-#define VERSION 330
+#define VERSION 340
 
 #ifdef DEBUG
     #define NETWORKLIB "networkd"
@@ -57,13 +57,13 @@ enum UpdateType
 
 typedef enum UpdateType UpdateType;
 
-class CheckUpdate : public QObject
+class CheckUpdate : public QObject  // Classe gérant la mise à jour de Multifacile
 {
     Q_OBJECT
 public:
     CheckUpdate(QObject *parent,  bool isUserAction = false);
-    void tryConnection(bool isUserAction = false) { _isUserAction = isUserAction; _net->tryConnection("multifacile.no-ip.org", 8087); }
-    void disconnectFromHost() { _net->disconnectFromHost(); }
+    void tryConnection(bool isUserAction = false) { _isUserAction = isUserAction; _net->tryConnection("multifacile.no-ip.org", 8087); }  //Lance une connection au serveur
+    void disconnectFromHost() { _net->disconnectFromHost(); }  //deconecte du serveur
     bool isUserAction() const { return _isUserAction; }
     void runMultifacileUpdate() { START_UPDATER(); }
     void runUpdaterUpdate() { START_ADD(); }
@@ -71,12 +71,12 @@ private:
     QLibrary _lib;
     Network *_net;
     int _actualVersion;
-    bool _isUserAction;
+    bool _isUserAction;  // Vrai si c'est l'utilisateur qui a demande a verifier les mise a jours Faux sinon
 public slots:
     void dataReceived(QByteArray*);
-    void Connected() { _net->sendVersion(_actualVersion); }
+    void Connected() { _net->sendVersion(_actualVersion); }  //Lorsque connecte au serveur, envoyer la version actuel
 signals:
-    void checkUpdateAnswer(UpdateType);
+    void checkUpdateAnswer(UpdateType);  //Envoie de la reponse : mise a jour disponoble pour multifacile ou pour l'updater, pas de mise à jour
     void error();
 };
 

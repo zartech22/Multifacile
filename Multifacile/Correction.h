@@ -31,7 +31,7 @@ enum RecordState
 
 typedef enum RecordState RecordState;
 
-class Correction : public QObject
+class Correction : public QObject  // Classe donnant la correction pour une classe : Le texte à affciher pour la correction, la note
 {
     Q_OBJECT
 
@@ -41,7 +41,7 @@ public:
 
     ~Correction();
 
-    int getCorrection(QString texte[], bool isGood[]);
+    int getCorrection(QString texte[], bool isGood[]);  //renvoie la note, modifie texte en lui attribuant le texte a affciher pour la correction, initialise isGood (Vrai si reponse correcte Faux sinon)
 
 private:
     unsigned short int _seconds;
@@ -58,16 +58,11 @@ private:
 
     Mode _difficultyMode;
 
-    void manageTime();
-    void notation(unsigned short int resultat[], bool isGood[]);
-    void doCorrection(QString texte[], bool isGood[], unsigned short int resultat[]) const;
+    void manageTime();  //enregistre le temps et la reussite ou non de la table dans le fichier xml
+    void notation(unsigned short int resultat[], bool isGood[]);  //initialise isGood et modifie la note
+    void doCorrection(QString texte[], bool isGood[], unsigned short int resultat[]) const;  //modifie texte avec ou sans resultat en fonction de isGood
+    QString Correction::getModeGroupName() const;  //donne la chaine de caractere correspondant au mode
 
-    QString getModeGroupName() const;
-    QString getModeKeyName() const;
-signals:
-    void newRecord(RecordState, int);
-public slots:
-    void isRecordValid(RecordState, int);
 };
 
 #endif // CORRECTION_H

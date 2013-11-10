@@ -51,7 +51,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MainWidget.h"
 
 
-class MainWindow : public QMainWindow
+class MainWindow : public QMainWindow  // Classe representant la fenetre. Contient d'autres "fenetres" de type MediumModeWindow (et enfant) ou MainWidget
 {
     Q_OBJECT
 public :
@@ -102,33 +102,33 @@ private :
 
     DataFileMgr _mgr;
 
-    void checkSucceedTables();
-    void verifyModesPermissions(bool hasProgressifModeChanged = false);
-    void createCentralWidget();
-    void deleteAddIfExist();
-    void doActions();
-    void doActionGroup();
-    void doMenuBar();
-    void initStyle();
+    void checkSucceedTables();  //lance la verification de la reussite des tables
+    void verifyModesPermissions(bool hasProgressifModeChanged = false);  //modife le style des modes en fonction du mode de progression
+    void createCentralWidget();  //creer la fenetre de presentation de table
+    void deleteAddIfExist();  //supprime le fichier add (ou add.exe) s'il existe
+    void doActions();  //creer les items des menus
+    void doActionGroup();  //creer les groupes d'items des menus
+    void doMenuBar();  //creer la barre de menus
+    void initStyle();  //initialise le style
 
-    void closeEvent(QCloseEvent * event);
-    void mouseMoveEvent(QMouseEvent *event);
-    void mousePressEvent(QMouseEvent *event);
+    void closeEvent(QCloseEvent * event);  //reimplementation
+    void mouseMoveEvent(QMouseEvent *event) { if(_ClickOnWindow) window()->move(event->globalPos() - _Diff); }  // (les trois prochaine fonctions)  Gestion du deplacement de la fenetre
+    void mousePressEvent(QMouseEvent *event) {  _ClickOnWindow = true; _Diff = event->pos(); }
     void mouseReleaseEvent(QMouseEvent *) { _ClickOnWindow = false; }
-    void setNewSecondWindow() { openWindow(_fen->getMultiple()); }
-    void unavailableMode(Mode mode);
-    void unavailableTable(const unsigned short int &table) { CustomMessageBox(CannotDoThisTable, this, table).exec(); }
-    void updateButtonsLabels();
+    void setNewSecondWindow() { openWindow(_fen->getMultiple()); }  //remplace la fentre de table actuellle par celle d'un autre mode
+    void unavailableMode(Mode mode);  //Indique un mode inacessible
+    void unavailableTable(const unsigned short int &table) { CustomMessageBox(CannotDoThisTable, this, table).exec(); }  //indique une table inacessible
+    void updateButtonsLabels();  //Lance la mise a jour des boutons de choix de table
 
 public slots :
 
-    void changeProgressifMode(QAction*);
-    void checkUpdateReceivedAnswer(UpdateType update);
-    void socketError();
-    void openWindow(const int nbr);
-    void resetCentralWidget();
-    void setMode(QAction *action);
-    void verification() { _check->tryConnection(true); }
+    void changeProgressifMode(QAction*);  //traitement du changement de mode progressif
+    void checkUpdateReceivedAnswer(UpdateType update);  //reception de la reponse du serveur de mise à jour et traitement
+    void socketError();  //indique une erreur de connection
+    void openWindow(const int nbr);  //ouvre une fenetre de table dans le mode adequat
+    void resetCentralWidget() { createCentralWidget(); this->setCentralWidget(_widget); }  //recreer et reeafiche la fenetre de presentationd de table
+    void setMode(QAction *action);  //traite le changement de mode
+    void verification() { _check->tryConnection(true); }  //lance une verification de mise a jour
 };
 
 #endif // FENETRE_PRINCIPALE_H
