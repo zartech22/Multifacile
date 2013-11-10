@@ -33,6 +33,7 @@ int Correction::getCorrection(QString texte[], bool isGood[])
 
     return _note;
 }
+
 void Correction::notation(unsigned short int resultat[], bool isGood[])
 {
     if(!_isHardMode)
@@ -64,6 +65,7 @@ void Correction::notation(unsigned short int resultat[], bool isGood[])
         }
     }
 }
+
 void Correction::doCorrection(QString texte[], bool isGood[], unsigned short int resultat[]) const
 {
     for(int i = 0; i < 10; ++i)
@@ -78,15 +80,7 @@ void Correction::manageTime()
     else
         _manager->setValue(getModeGroupName(), _seconds, (_note == 10) , _Multiple);
 }
-void Correction::isRecordValid(RecordState record, int lastRecordTime)
-{
-    if(record == NORECORD)
-        emit newRecord(NORECORD, lastRecordTime);
-    else if(_note == 10)  // if record != NORECORD then record == RECORD
-        emit newRecord(RECORD, lastRecordTime);
-    else
-        emit newRecord(UNVALIDRECORD, lastRecordTime);
-}
+
 QString Correction::getModeGroupName() const
 {
     if(_isHardMode)
@@ -98,16 +92,11 @@ QString Correction::getModeGroupName() const
     else
         return QString();
 }
-QString Correction::getModeKeyName() const
-{
-    if(_difficultyMode == EASY || _difficultyMode == MEDIUM)
-        return QString("TableDe"+QString::number(_Multiple));
-    else
-        return QString();
-}
+
 Correction::~Correction()
 {
-    delete _manager;
+    if(_seconds != 0)
+        delete _manager;
 
     _manager = NULL;
 }
