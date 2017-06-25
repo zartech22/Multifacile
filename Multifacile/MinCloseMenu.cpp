@@ -16,32 +16,19 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "MinCloseMenu.h"
 
-MinCloseMenu::MinCloseMenu(QWidget *parent) : QWidget(parent), _ParentWidget(parent)
+MinCloseMenu::MinCloseMenu(QWidget *parent) : QWidget(parent), _ParentWidget(parent), _cross("X"), _mini("_")
 {
-    _cross = new QPushButton("X");
-    _mini = new QPushButton("_");
+    _cross.setObjectName("Cross");
+    _mini.setObjectName("mini");
 
-    _cross->setObjectName("Cross");
-    _mini->setObjectName("mini");
+    _cross.setDefault(false);
+    _mini.setDefault(false);
 
-    _cross->setDefault(false);
-    _mini->setDefault(false);
+    _layout.addWidget(&_mini);
+    _layout.addWidget(&_cross);
 
-    _layout = new QHBoxLayout;
+    this->setLayout(&_layout);
 
-    _layout->addWidget(_mini);
-    _layout->addWidget(_cross);
-
-    this->setLayout(_layout);
-
-    connect(_cross, SIGNAL(clicked()), _ParentWidget, SLOT(close()));
-    connect(_mini, SIGNAL(clicked()), _ParentWidget, SLOT(showMinimized()));
-}
-MinCloseMenu::~MinCloseMenu()
-{
-    delete _cross, _mini, _layout;
-
-    _cross = nullptr;
-    _mini = nullptr;
-    _layout = nullptr;
+    connect(&_cross, SIGNAL(clicked()), _ParentWidget, SLOT(close()));
+    connect(&_mini, SIGNAL(clicked()), _ParentWidget, SLOT(showMinimized()));
 }
