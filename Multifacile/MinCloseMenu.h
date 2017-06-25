@@ -27,12 +27,12 @@ class MinCloseMenu : public QWidget  // Classe regroupant la croix (fermer) de l
     Q_OBJECT
 
 public:
-    MinCloseMenu(QWidget *parent = 0);
-    ~MinCloseMenu();
+    MinCloseMenu(QWidget *parent);
+    ~MinCloseMenu() = default;
 private:
-    QHBoxLayout *_layout;
+    QHBoxLayout _layout;
 
-    QPushButton *_mini, *_cross;
+    QPushButton _mini, _cross;
 
     QWidget *_ParentWidget;
 };
