@@ -25,7 +25,7 @@ Shuffle::Shuffle(bool shuffle) : _needShuffle(shuffle) {}
 
 void Shuffle::getNumbers(std::array<unsigned short, 10> &tab)
 {
-    for(int i = 0; i < tab.size(); ++i)
+    for(int i = 0; i < 10; ++i) // 10 as defined in parameter
         tab.at(i) = i + 1;
 
     if(_needShuffle)
