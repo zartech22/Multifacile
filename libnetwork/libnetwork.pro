@@ -26,7 +26,6 @@ DESTDIR = $${BIN_PATH}/debug
 TARGET = networkd
 }
 
-
 TEMPLATE = lib
 
 DEFINES += NETWORK_LIBRARY

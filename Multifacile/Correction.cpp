@@ -16,8 +16,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "Correction.h"
 
-const QString Correction::_goodAnswer("<span style=\"color: #9FC54D;\">%1 C'est la bonne réponse !</span>");
-const QString Correction::_badAnswer("<span style=\"color: red;\">%1</span><span style=\"color: #9FC54D;\"> La bonne réponse était %2</span>");
+const QString Correction::_goodAnswer("<span style=\"color: #9FC54D;\">%1 C'est la bonne rÃ©ponse !</span>");
+const QString Correction::_badAnswer("<span style=\"color: red;\">%1</span><span style=\"color: #9FC54D;\"> La bonne rÃ©ponse Ã©tait %2</span>");
 
 Correction::Correction(Mode mode, operande multiple, std::array<operande, 10> &order, std::array<operande, 10> &userAnswers, const operande time) :
     _difficultyMode(mode), _seconds(time), _note(10), _multiple({false, multiple})

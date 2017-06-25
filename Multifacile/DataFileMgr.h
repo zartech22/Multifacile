@@ -1,4 +1,4 @@
-/*Copyright (C) <2013> <Plestan> <Kévin>
+/*Copyright (C) <2013> <Plestan> <KÃ©vin>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <QDebug>
 #include "Include.h"
 
-class DataFileMgr  // Classe gérant l'acces aux donnees contenues dans le fichier xml
+class DataFileMgr  // Classe gÃ©rant l'acces aux donnees contenues dans le fichier xml
 {
 public:
     DataFileMgr(const QString &fileName);

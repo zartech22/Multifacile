@@ -15,7 +15,7 @@ MainWidget::MainWidget(Mode mode) : QWidget()
         if(mode == EASY || mode == MEDIUM)
             _bouton[i] = new QPushButton(tr("La table de ")+QString::number(i+1), this);
         else // _mode == HARD
-            _bouton[i] = new QPushButton(tr("La table aléatoire"), this);
+            _bouton[i] = new QPushButton(tr("La table alÃ©atoire"), this);
 
         _bouton[i]->setFixedSize(302, 75);
 
@@ -50,7 +50,7 @@ MainWidget::MainWidget(Mode mode) : QWidget()
     }
 
 //    _tables = new QPushButton(tr("Tables"), this);
-    //_problems = new QPushButton(tr("Problèmes"), this);
+    //_problems = new QPushButton(tr("ProblÃ¨mes"), this);
 
 //    _tables->setFixedSize(256, 94);
     //_problems->setFixedSize(256, 94);
@@ -97,7 +97,7 @@ void MainWidget::updateButtonsLabels(Mode mode)
     {
         for(int i = 0; i < 10; ++i)
         {
-            _bouton[i]->setText(tr("La table aléatoire"));
+            _bouton[i]->setText(tr("La table alÃ©atoire"));
             _bouton[i]->setStyleSheet("");
         }
     }

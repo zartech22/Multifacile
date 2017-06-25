@@ -1,4 +1,4 @@
-/*Copyright (C) <2013> <Plestan> <Kévin>
+/*Copyright (C) <2013> <Plestan> <KÃ©vin>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -194,7 +194,7 @@ void MainWindow::doActions()
 {
     _quitAction = new QAction(QIcon(":/icon/sortie.png"), tr("&Quitter"), this); //the file comes of a Qt ressource file (it's faster than charge a directory's file)
 
-    _updateAction = new QAction(QIcon(":/icon/update.png"), tr("&Vérifier les mise à jours"), this);  //idem
+    _updateAction = new QAction(QIcon(":/icon/update.png"), tr("&VÃ©rifier les mise Ã  jours"), this);  //idem
 
     _easyMode = new QWidgetAction(this);
     _easyModeActionText = new QLabel("Facile");
@@ -209,7 +209,7 @@ void MainWindow::doActions()
     _hardModeActionText = new QLabel("Difficile");
     _hardMode->setDefaultWidget(_hardModeActionText);
 
-    _progressifMode = new QAction(tr("Progression pas à pas"), this);
+    _progressifMode = new QAction(tr("Progression pas Ã  pas"), this);
 
     _freeMode = new QAction(tr("Progression libre"), this);
 }
@@ -242,12 +242,12 @@ void MainWindow::doMenuBar()
     _easyMode->setCheckable(true);
     _easyMode->setToolTip("Table dans l'ordre avec astuces");
     _mediumMode->setCheckable(true);
-    _mediumMode->setToolTip("Table en désordre sans astuces");
+    _mediumMode->setToolTip("Table en dÃ©sordre sans astuces");
     _hardMode->setCheckable(true);
-    _hardMode->setToolTip("Table mystère...");
+    _hardMode->setToolTip("Table mystÃ¨re...");
     _progressifMode->setCheckable(true);
     _progressifMode->setChecked(_isProgressifMode);
-    _progressifMode->setToolTip("Tu est obligé de faire \nles tables par modes \n(du plus facile au plus difficile)");
+    _progressifMode->setToolTip("Tu est obligÃ© de faire \nles tables par modes \n(du plus facile au plus difficile)");
     _freeMode->setCheckable(true);
     _freeMode->setChecked(!_isProgressifMode);
     _freeMode->setToolTip("Tu fait la table que tu veux \ndans le mode que tu veux");

@@ -1,4 +1,4 @@
-/*Copyright (C) <2013> <Plestan> <KÈvin>
+/*Copyright (C) <2013> <Plestan> <K√©vin>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@ HardModeWindow::HardModeWindow() : AbstractModeWindow()
 
     initLabels();
 
-    this->setWindowTitle(tr("Table alÈaoire"));
+    this->setWindowTitle(tr("Table al√©aoire"));
 }
 
 void HardModeWindow::initAskLabels()

@@ -13,7 +13,7 @@ Updater::Updater() : QProgressDialog(), lib(NETWORK)
     ToDoMessageSize = 0;
     FilesNumber = 0;
     downloaded = false;
-    this->setLabelText("Téléchargement de la mise à  jour en cours...");
+    this->setLabelText("TÃ©lÃ©chargement de la mise Ã   jour en cours...");
     this->setCancelButtonText("&Annuler");
     this->setAutoClose(false);
     this->setAutoReset(false);
