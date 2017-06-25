@@ -24,7 +24,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <QApplication>
 
 #include "Include.h"
-#include  "DataFileMgr.h"
+#include "DataFileMgr.h"
 
 class MainWidget : public QWidget  // Classe representant la fenetre de presentation des tables
 {

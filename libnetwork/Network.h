@@ -21,6 +21,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include <QString>
 #include <QTcpSocket>
+#include <QDataStream>
 #include <memory>
 
 enum class QUIntSize
