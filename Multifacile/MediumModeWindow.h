@@ -1,4 +1,4 @@
-/*Copyright (C) <2013> <Plestan> <Kévin>
+/*Copyright (C) <2013> <Plestan> <KÃ©vin>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -73,9 +73,9 @@ protected :
 public slots:
 
     virtual void correct();  //Fait la correction
-    void Next();  //fait passer à la table suivante
-    void Previous();  //fait passer à la table precedente
-    virtual void Retry();  //remet tout à zero pour un nouvel essai
+    void Next();  //fait passer Ã  la table suivante
+    void Previous();  //fait passer Ã  la table precedente
+    virtual void Retry();  //remet tout Ã  zero pour un nouvel essai
 };
 
 #endif // FEN_SECONDAIRE_H

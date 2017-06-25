@@ -14,12 +14,12 @@ ProblemWidget::ProblemWidget() : QWidget()
     }
 
     _tables = new QPushButton(tr("Tables"), this);
-    _problems = new QPushButton(tr("Problèmes"), this);
+    _problems = new QPushButton(tr("ProblÃ¨mes"), this);
     _chooseATable = new QPushButton(tr("Choisir une table"), this);
     _correction = new QPushButton(tr("Corriger"), this);
     _quit = new QPushButton(tr("Quitter"), this);
     _answer = new QLineEdit(this);
-    _answer->setPlaceholderText(tr("Ta réponse"));
+    _answer->setPlaceholderText(tr("Ta rÃ©ponse"));
     _answer->setValidator(new QRegExpValidator(QRegExp("\\d{0,3}"), _answer));
 
     _tables->setFixedSize(256, 94);
@@ -46,7 +46,7 @@ ProblemWidget::ProblemWidget() : QWidget()
                            border-radius: 4px; \
                            padding: 25px;");
 
-    _text = new QLabel(tr("Vérifie que tu connais bien tes tables grâce aux problèmes !"), this);
+    _text = new QLabel(tr("VÃ©rifie que tu connais bien tes tables grÃ¢ce aux problÃ¨mes !"), this);
     _text->setFixedSize(500, 200);
     _text->move(100, 105);
 
