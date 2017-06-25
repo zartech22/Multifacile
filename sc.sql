@@ -1,0 +1,1 @@
+INSERT INTO problems VALUES('', 'Gildas veut acheter 5 paquets de bonbons à %d euros l''unité, pour combien en aura-t-il ?');
