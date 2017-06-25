@@ -17,7 +17,7 @@ MainWidget::MainWidget(Mode mode) : QWidget()
         else // _mode == HARD
             _bouton[i] = new QPushButton(tr("La table aléatoire"), this);
 
-        _bouton[i]->setFixedSize(256, 94);
+        _bouton[i]->setFixedSize(302, 75);
 
         connect(_bouton[i], SIGNAL(clicked()), _mapper, SLOT(map()));
         _mapper->setMapping(_bouton[i], i+1);
@@ -30,10 +30,10 @@ MainWidget::MainWidget(Mode mode) : QWidget()
     _quit->setObjectName("QuitButton");
 
     _texte->setParent(this);
-    _texte->move(68, 25);
+    _texte->move(68, 40);
 
     _point->setParent(this);
-    _point->move(50, 38);
+    _point->move(50, 53);
 
     _quit->setParent(this);
     _quit->move(490, 480);
@@ -41,17 +41,30 @@ MainWidget::MainWidget(Mode mode) : QWidget()
     for(int i = 0, j = 0; i < 10; ++i)
     {
         if(i % 2 == 0)
-            _bouton[i]->move(80, (75 + 80 * j));
+            _bouton[i]->move(40, (110 + 70 * j));
         else
         {
-            _bouton[i]->move(320, (75 + 80 * j));
+            _bouton[i]->move(320, (110 + 70 * j));
             ++j;
         }
     }
 
+//    _tables = new QPushButton(tr("Tables"), this);
+    //_problems = new QPushButton(tr("Problèmes"), this);
+
+//    _tables->setFixedSize(256, 94);
+    //_problems->setFixedSize(256, 94);
+
+//    _tables->move(68, 5);
+    //_problems->move(350, 5);
+
+//    _tables->setStyleSheet("background-image: url(\":/image/Bouton.png\")");
+    //_problems->setStyleSheet("background-image: url(\":/image/Bouton_inacessible.png\")");
+
 
     connect(_quit, SIGNAL(clicked()), qApp, SLOT(quit()));
     connect(_mapper, SIGNAL(mapped(int)), this, SIGNAL(clicked(int)));
+    //connect(_problems, SIGNAL(clicked()), this, SIGNAL(goToProblems()));
 }
 
 void MainWidget::checkSucceedTables(Mode mode)
@@ -62,10 +75,9 @@ void MainWidget::checkSucceedTables(Mode mode)
 
         for(QMap<int, bool>::Iterator it = list->begin(); it != list->end(); ++it)
             if(it.value())
-                _bouton[ (it.key() - 1)]->setStyleSheet("background-image: url(\":/image/Bouton_succes.png\");");
+                _bouton[ (it.key() - 1)]->setStyleSheet("background-image: url(\":/image/TextBoxSuccess.png\");");
 
         delete list;
-
     }
 }
 
@@ -97,14 +109,14 @@ void MainWidget::updateButtonsLabels(Mode mode, bool isProgressifMode)
     {
         for(int i = 0; i < 10; ++i)
             if(!DataFileMgr::hasNoErrorTrue("Multifacile.xml", "EasyMode", (i + 1)))
-                _bouton[i]->setStyleSheet("background-image: url(\":/image/Bouton_inacessible.png\"); color: grey;");
+                _bouton[i]->setStyleSheet("background-image: url(\":/image/TextBox_inacessible.png\"); color: grey;");
     }
     else if(mode == MEDIUM && !isProgressifMode)
         for(int i = 0; i < 10; ++i)
         {
-            if(!DataFileMgr::hasNoErrorTrue("Multifacile.xml", "EasyMode", (i + 1)) && !DataFileMgr::hasNoErrorTrue("Multifacile.xml", "MediumMode", (i + 1)))
+            if( !DataFileMgr::hasNoErrorTrue("Multifacile.xml", "MediumMode", (i + 1)))
                 _bouton[i]->setStyleSheet("");
             else
-                _bouton[i]->setStyleSheet("background-image: url(\":/image/Bouton_succes.png\");");
+                _bouton[i]->setStyleSheet("background-image: url(\":/image/TextBoxSuccess.png\");");
         }
 }

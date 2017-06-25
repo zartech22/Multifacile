@@ -20,15 +20,20 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <cstdlib>
 #include <ctime>
 
+#include <array>
+
 class Shuffle  // Classe melengeant les tables
 {
 public:
     Shuffle(bool shuffle);
-    void getNumbers(int tab[]);  //initialise un tableau allant de 1 à 10 dans l'ordre ou dans le desordre en fonction de _needShuffle
-    void getNumbers(int tab[], unsigned short int array[]);  //initialise 2 tableau allant de 1 à 10 dans le desordre
+
+    void getNumbers(std::array<unsigned short int, 10> &tab);
+    void getNumbers(std::array<unsigned short int, 10> &tab, std::array<unsigned short int, 10> &array);
+
+    static int random(int a, int b);
 private:
     bool _needShuffle;
-    unsigned short int _numbers[10];
+    std::array<unsigned char, 10> _numbers;
 };
 
 #endif // SHUFFLE_H

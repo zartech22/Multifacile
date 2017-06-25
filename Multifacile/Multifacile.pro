@@ -10,8 +10,9 @@ SOURCES += \
     DataFileMgr.cpp \
     MainWindow.cpp \
     CustomMessageBox.cpp \
-    Menu.cpp \
-    MainWidget.cpp
+    MainWidget.cpp \
+    ProblemWidget.cpp \
+    AbstractModeWindow.cpp
 
 HEADERS += \
     CheckUpdate.h \
@@ -23,17 +24,20 @@ HEADERS += \
     MinCloseMenu.h \
     DataFileMgr.h \
     MainWindow.h \
-    MainWindowEnums.h \
     CustomMessageBox.h \
     Menu.h \
-    MainWidget.h
+    MainWidget.h \
+    ProblemWidget.h \
+    Include.h \
+    AbstractModeWindow.h
 
-RC_FILE = Icon.rc
 
-QT += network xml
+QT += network xml sql widgets
 
 RESOURCES += \
     ressource.qrc \
+
+RC_FILE += Icon.rc
 
 TRANSLATIONS += en.ts
 

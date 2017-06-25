@@ -23,7 +23,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <QSignalMapper>
 #include <QApplication>
 
-#include "MainWindowEnums.h"
+#include "Include.h"
 #include  "DataFileMgr.h"
 
 class MainWidget : public QWidget  // Classe representant la fenetre de presentation des tables
@@ -42,11 +42,14 @@ private:
 
     QPushButton *_bouton[10];
     QPushButton *_quit;
+    //QPushButton *_tables;
+    //QPushButton *_problems;
 
     QSignalMapper *_mapper;
     
 signals:
     void clicked(int);
+    //void goToProblems();
         
 };
 

@@ -16,9 +16,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "CustomMessageBox.h"
 
-CustomMessageBox::CustomMessageBox(MessageType msgType, QWidget *parent, const unsigned short table) : QDialog(parent, Qt::FramelessWindowHint), _clickOnWindow(false), _type(msgType)
+CustomMessageBox::CustomMessageBox(MessageType msgType, QWidget *parent, const operande table) : QDialog(parent, Qt::FramelessWindowHint), _clickOnWindow(false), _type(msgType)
 {
-
     this->setAttribute(Qt::WA_TranslucentBackground);
 
     _menu = new MinCloseMenu(this);
@@ -57,7 +56,7 @@ CustomMessageBox::CustomMessageBox(MessageType msgType, QWidget *parent, const u
     connect(_okBouton, SIGNAL(clicked()), this, SLOT(close()));
 }
 
-CustomMessageBox::CustomMessageBox(const unsigned short time, const unsigned short note, QWidget* parent) : QDialog(parent, Qt::FramelessWindowHint), _clickOnWindow(false), _type(Results)
+CustomMessageBox::CustomMessageBox(const operande time, const operande note, QWidget* parent) : QDialog(parent, Qt::FramelessWindowHint), _clickOnWindow(false), _type(Results)
 {
     this->setAttribute(Qt::WA_TranslucentBackground);
 
@@ -76,7 +75,7 @@ CustomMessageBox::CustomMessageBox(const unsigned short time, const unsigned sho
     connect(_okBouton, SIGNAL(clicked()), this, SLOT(close()));
 }
 
-void CustomMessageBox::displayTricks(const unsigned short int &table)
+void CustomMessageBox::displayTricks(const operande &table)
 {
     setFixedSize(646, 266);
 
@@ -97,7 +96,7 @@ void CustomMessageBox::displayTricks(const unsigned short int &table)
         _label->setText(tr("Il n'y a pas encore d'astuces pour cette table."));
 }
 
-void CustomMessageBox::tricksInit(QMap<unsigned short int, QString> &tricks)
+void CustomMessageBox::tricksInit(QMap<operande, QString> &tricks)
 {
     tricks[1] = tr("Pour la table de 1, le résultat sera toujours égal au nombre que multiplie 1.<br /><span style=\"color: #9FC54D\">Ex</span> : 1 x <span style=\"text-decoration: underline;\">7</span> = <span style=\"text-decoration: underline;\">7</span></strong>");
     tricks[2] = tr("Pour la table de 2, le résultat est toujours un nombre paire et les résultats vont de 2 en 2.<br /><span style=\"color: #9FC54D\">Ex</span> : <strong>2 x 1 = <span style=\"text-decoration: underline;\">2</span><br />2 x 2 = <span style=\"text-decoration: underline;\">4</span></strong>");
@@ -116,7 +115,7 @@ void CustomMessageBox::displayConnectionError()
     _okBouton->move(386, 135);
 }
 
-void CustomMessageBox::displayResults(const unsigned short &time, const unsigned short &note)
+void CustomMessageBox::displayResults(const operande &time, const operande &note)
 {
     setFixedSize(434, 179);
 
@@ -188,7 +187,8 @@ void CustomMessageBox::displayCannotAMode()
 {
     setFixedSize(434, 179);
 
-    (_type == CannotMediumMode) ? _label->setText("Réussis au moins une table du mode Facile sans faire de faute pour accéder au mode Moyen.") : _label->setText("Réussis toutes les tables du mode Moyen et du mode Facile sans faire de faute pour accéder au mode Difficile.");
+    (_type == CannotMediumMode) ? _label->setText("Réussis au moins une table du mode Facile sans faire de faute pour accéder au mode Moyen.")
+                                : _label->setText("Réussis toutes les tables du mode Moyen et du mode Facile sans faire de faute pour accéder au mode Difficile.");
     _label->setWordWrap(true);
     _label->move(45, 50);
 
@@ -196,7 +196,7 @@ void CustomMessageBox::displayCannotAMode()
     _okBouton->move(386, 135);
 }
 
-void CustomMessageBox::displayCannotDoATable(const int &table)
+void CustomMessageBox::displayCannotDoATable(const operande &table)
 {
     setFixedSize(434, 179);
 
@@ -209,50 +209,20 @@ void CustomMessageBox::displayCannotDoATable(const int &table)
     _okBouton->move(386, 135);
 }
 
-void CustomMessageBox::calculTime(const unsigned short &time, unsigned short &minutes, unsigned short &seconds)
+void CustomMessageBox::calculTime(const operande &time, operande &minutes, operande &seconds)
 {
     minutes = time/60;
-
-    if(minutes != 0)
-        seconds = time % 60;
-    else
-        seconds = time;
+    seconds = time % 60;
 }
 
-void CustomMessageBox::setSmiley(const unsigned short &note, QPixmap &smiley)
+void CustomMessageBox::setSmiley(const operande &note, QPixmap &smiley)
 {
-    switch(note)
-    {
-        case 0:
-
-        case 1:
-
-        case 2:
-            smiley.load(":/smiley/mauvais.png");
-            break;
-
-        case 3:
-
-        case 4:
-
-        case 5:
-
-        case 6:
-            smiley.load(":/smiley/moyen.png");
-            break;
-
-        case 7:
-
-        case 8:
-
-        case 9:
-            smiley.load(":/smiley/bien.png");
-            break;
-
-        case 10:
-            smiley.load(":/smiley/excellent.png");
-            break;
-    }
+    if(note < 3)
+        smiley.load(":/smiley/mauvais.png");
+    else if (note < 10)
+        smiley.load(":/smiley/bien.png");
+    else if(note < 11)
+        smiley.load(":/smiley/excellent.png");
 }
 
 void CustomMessageBox::paintEvent(QPaintEvent *)
@@ -262,6 +232,7 @@ void CustomMessageBox::paintEvent(QPaintEvent *)
     QRectF imgRect;
     QRectF deviceRect;
     QImage img;
+
     if(_type == Trick)
     {
         imgRect.setCoords(0, 0, 646, 266);
@@ -290,10 +261,4 @@ void CustomMessageBox::mousePressEvent(QMouseEvent *event)
 {
     _clickOnWindow = true;
     _Diff = event->pos();
-}
-
-CustomMessageBox::~CustomMessageBox()
-{
-    delete _label;
-    _label = NULL;
 }

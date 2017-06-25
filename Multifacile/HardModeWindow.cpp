@@ -16,26 +16,18 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "HardModeWindow.h"
 
-HardModeWindow::HardModeWindow()
+HardModeWindow::HardModeWindow() : AbstractModeWindow()
 {
-    initStyle();
-    initButtons();
-    initTimer();
-
     Shuffle shuffle(true);
     shuffle.getNumbers(_array, _multiple);
     setWindowFlags(Qt::FramelessWindowHint);
 
-    this->setWindowTitle(tr("Table aléaoire"));
-
-    initLineEdit();
     initLabels();
 
-    startTime();
-
+    this->setWindowTitle(tr("Table aléaoire"));
 }
 
-void HardModeWindow::initTableLabels()
+void HardModeWindow::initAskLabels()
 {
     for(int i = 0; i < 10; ++i)
     {
@@ -47,32 +39,31 @@ void HardModeWindow::initTableLabels()
 
 void HardModeWindow::correct()
 {
-    unsigned short int rep[10];
-    for(int i = 0; i < 10; ++i)
-        rep[i] = _reponses[i]->text().toInt();
+    std::array<unsigned short int, 10> rep;
 
-    Correction correction(_multiple, _array, rep, _secondes);
+    for(int i = 0; i < 10; ++i)
+        rep[i] = _lineEdits[i]->text().toInt();
+
+    Correction correction(_multiple, _array, rep, _timeElapsed);
 
     bool isGood[10];
     QString texte[10];
 
     _note = correction.getCorrection(texte, isGood);
 
-    _corriger->setText(tr("Retenter"));
-    disconnect(_corriger, SIGNAL(clicked()), this, SLOT(correct()));
-    connect(_corriger, SIGNAL(clicked()), this, SLOT(Retry()));
+    _correct->setText(tr("Retenter"));
+    disconnect(_correct, SIGNAL(clicked()), this, SLOT(correct()));
+    connect(_correct, SIGNAL(clicked()), this, SLOT(Retry()));
 
-    _chronometre->stop();
-    delete _chronometre;
-    _chronometre = NULL;
+    stopTimer();
 
-    CustomMessageBox results(_secondes, _note, this);
+    CustomMessageBox results(_timeElapsed, _note, this);
 
-    _secondes = 0;
+    _timeElapsed = 0;
 
     for(int i = 0; i < 10; ++i)
     {
-        _reponses[i]->setVisible(false);
+        _lineEdits[i]->setVisible(false);
 
         _labelCorrection[i]->setText(texte[i]);
         _labelCorrection[i]->move(200, (80 + (i * 40)));
@@ -80,14 +71,14 @@ void HardModeWindow::correct()
 
         if(isGood[i])
         {
-            _trueFalseLabel[0][i]->setPixmap(QPixmap(":/image/Right.png"));
-            _trueFalseLabel[1][i]->setPixmap(QPixmap(":/image/OpacWrong.png"));
+            _trueFalse[0][i]->setPixmap(QPixmap(":/image/Right.png"));
+            _trueFalse[1][i]->setPixmap(QPixmap(":/image/OpacWrong.png"));
         }
 
         else
         {
-            _trueFalseLabel[0][i]->setPixmap(QPixmap(":/image/OpacRight.png"));
-            _trueFalseLabel[1][i]->setPixmap(QPixmap(":/image/Wrong.png"));
+            _trueFalse[0][i]->setPixmap(QPixmap(":/image/OpacRight.png"));
+            _trueFalse[1][i]->setPixmap(QPixmap(":/image/Wrong.png"));
         }
 
         this->repaint();
@@ -98,9 +89,9 @@ void HardModeWindow::correct()
 
 void HardModeWindow::Retry()
 {
-    _corriger->setText(tr("Corriger"));
-    disconnect(_corriger, SIGNAL(clicked()), this, SLOT(Retry()));
-    connect(_corriger, SIGNAL(clicked()), this, SLOT(correct()));
+    _correct->setText(tr("Corriger"));
+    disconnect(_correct, SIGNAL(clicked()), this, SLOT(Retry()));
+    connect(_correct, SIGNAL(clicked()), this, SLOT(correct()));
 
     Shuffle shuffle(true);
     shuffle.getNumbers(_array, _multiple);
@@ -111,15 +102,13 @@ void HardModeWindow::Retry()
         _labelCorrection[i]->setVisible(false);
 
         _label[i]->setText("<span style=\"color: #9FC54D\">"+QString::number(_multiple[i])+"</span> x "+QString::number(_array[i]));
-        _trueFalseLabel[0][i]->setPixmap(QPixmap(":/image/OpacRight.png"));
-        _trueFalseLabel[1][i]->setPixmap(QPixmap(":/image/OpacWrong.png"));
-        _reponses[i]->clear();
-        _reponses[i]->setVisible(true);
+        _trueFalse[0][i]->setPixmap(QPixmap(":/image/OpacRight.png"));
+        _trueFalse[1][i]->setPixmap(QPixmap(":/image/OpacWrong.png"));
+        _lineEdits[i]->clear();
+        _lineEdits[i]->setVisible(true);
     }
 
-    _reponses[0]->setFocus();
+    _lineEdits[0]->setFocus();
 
-    _minute->setText("00");
-    _seconde->setText("00");
-    startTime();
+    restartTimer();
 }

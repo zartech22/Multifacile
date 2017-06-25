@@ -18,10 +18,12 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #ifndef HARDMODEWINDOW_H
 #define HARDMODEWINDOW_H
 
-#include "MediumModeWindow.h"
+#include "AbstractModeWindow.h"
 #include "CustomMessageBox.h"
+#include "Shuffle.h"
+#include "Correction.h"
 
-class HardModeWindow : public MediumModeWindow  // Classe representant la fenetre de la table mode difficile. Herite de MediumModeWindow
+class HardModeWindow : public AbstractModeWindow  // Classe representant la fenetre de la table mode difficile. Herite de MediumModeWindow
 {
     Q_OBJECT
 
@@ -29,11 +31,13 @@ public:
     HardModeWindow();
     ~HardModeWindow() {}
 
-    const unsigned short int getMultiple() { return 1; } //reimplementation
+    operande getMultiple() { return 1; } //reimplementation
 private:
-    unsigned short int _multiple[10];
+    //unsigned short int _multiple[10];
+    std::array<unsigned short int, 10> _multiple;
     void correct();  //reimplementation
-    void initTableLabels();
+    void initAskLabels();
+    void progressifModeHasChanged(const bool) {}
 public slots:
     void Retry();  //reimplementation
 };

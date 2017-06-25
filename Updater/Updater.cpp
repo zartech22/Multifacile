@@ -137,7 +137,7 @@ void Updater::sendRequest(QueryState state)
         request = "WinStartFile";
 #endif
         connect(net, SIGNAL(answer(QByteArray*)), this, SLOT(ReceiveFilesData(QByteArray*)));
-        net->sendMsg(request, QUInt64);
+        net->sendMsg(request, QUIntSize::QUInt64);
         break;
 
     case NameQuery :

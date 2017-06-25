@@ -42,13 +42,14 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "CheckUpdate.h"
 #include "DataFileMgr.h"
 #include "EasyModeWindow.h"
-#include "MainWindowEnums.h"
+#include "Include.h"
 #include "MediumModeWindow.h"
 #include "MinCloseMenu.h"
 #include "HardModeWindow.h"
 #include "CustomMessageBox.h"
 #include "Menu.h"
 #include "MainWidget.h"
+//#include "ProblemWidget.h"
 
 
 class MainWindow : public QMainWindow  // Classe representant la fenetre. Contient d'autres "fenetres" de type MediumModeWindow (et enfant) ou MainWidget
@@ -83,7 +84,7 @@ private :
 
     CheckUpdate *_check;
 
-    MediumModeWindow *_fen;
+    AbstractModeWindow *_fen;
 
     MinCloseMenu *_minCloseMenu;
 
@@ -97,6 +98,7 @@ private :
     QPoint _Diff;
 
     MainWidget *_widget;
+    //ProblemWidget *_probWidget;
 
     Menu *_modes;
 
@@ -117,7 +119,7 @@ private :
     void mouseReleaseEvent(QMouseEvent *) { _ClickOnWindow = false; }
     void setNewSecondWindow() { openWindow(_fen->getMultiple()); }  //remplace la fentre de table actuellle par celle d'un autre mode
     void unavailableMode(Mode mode);  //Indique un mode inacessible
-    void unavailableTable(const unsigned short int &table) { CustomMessageBox(CannotDoThisTable, this, table).exec(); }  //indique une table inacessible
+    void unavailableTable(const operande &table) { CustomMessageBox(CannotDoThisTable, this, table).exec(); }  //indique une table inacessible
     void updateButtonsLabels();  //Lance la mise a jour des boutons de choix de table
 
 public slots :
@@ -128,6 +130,8 @@ public slots :
     void openWindow(const int nbr);  //ouvre une fenetre de table dans le mode adequat
     void resetCentralWidget() { createCentralWidget(); this->setCentralWidget(_widget); }  //recreer et reeafiche la fenetre de presentationd de table
     void setMode(QAction *action);  //traite le changement de mode
+    //void switchToTables();
+    //void switchToProblems();
     void verification() { _check->tryConnection(true); }  //lance une verification de mise a jour
 };
 

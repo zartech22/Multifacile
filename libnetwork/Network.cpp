@@ -16,50 +16,24 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "Network.h"
 
-extern "C"  NETWORKSHARED_EXPORT Network* getNetwork();
-
 Network* getNetwork() { return new Network(); }
 
-Network::Network() : QTcpSocket(),  _msgSize(0), _msg64Size(0) { connect(this, SIGNAL(readyRead()), this, SLOT(dataReceived())); }
+Network::Network() : QTcpSocket() { connect(this, SIGNAL(readyRead()), this, SLOT(dataReceivedHandler())); }
 
-void Network::quint16DataReceived()
+void Network::dataReceivedHandler()
 {
-    QDataStream in(this);
-    QByteArray *paquet = new QByteArray;
-
-    if(_msgSize == 0)
+    switch(_size)
     {
-        if(bytesAvailable() < (int)sizeof(quint16))
-            return;
-        in >> _msgSize;
-    }
-
-    if(bytesAvailable() < _msgSize)
+    case QUIntSize::QUInt16:
+        dataReceived<quint16>();
+        break;
+    case QUIntSize::QUInt32:
+        dataReceived<quint32>();
+        break;
+    case QUIntSize::QUInt64:
+        dataReceived<quint64>();
+        break;
+    default:
         return;
-    *paquet = read(_msgSize);
-
-    emit answer(paquet);
-
-    _msgSize = 0;
-}
-
-void Network::quint64DataReceived()
-{
-    QDataStream in(this);
-    QByteArray *paquet = new QByteArray;
-
-    if(_msg64Size == 0)
-    {
-        if(bytesAvailable() < (int) sizeof(quint64))
-            return;
-        in >> _msg64Size;
     }
-    if(bytesAvailable() <  (qint64)_msg64Size)
-        return;
-
-    *paquet = read(_msg64Size);
-
-    emit answer(paquet);
-
-    _msg64Size = 0;
 }

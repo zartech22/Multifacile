@@ -1,4 +1,4 @@
-/*Copyright (C) <2013> <Plestan> <Kévin>
+/*Copyright (C) <2013> <Plestan> <KÃ©vin>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -16,21 +16,18 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "DataFileMgr.h"
 
+#include <algorithm>
+
 DataFileMgr::DataFileMgr(const QString &fileName)
 {
 #ifdef Q_OS_WIN32
-    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-    QDir multifacileDir(env.value("appdata") + "/Multifacile");
+    const QString &appdataPath = QProcessEnvironment::systemEnvironment().value("appdata");
 
-    if(!multifacileDir.exists())
-    {
-        QDir appdata(env.value("appdata"));
-        appdata.mkdir("Multifacile");
-    }
+    if(!QDir(appdataPath + "/Multifacile").exists())
+        QDir(appdataPath).mkdir("Multifacile");
 
-    _xmlFile.setFileName(env.value("appdata") + "/Multifacile/" + fileName);
-#endif
-#if defined(Q_OS_LINUX) || defined(Q_OS_MAC)
+    _xmlFile.setFileName(appdataPath + "/Multifacile/" + fileName);
+#elif defined(Q_OS_LINUX) || defined(Q_OS_MAC)
     if(!QDir(QDir::homePath() + "/.config/Multifacile/").exists())
         QDir(QDir::homePath() + "/.config").mkdir("Multifacile");
 
@@ -42,7 +39,8 @@ DataFileMgr::DataFileMgr(const QString &fileName)
     if(_xmlFile.readAll().isEmpty())
         createGroup(true);
 }
-bool DataFileMgr::setValue(const QString &group, const unsigned short &time, const bool &noError, const unsigned short &table)
+
+bool DataFileMgr::setValue(const QString &group, const operande &time, const bool &noError, const operande &table)
 {
     _xmlFile.seek(0);
     QTextStream out(&_xmlFile);
@@ -67,7 +65,6 @@ bool DataFileMgr::setValue(const QString &group, const unsigned short &time, con
         else
             groupElement.replaceChild(timeElement, groupElement.firstChild());
      }
-
     else
     {
         QDomElement timeElement = _doc.createElement("time");
@@ -98,6 +95,7 @@ bool DataFileMgr::setValue(const QString &group, const unsigned short &time, con
                 alreadyExist = true;
                 break;
             }
+
             if(alreadyExist)
             {
                 if(actualTime.attribute("noError", "false") == "true" && !noError)
@@ -146,7 +144,7 @@ bool DataFileMgr::setValue(const QString &group, const QString &key, const QStri
     return true;
 }
 
-const QString DataFileMgr::value(const QString &group, const unsigned short &table)
+const QString DataFileMgr::value(const QString &group, const operande &table)
 {
     if(!_doc.setContent(&_xmlFile))
         return "Error : cannot set content";
@@ -199,21 +197,19 @@ bool DataFileMgr::exist(const QString &group)
 
     QDomElement data = _doc.documentElement();
 
-    if(data.elementsByTagName(group).isEmpty())
-        return false;
-    else
-        return true;
+    return !data.elementsByTagName(group).isEmpty();
 }
 void DataFileMgr::createGroup(bool createAllGroups, const QString &group)
 {
     _xmlFile.seek(0);
     QTextStream out(&_xmlFile);
+    QDomElement data;
 
     if(createAllGroups)
     {
         _doc.appendChild(_doc.createProcessingInstruction("xml", "version=\"1.0\""));
 
-        QDomElement data = _doc.createElement("data");
+        data = _doc.createElement("data");
 
         QDomElement EasyMode = _doc.createElement("EasyMode");
         QDomElement MediumMode = _doc.createElement("MediumMode");
@@ -224,16 +220,15 @@ void DataFileMgr::createGroup(bool createAllGroups, const QString &group)
         data.appendChild(HardMode);
 
         _doc.appendChild(data);
-
-        _doc.save(out, 4);
     }
 
     else
     {
-        QDomElement data = _doc.documentElement();
+        data = _doc.documentElement();
         data.appendChild(_doc.createElement(group));
-        _doc.save(out, 4);
     }
+
+    _doc.save(out, 4);
 }
 
 QMap<int, bool>* DataFileMgr::getNoErrorList(const QString &fileName, const QString &mode)
@@ -241,9 +236,7 @@ QMap<int, bool>* DataFileMgr::getNoErrorList(const QString &fileName, const QStr
     QFile file;
 
 #ifdef Q_OS_WIN
-    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-
-    file.setFileName(env.value("appdata") + "/Multifacile/" + fileName);
+    file.setFileName(QProcessEnvironment::systemEnvironment().value("appdata") + "/Multifacile/" + fileName);
 #endif
 #if defined(Q_OS_LINUX) || defined(Q_OS_MAC)
     file.setFileName(QDir::homePath() + "/.config/Multifacile/" + fileName);
@@ -270,10 +263,11 @@ QMap<int, bool>* DataFileMgr::getNoErrorList(const QString &fileName, const QStr
         else
             noErrorList->insert(childs.at(i).toElement().attribute("table").toInt(), false);
     }
+
     return noErrorList;
 }
 
-bool DataFileMgr::hasNoErrorTrue(const QString &fileName, const QString &mode, const unsigned short int &table)
+bool DataFileMgr::hasNoErrorTrue(const QString &fileName, const QString &mode, const operande &table)
 {
     QFile file;
 
@@ -326,31 +320,47 @@ bool DataFileMgr::isAllTableWithNoErrorFalse(const QString &fileName, const QStr
     return AllWithError;
 }
 
-int DataFileMgr::nextTableWithNoErrorTrue(const QString &fileName, const QString &mode, const unsigned short table)
+int DataFileMgr::nextTableWithNoErrorTrue(const QString &fileName, const QString &mode, const operande table)
 {
-    QMap<int, bool> *list = DataFileMgr::getNoErrorList(fileName, mode);
+    std::unique_ptr<QMap<int, bool>> list(DataFileMgr::getNoErrorList(fileName, mode));
 
-    int min = 11;
+    auto test = list->keys();
+
+    auto cmp = [&](const int &a, const int &b)
+    {
+        qDebug() << a << b << (a <= table) << (a < b);
+        if(a <= table)
+            return false;
+        else if(b <= table)
+            return true;
+        else
+            return (a < b);
+    };
+
+    auto min = std::min_element(test.begin(), test.end(), cmp);
+
+    return *min;
+
+    /*int min = 11;
 
     for(QMap<int, bool>::iterator it = list->begin(); it != list->end(); ++it)
     {
-        qDebug() << it.key();
         if(it.key() <= table)
             continue;
         else if((it.key() < min) && it.value())
             min = it.key();
     }
-    return (min != 11) ? min : table;
+    return (min != 11) ? min : table;*/
 }
-int DataFileMgr::previousTableWithNoErrorTrue(const QString &fileName, const QString &mode, const unsigned short table)
+
+int DataFileMgr::previousTableWithNoErrorTrue(const QString &fileName, const QString &mode, const operande table)
 {
-    QMap<int, bool> *list = DataFileMgr::getNoErrorList(fileName, mode);
+    std::unique_ptr<QMap<int, bool>> list(DataFileMgr::getNoErrorList(fileName, mode));
 
     int min = 0;
 
     for(QMap<int, bool>::iterator it = list->begin(); it != list->end(); ++it)
     {
-        qDebug() << it.key();
         if(it.key() >= table)
             continue;
         else if((it.key() > min) && it.value())

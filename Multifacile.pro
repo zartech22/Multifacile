@@ -1,5 +1,5 @@
 TEMPLATE = subdirs
 SUBDIRS += libnetwork \
             Multifacile \
-			Updater
+            Updater
 CONFIG += ordered

@@ -39,77 +39,43 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "Shuffle.h"
 #include "Correction.h"
 #include "CustomMessageBox.h"
+#include "AbstractModeWindow.h"
 
-class MediumModeWindow : public QWidget  // Classe representant la fenetre des tables de mode moyen.
+class MediumModeWindow : public AbstractModeWindow  // Classe representant la fenetre des tables de mode moyen.
 {
     Q_OBJECT
 public :
 
-    MediumModeWindow() {}
-    MediumModeWindow(const int multiplicateur, bool actualProgressifMode);
+    MediumModeWindow();
+    MediumModeWindow(const operande multiplicateur, bool actualProgressifMode);
     ~MediumModeWindow();
 
-    virtual const unsigned short int getMultiple() { return _multiple; }  //retourne la table en cours
+    virtual operande getMultiple() { return _multiple; }  //retourne la table en cours
     void progressifModeHasChanged(const bool actualProgressifMode) { _progressifMode = actualProgressifMode; checkTableAvailable();}  //si changement de mode de progression, on verifie si la table est disponible
 protected :
 
-    unsigned short int _multiple;
-    unsigned short int _note;
-    int _array[10];
-    unsigned short int _secondes;
+    operande _multiple;
+    operande _note;
+    std::array<unsigned short int, 10> _array;
 
     bool _progressifMode;
 
     Mode _mode;
 
-    QSignalMapper *_mapper;
-
-    QLabel *_label[10];
-    QLabel *_text;
-    QLabel *_minute;
-    QLabel *_seconde;
-    QLabel *_deuxPoint;
-    QLabel *_labelPoint[10];
-    QLabel *_trueFalseLabel[2][10];
-    QLabel *_labelCorrection[10];
-
-    QPushButton *_corriger;
-    QPushButton *_quitter;
     QPushButton *_nextPrev[2];
 
-    QLineEdit *_reponses[10];
-
-    QTimer *_chronometre;
-
-    void initStyle();  //initialise le style
-    virtual void initButtons();  //initialise les boutons
-    void initTimer();  //initialise l'affichage du temps
-    void initLineEdit();  //initailise les lineEdit
-    void initLabels();  //Initialise le texte
-    virtual void initTableLabels();  //initialise le texte des multiplications
+    virtual void initAskLabels();  //initialise le texte des multiplications
     void initNextPrev();  //initialise les boutons suivant et precedent
     void closeEvent(QCloseEvent *event);  //reimplementation
-    void paintEvent(QPaintEvent *);  //reimplementation pour prise en charge du css
-    void setNewNumber(const unsigned short int newNumber);  //change de table
-    void startTime();  //lance le timer
+    void setNewNumber(const operande newNumber);  //change de table
     virtual void checkTableAvailable();
-
-signals:
-
-    void addSeconde(int);  //emis lorsqu'on doit ajouter une seconde
-    void wasClosed();  //emis losrqu'on quitte la fenetre de table
 
 public slots:
 
     virtual void correct();  //Fait la correction
-    void newSecond();  //ajoute une seconde
-    void newSetFocus(const int number);  //fait passer le focus d'un lineEdit a un autre
     void Next();  //fait passer à la table suivante
     void Previous();  //fait passer à la table precedente
     virtual void Retry();  //remet tout à zero pour un nouvel essai
-    void showEvent(QShowEvent *);  //reimplementation pour donner le focus a la premiere lineEdit au debut
-    void updateLabel(const int temps) const;  //met a jour le texte donnant le temps
-
 };
 
 #endif // FEN_SECONDAIRE_H

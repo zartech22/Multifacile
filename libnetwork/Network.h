@@ -21,13 +21,12 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include <QString>
 #include <QTcpSocket>
+#include <memory>
 
-enum QUIntSize
+enum class QUIntSize
 {
     QUInt16, QUInt32, QUInt64
 };
-
-typedef enum QUIntSize QUIntSize;
 
 class NETWORKSHARED_EXPORT Network : public QTcpSocket
 {
@@ -35,16 +34,14 @@ class NETWORKSHARED_EXPORT Network : public QTcpSocket
     
 public:
     Network();
-    void sendMsg(const QString &msg, QUIntSize answerMsgSize = QUInt16) { _size = answerMsgSize; writePaquet<QString>(msg); }
-    void sendVersion(const unsigned int version) {  _size = QUInt16; writePaquet<unsigned int>(version); }
+    void sendMsg(const QString &msg, const QUIntSize answerMsgSize = QUIntSize::QUInt16) { _size = answerMsgSize; writePaquet<QString>(msg); }
+    void sendVersion(const unsigned int version) {  _size = QUIntSize::QUInt16; writePaquet<unsigned int>(version); }
     void tryConnection(const QString &host, const unsigned int port) { connection(host, port); }
 
 private:
     void connection(const QString &host, const unsigned int port) { abort(); connectToHost(host, port); }
 
     unsigned int _version;
-    quint16 _msgSize;
-    quint64 _msg64Size;
     QString _msg;
     QUIntSize _size;
 
@@ -64,12 +61,38 @@ private:
         write(paquet);
     }
 
+    template<typename T>
+    void dataReceived()
+    {
+        static T msgSize = 0;
+
+        QDataStream in(this);
+        auto paquet = std::make_unique<QByteArray>();
+
+        if(msgSize == 0)
+        {
+            if(bytesAvailable() < static_cast<qint64>(sizeof(msgSize)))
+                return;
+            in >> msgSize;
+        }
+
+        if(bytesAvailable() < static_cast<qint64>(msgSize))
+            return;
+
+        *paquet = read(msgSize);
+
+        emit answer(paquet.release());
+
+        msgSize = 0;
+    }
+
 public slots:
-    void dataReceived() { (_size == QUInt16) ? quint16DataReceived() : quint64DataReceived(); }
-    void quint16DataReceived();
-    void quint64DataReceived();
+    void dataReceivedHandler();
+
 signals:
     void answer(QByteArray*);
 };
+
+extern "C"  NETWORKSHARED_EXPORT Network* getNetwork();
 
 #endif // NETWORK_H

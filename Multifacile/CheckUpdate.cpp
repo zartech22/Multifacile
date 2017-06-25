@@ -16,19 +16,14 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "CheckUpdate.h"
 
-CheckUpdate::CheckUpdate(QObject *parent, bool isUserAction) : QObject(parent), _actualVersion(VERSION), _lib(NETWORKLIB), _isUserAction(isUserAction)
+CheckUpdate::CheckUpdate(QObject *parent, bool isUserAction) : QObject(parent), _actualVersion(VERSION), _isUserAction(isUserAction)
 {
-    typedef Network* (*NetworkConstructor) ();
-
-    NetworkConstructor constructor = (NetworkConstructor) _lib.resolve("getNetwork");
-
-    if(constructor)
-        _net = constructor();
+    _net = getNetwork();
 
     connect(_net, SIGNAL(connected()), this, SLOT(Connected()));
     connect(_net, SIGNAL(answer(QByteArray*)), this, SLOT(dataReceived(QByteArray*)));
     connect(_net, SIGNAL(error(QAbstractSocket::SocketError)), this, SIGNAL(error()));
-    _net->tryConnection("multifacile.no-ip.org", 8087);
+    _net->tryConnection(SERVER_ADDR, CHECK_PORT);
 }
 
 void CheckUpdate::dataReceived(QByteArray*array)

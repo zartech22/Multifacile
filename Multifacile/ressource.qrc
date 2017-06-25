@@ -30,6 +30,8 @@
         <file alias="TextBox.png">image/TextBox.png</file>
         <file alias="Underline.png">image/Underline.png</file>
         <file alias="Wrong.png">image/Wrong.png</file>
+        <file alias="TextBoxSuccess.png">image/TextBoxSuccess.png</file>
+        <file alias="TextBox_inacessible.png">image/TextBox_inacessible.png</file>
     </qresource>
     <qresource prefix="/police">
         <file alias="DK Crayon Crumble.ttf">police/DK Crayon Crumble.ttf</file>

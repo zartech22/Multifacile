@@ -16,123 +16,27 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "MediumModeWindow.h"
 
-MediumModeWindow::MediumModeWindow(const int multiplicateur, bool actualProgressifMode) : _mode(MEDIUM), _progressifMode(actualProgressifMode)
+MediumModeWindow::MediumModeWindow() : AbstractModeWindow()
 {
-    initStyle();
-    initButtons();
-    initTimer();
-
     this->setWindowFlags(Qt::FramelessWindowHint);
+    initNextPrev();
+}
 
-    _multiple = multiplicateur;
+MediumModeWindow::MediumModeWindow(const operande multiplicateur, bool actualProgressifMode) : AbstractModeWindow(), _mode(MEDIUM), _progressifMode(actualProgressifMode)
+  , _multiple(multiplicateur)
+{
+    this->setWindowFlags(Qt::FramelessWindowHint);
 
     Shuffle shuffle(true);
     shuffle.getNumbers(_array);
 
     this->setWindowTitle(tr("Table de ")+QString::number(_multiple));
 
-    initLineEdit();
-    initLabels();
     initNextPrev();
-
-
-    startTime();
+    initLabels();
 }
 
-void MediumModeWindow::initStyle()
-{
-    QFile css(":/css/Fen2.css");
-    css.open(QIODevice::ReadOnly);
-    setStyleSheet(css.readAll());
-    css.close();
-}
-
-void MediumModeWindow::initButtons()
-{
-    _quitter = new QPushButton(tr("Retour"));
-    _quitter->setParent(this);
-    _quitter->setFixedSize(70, 40);
-    _quitter->move(490, 490);
-    _quitter->setObjectName("Quitter");
-
-    _corriger = new QPushButton(tr("Corriger"));
-    _corriger->setParent(this);
-    _corriger->setFixedSize(80, 40);
-    _corriger->move(400, 490);
-    _corriger->setObjectName("Corriger");
-
-    connect(_corriger, SIGNAL(clicked()), this, SLOT(correct()));
-    connect(_quitter, SIGNAL(clicked()), this, SIGNAL(wasClosed()));
-}
-
-void MediumModeWindow::initTimer()
-{
-    _text = new QLabel(tr("Temps :"),this);
-    _minute = new QLabel("00", this);
-    _deuxPoint = new QLabel(":", this);
-    _seconde = new QLabel("00", this);
-
-    _text->move(235, 15);
-    _minute->move(330, 15);
-    _deuxPoint->move(355, 15);
-    _seconde->move(380, 15);
-
-    _seconde->setFixedWidth(25);
-
-    _secondes = 0;
-}
-
-void MediumModeWindow::initLineEdit()
-{
-    _mapper = new QSignalMapper(this);
-
-    for(int i = 0; i < 10; ++i)
-    {
-        _reponses[i] = new QLineEdit(this);
-        _reponses[i]->setAttribute(Qt::WA_TranslucentBackground);
-        _reponses[i]->setFixedSize(302, 69);
-        _reponses[i]->move(185, (60 + 40 * i));
-        _reponses[i]->setValidator(new QRegExpValidator(QRegExp("\\d{0,3}"), _reponses[i]));
-
-        connect(_reponses[i], SIGNAL(returnPressed()), _mapper, SLOT(map()));
-        _mapper->setMapping(_reponses[i], (i + 1));
-    }
-
-    connect(_mapper, SIGNAL(mapped(int)), this, SLOT(newSetFocus(int)));
-}
-
-void MediumModeWindow::initLabels()
-{
-    initTableLabels();
-
-    for(int i = 0; i < 10; ++i)
-    {
-        _labelPoint[i] = new QLabel(this);
-        _labelPoint[i]->setPixmap(QPixmap(":/image/Point.png"));
-        _labelPoint[i]->move(105, (90 + 40 * i));
-
-        _labelCorrection[i] = new QLabel(this);
-        _labelCorrection[i]->setVisible(false);
-    }
-
-    for(int j = 0; j < 2; ++j)
-        for(int i = 0; i < 10; ++i)
-        {
-            _trueFalseLabel[j][i] = new QLabel(this);
-            if(j == 0)
-            {
-                _trueFalseLabel[j][i]->setPixmap(QPixmap(":/image/OpacRight.png"));
-                _trueFalseLabel[j][i]->move(475, (70 + 40 * i));
-            }
-            if(j == 1)
-            {
-                _trueFalseLabel[j][i]->setPixmap(QPixmap(":/image/OpacWrong.png"));
-                _trueFalseLabel[j][i]->move(525, (75 + 40 * i));
-            }
-        }
-}
-
-void MediumModeWindow::initTableLabels()
+void MediumModeWindow::initAskLabels()
 {
     for(int i = 0; i < 10; ++i)
     {
@@ -160,69 +64,17 @@ void MediumModeWindow::initNextPrev()
     connect(_nextPrev[1], SIGNAL(clicked()), this, SLOT(Next()));
 }
 
-void MediumModeWindow::newSetFocus(const int number)
-{
-    if(number < 10)
-    {
-        _reponses[number]->setFocus();
-        _reponses[number]->selectAll();
-    }
-    else
-        correct();
-}
-
-void MediumModeWindow::startTime()
-{
-    _chronometre = new QTimer;
-    _chronometre->start(1000);
-    connect(_chronometre, SIGNAL(timeout()), this, SLOT(newSecond()));
-    connect(this, SIGNAL(addSeconde(int)), this, SLOT(updateLabel(int)));
-}
-
 void MediumModeWindow::closeEvent(QCloseEvent *event)
 {
-    if(event->spontaneous())
-        delete _chronometre;
+    //if(event->spontaneous())
+      //  delete _chronometre;
     event->accept();
-}
-
-void MediumModeWindow::newSecond()
-{
-    ++_secondes;
-    emit addSeconde(_secondes);
-}
-
-void MediumModeWindow::updateLabel(const int temps) const
-{
-    if((temps/60) != 0)
-    {
-        _minute->setText("0"+QString::number(temps/60));
-        if((temps%60) < 10)
-            _seconde->setText("0"+QString::number(temps%60));
-        else
-            _seconde->setText(QString::number(temps%60));
-    }
-    else
-    {
-        if(temps < 10)
-            _seconde->setText("0"+QString::number(temps));
-        else
-            _seconde->setText(QString::number(temps));
-    }
-}
-
-void MediumModeWindow::paintEvent(QPaintEvent *)
-{
-    QStyleOption opt;
-    opt.init(this);
-    QPainter p(this);
-    this->style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
 }
 
 void MediumModeWindow::Previous()
 {
     if(_progressifMode && _mode == MEDIUM)
-        _multiple = DataFileMgr::previousTableWithNoErrorTrue("Multifacile.xml", "MediumMode", _multiple);
+        _multiple = DataFileMgr::previousTableWithNoErrorTrue("Multifacile.xml", "EasyMode", _multiple);
     else if(_multiple > 1)
         --_multiple;
     setNewNumber(_multiple);
@@ -231,17 +83,17 @@ void MediumModeWindow::Previous()
 void MediumModeWindow::Next()
 {
     if(_progressifMode && _mode == MEDIUM)
-        _multiple = DataFileMgr::nextTableWithNoErrorTrue("Multifacile.xml", "MediumMode", _multiple);
+        _multiple = DataFileMgr::nextTableWithNoErrorTrue("Multifacile.xml", "EasyMode", _multiple);
     else if(_multiple < 10)
        ++ _multiple;
     setNewNumber(_multiple);
 }
 
-void MediumModeWindow::setNewNumber(const unsigned short int newNumber)
+void MediumModeWindow::setNewNumber(const operande newNumber)
 {
     this->setWindowTitle(tr("Table de ")+QString::number(newNumber));
 
-    _corriger->setText("Corriger");
+    _correct->setText("Corriger");
 
     for(int i = 0; i < 10; ++i)
     {
@@ -249,54 +101,45 @@ void MediumModeWindow::setNewNumber(const unsigned short int newNumber)
 
         _labelCorrection[i]->setVisible(false);
 
-        _reponses[i]->clear();
-        _reponses[i]->setVisible(true);
+        _lineEdits[i]->clear();
+        _lineEdits[i]->setVisible(true);
 
-        _trueFalseLabel[0][i]->setPixmap(QPixmap(":/image/OpacRight.png"));
-        _trueFalseLabel[1][i]->setPixmap(QPixmap(":/image/OpacWrong.png"));
+        _trueFalse[0][i]->setPixmap(QPixmap(":/image/OpacRight.png"));
+        _trueFalse[1][i]->setPixmap(QPixmap(":/image/OpacWrong.png"));
     }
 
-    if(_chronometre != NULL)
+    /*if(_chronometre != NULL)
     {
-        _chronometre->stop();
-        delete _chronometre;
-    }
-
-    _secondes = 0;
-    _minute->setText("00");
-    _seconde->setText("00");
-    startTime();
-    _reponses[0]->setFocus();
+        stopTimer();
+        //delete _chronometre;
+    }*/
+    restartTimer();
+    _lineEdits[0]->setFocus();
 }
 
 void MediumModeWindow::correct()
 {
-    _chronometre->stop();
-    delete _chronometre;
-    _chronometre = NULL;
-
-    unsigned short int rep[10];
+    stopTimer();
+    std::array<unsigned short int, 10> rep;
     for(int i = 0; i < 10; ++i)
-        rep[i] = _reponses[i]->text().toInt();
+        rep[i] = _lineEdits[i]->text().toInt();
 
-    Correction test(_mode, _multiple, _array, rep, _secondes);
+    Correction correction(_mode, _multiple, _array, rep, _timeElapsed);
 
     bool isGood[10];
     QString texte[10];
 
-    _note = test.getCorrection(texte, isGood);
+    _note = correction.getCorrection(texte, isGood);
 
-    CustomMessageBox results(_secondes, _note, this);
+    CustomMessageBox results(_timeElapsed, _note, this);
 
-    _secondes = 0;
-
-    _corriger->setText(tr("Retenter"));
-    disconnect(_corriger, SIGNAL(clicked()), this, SLOT(correct()));
-    connect(_corriger, SIGNAL(clicked()), this, SLOT(Retry()));
+    _correct->setText(tr("Retenter"));
+    disconnect(_correct, SIGNAL(clicked()), this, SLOT(correct()));
+    connect(_correct, SIGNAL(clicked()), this, SLOT(Retry()));
 
     for(int i = 0; i < 10; ++i)
     {
-        _reponses[i]->setVisible(false);
+        _lineEdits[i]->setVisible(false);
 
         _labelCorrection[i]->setText(texte[i]);
         _labelCorrection[i]->move(200, (80 + (i * 40)));
@@ -304,13 +147,13 @@ void MediumModeWindow::correct()
 
         if(isGood[i])
         {
-            _trueFalseLabel[0][i]->setPixmap(QPixmap(":/image/Right.png"));
-            _trueFalseLabel[1][i]->setPixmap(QPixmap(":/image/OpacWrong.png"));
+            _trueFalse[0][i]->setPixmap(QPixmap(":/image/Right.png"));
+            _trueFalse[1][i]->setPixmap(QPixmap(":/image/OpacWrong.png"));
         }
         else
         {
-            _trueFalseLabel[0][i]->setPixmap(QPixmap(":/image/OpacRight.png"));
-            _trueFalseLabel[1][i]->setPixmap(QPixmap(":/image/Wrong.png"));
+            _trueFalse[0][i]->setPixmap(QPixmap(":/image/OpacRight.png"));
+            _trueFalse[1][i]->setPixmap(QPixmap(":/image/Wrong.png"));
         }
         this->repaint();
     }
@@ -320,38 +163,28 @@ void MediumModeWindow::correct()
 
 void MediumModeWindow::Retry()
 {
-    _corriger->setText(tr("Corriger"));
-    disconnect(_corriger, SIGNAL(clicked()), this, SLOT(Retry()));
-    connect(_corriger, SIGNAL(clicked()), this, SLOT(correct()));
+    _correct->setText(tr("Corriger"));
+    disconnect(_correct, SIGNAL(clicked()), this, SLOT(Retry()));
+    connect(_correct, SIGNAL(clicked()), this, SLOT(correct()));
 
     for(int i = 0; i < 10; ++i)
     {
         _labelCorrection[i]->setVisible(false);
-        _reponses[i]->clear();
-        _reponses[i]->setVisible(true);
+        _lineEdits[i]->clear();
+        _lineEdits[i]->setVisible(true);
 
-        _trueFalseLabel[0][i]->setPixmap(QPixmap(":/image/OpacRight.png"));
-        _trueFalseLabel[1][i]->setPixmap(QPixmap(":/image/OpacWrong.png"));
+        _trueFalse[0][i]->setPixmap(QPixmap(":/image/OpacRight.png"));
+        _trueFalse[1][i]->setPixmap(QPixmap(":/image/OpacWrong.png"));
     }
 
-    _reponses[0]->setFocus();
-
-    _minute->setText("00");
-    _seconde->setText("00");
-    startTime();
-}
-
-void MediumModeWindow::showEvent(QShowEvent *event)
-{
-    _reponses[0]->setFocus();
-    QWidget::showEvent(event);
+    restartTimer();
 }
 
 void MediumModeWindow::checkTableAvailable()
 {
     if(!DataFileMgr::hasNoErrorTrue("Multifacile.xml", "MediumMode", _multiple))
     {
-        _chronometre->stop();
+        stopTimer();
         CustomMessageBox(CannotDoThisTable, this, _multiple).exec();
         emit wasClosed();
     }
@@ -359,47 +192,12 @@ void MediumModeWindow::checkTableAvailable()
 
 MediumModeWindow::~MediumModeWindow()
 {
-    delete _corriger;
-    _corriger = NULL;
-
-    delete _quitter;
-    _quitter = NULL;
-
     for(int i = 0; i < 10; ++i)
     {
         delete _label[i];
-        _label[i] = NULL;
-
-        delete _labelPoint[i];
-        _labelPoint[i] = NULL;
+        _label[i] = nullptr;
 
         /*delete _reponses[i];
         _reponses[i] = nullptr;*/
     }
-
-    for(int i = 0; i < 2; ++i)
-    {
-        for(int j = 0; j < 10; ++j)
-        {
-            delete _trueFalseLabel[i][j];
-            _trueFalseLabel[i][j] = NULL;
-        }
-
-        /*delete _nextPrev[i];
-        _nextPrev[i] = nullptr;*/
-    }
-
-    delete _text;
-    delete _minute;
-    delete _seconde;
-    delete _deuxPoint;
-    if(_chronometre != NULL)
-        delete _chronometre;
-
-
-    _chronometre = NULL;
-    _text = NULL;
-    _minute = NULL;
-    _seconde = NULL;
-    _deuxPoint = NULL;
 }

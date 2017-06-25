@@ -19,7 +19,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "Shuffle.h"
 #include "DataFileMgr.h"
 
-MainWindow::MainWindow() :  _mode(EASY), _actualWindow(FirstWidget),  _mgr("Multifacile.xml")
+MainWindow::MainWindow() :  _mode(EASY), _actualWindow(FirstWidget),  _mgr("Multifacile.xml"), _ClickOnWindow(false) //, _probWidget(NULL)
 {
     setWindowFlags(Qt::FramelessWindowHint);
     setWindowTitle("Multifacile");
@@ -42,7 +42,6 @@ MainWindow::MainWindow() :  _mode(EASY), _actualWindow(FirstWidget),  _mgr("Mult
     this->setCentralWidget(_widget);
 
 
-
     connect(_check, SIGNAL(checkUpdateAnswer(UpdateType)), this, SLOT(checkUpdateReceivedAnswer(UpdateType)));
     connect(_check, SIGNAL(error()), this, SLOT(socketError()));
 
@@ -51,6 +50,24 @@ MainWindow::MainWindow() :  _mode(EASY), _actualWindow(FirstWidget),  _mgr("Mult
     connect(_actionGroup, SIGNAL(triggered(QAction*)), this, SLOT(setMode(QAction*)));
     connect(_progressifModeActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeProgressifMode(QAction*)));
 }
+
+//void MainWindow::switchToProblems()
+//{
+//    _probWidget = new ProblemWidget();
+
+//    disconnect(_widget, SIGNAL(goToProblems()), this, SLOT(switchToProblems()));
+
+//    this->setCentralWidget(_probWidget);
+
+//    connect(_probWidget, SIGNAL(goToTables()), this, SLOT(switchToTables()));
+//}
+
+//void MainWindow::switchToTables()
+//{
+//    disconnect(_probWidget, SIGNAL(goToTables()), this, SLOT(switchToTables()));
+//    resetCentralWidget();
+//    connect(_widget, SIGNAL(goToProblems()), this, SLOT(switchToProblems()));
+//}
 
 void MainWindow::checkSucceedTables()
 {
@@ -155,6 +172,7 @@ void MainWindow::createCentralWidget()
     _widget = new MainWidget(_mode);
 
     connect(_widget, SIGNAL(clicked(int)),  this, SLOT(openWindow(int)));
+//    connect(_widget, SIGNAL(goToProblems()), this, SLOT(switchToProblems()));
 
     checkSucceedTables();
 }
@@ -410,17 +428,17 @@ MainWindow::~MainWindow()
     delete _minCloseMenu;
 
 
-    _file = NULL;
-    _tools = NULL;
-    _modes = NULL;
-    _quitAction = NULL;
-    _updateAction = NULL;
-    _easyMode = NULL;
-    _mediumMode = NULL;
-    _hardMode = NULL;
-    _actionGroup = NULL;
-    _minCloseMenu = NULL;
-    _check = NULL;
-    _widget = NULL;
-    _fen = NULL;
+    _file = nullptr;
+    _tools = nullptr;
+    _modes = nullptr;
+    _quitAction = nullptr;
+    _updateAction = nullptr;
+    _easyMode = nullptr;
+    _mediumMode = nullptr;
+    _hardMode = nullptr;
+    _actionGroup = nullptr;
+    _minCloseMenu = nullptr;
+    _check = nullptr;
+    _widget = nullptr;
+    _fen = nullptr;
 }

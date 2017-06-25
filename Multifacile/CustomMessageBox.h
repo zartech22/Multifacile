@@ -27,6 +27,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <QMouseEvent>
 
 #include "MinCloseMenu.h"
+#include "Include.h"
 
 enum MessageType
 {
@@ -50,9 +51,8 @@ class CustomMessageBox : public QDialog
 {
     Q_OBJECT
 public:
-    CustomMessageBox(MessageType msgType, QWidget *parent = 0, const unsigned short int table = 0);
-    CustomMessageBox(const unsigned short int time, const unsigned short int note, QWidget *parent = 0);
-    ~CustomMessageBox();
+    CustomMessageBox(MessageType msgType, QWidget *parent = 0, const operande table = 0);
+    CustomMessageBox(const operande time, const operande note, QWidget *parent = 0);
 private:
     QLabel *_label;
     QPushButton *_okBouton;
@@ -61,16 +61,16 @@ private:
     QPoint _Diff;
     MessageType _type;
 
-    inline void tricksInit(QMap<unsigned short int, QString> &tricks);  //initialise les astuces
-    void displayTricks(const unsigned short int &table);  //affcihe l'astuce
-    void displayResults(const unsigned short int &time, const unsigned short int &note);  //affiche les resultats
+    inline void tricksInit(QMap<operande, QString> &tricks);  //initialise les astuces
+    void displayTricks(const operande &table);  //affcihe l'astuce
+    void displayResults(const operande &time, const operande &note);  //affiche les resultats
     void displayConnectionError();  //Affiche l'erreur de connection
     void displayNoUpdate();  //Affiche qu'il n'y a pas de mise a jours
     void displayNewUpdate();  //Affcihe qu'il y a une nouvelle mise a jour
     void displayCannotAMode();  //Affiche qu'on ne peut pas acceder a un mode
-    void displayCannotDoATable(const int &table);  //Affiche qu'on ne peut pas acceder a uune table
-    void calculTime(const unsigned short int &time, unsigned short int &minutes, unsigned short int &seconds); //Donne le nombre de minutes et de secondes en fonction de time qui est en secondes
-    void setSmiley(const unsigned short int &note, QPixmap &smiley);  //Attribut un smiley a smiley en fonction de note
+    void displayCannotDoATable(const operande &table);  //Affiche qu'on ne peut pas acceder a uune table
+    void calculTime(const operande &time, operande &minutes, operande &seconds); //Donne le nombre de minutes et de secondes en fonction de time qui est en secondes
+    void setSmiley(const operande &note, QPixmap &smiley);  //Attribut un smiley a smiley en fonction de note
 
     void paintEvent(QPaintEvent *);  //reimplementation pour afficher l'image de fond approprie
     void mouseMoveEvent(QMouseEvent *event);  // (Les trois fonctions)  Gestion du deplacement de la fenetre

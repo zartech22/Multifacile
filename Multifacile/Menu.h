@@ -26,7 +26,22 @@ class Menu : public QMenu  // Classe qui reimplement une fonction de la classe Q
 {
 public:
     Menu(QString title, QWidget *parent = 0) : QMenu(title, parent) { }
-    virtual bool event(QEvent *e);  //reimplementation
+
+    virtual bool event(QEvent *e)  //reimplementation
+    {
+        if(e->type() == QEvent::ToolTip)
+        {
+            QHelpEvent *he = dynamic_cast<QHelpEvent*>(e);
+            QAction *act = actionAt(he->pos());
+
+            if(act)
+                QToolTip::showText(he->globalPos(), act->toolTip());
+        }
+        else
+            QToolTip::hideText();
+
+        return QMenu::event(e);
+    }
 };
 
 #endif // MENUBAR_H

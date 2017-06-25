@@ -41,7 +41,7 @@ MinCloseMenu::~MinCloseMenu()
 {
     delete _cross, _mini, _layout;
 
-    _cross = NULL;
-    _mini = NULL;
-    _layout = NULL;
+    _cross = nullptr;
+    _mini = nullptr;
+    _layout = nullptr;
 }

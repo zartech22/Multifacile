@@ -24,13 +24,13 @@ enum Mode
     EASY, MEDIUM, HARD
 };
 
-typedef enum Mode Mode;
-
 enum Widget
 {
     FirstWidget, SecondWidget
 };
 
+typedef enum Mode Mode;
 typedef enum Widget Widget;
+typedef unsigned short int operande;
 
 #endif // MODEENUM_H

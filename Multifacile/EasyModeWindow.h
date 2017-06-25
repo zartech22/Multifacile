@@ -25,15 +25,14 @@ class EasyModeWindow : public MediumModeWindow  // Classe representant la fenetr
 {
     Q_OBJECT
 public:
-    EasyModeWindow(const unsigned short int m_multiplicateur);
-    ~EasyModeWindow();
+    EasyModeWindow(const operande m_multiplicateur);
 protected:
-    QPushButton *_astuces;
+    QPushButton *_tip;
 
     void checkTableAvailable() {} //reimplementation
-    void initButtons();
+    void initTipButton();
 public slots:
-    void openAstuce() const;  //ouvre la fenetre astuce
+    void openTip() const;  //ouvre la fenetre astuce
 };
 
 #endif // SHUFFLEQUESTIONNAIRE_H

@@ -29,9 +29,11 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "MainWindow.h"
 
+
 int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
+
 
     QTranslator translator;
     translator.load(":/translation/qt_fr");

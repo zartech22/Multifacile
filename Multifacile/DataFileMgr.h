@@ -23,26 +23,29 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <QProcessEnvironment>
 #include <QTextStream>
 #include <QDir>
+#include <QDesktopServices>
+#include <memory>
 
 #include <QDebug>
+#include "Include.h"
 
 class DataFileMgr  // Classe gérant l'acces aux donnees contenues dans le fichier xml
 {
 public:
     DataFileMgr(const QString &fileName);
-    ~DataFileMgr() {_xmlFile.close(); }
+    ~DataFileMgr() { _xmlFile.close(); }
 
-    bool setValue(const QString &group, const unsigned short int &time, const bool &noError = false, const unsigned short int &table = 0); //ecrit une valeur dans le fcihier de type table
+    bool setValue(const QString &group, const operande &time, const bool &noError = false, const operande &table = 0); //ecrit une valeur dans le fcihier de type table
     bool setValue(const QString &group, const QString &key, const QString &value); //ecrit une valeur dans le fcihier de n'importe quel type
-    const QString value(const QString &group, const unsigned short int &table = 0);  //lit une valeur de type table
+    const QString value(const QString &group, const operande &table = 0);  //lit une valeur de type table
     const QString value(const QString &group, const QString &key);  //lit une valeur de n'importe quel type
 
     static QMap<int, bool>* getNoErrorList(const QString &fileName, const QString &mode);  //retourne la liste de toutes les tables d'un mode presente dans le fichier contenant le numero de la table et si elle a ete reussite ou pas
-    static bool hasNoErrorTrue(const QString &fileName, const QString &mode, const unsigned short int &table);  // retourne vrai si la table a ete reussite sinon retourne faux (pareil si la table n'est pas presente dans le fichier)
+    static bool hasNoErrorTrue(const QString &fileName, const QString &mode, const operande &table);  // retourne vrai si la table a ete reussite sinon retourne faux (pareil si la table n'est pas presente dans le fichier)
     static bool isAllTableWithNoErrorTrue(const QString &fileName, const QString &mode);  //retourne vrai si toutes les tables d'un mode ont ete reussite sinon retourne faux
     static bool isAllTableWithNoErrorFalse(const QString &fileName, const QString &mode); //contraire de la fonction precedente
-    static int nextTableWithNoErrorTrue(const QString &fileName, const QString &mode, const unsigned short int table);  //retourne la prochaine table reussite
-    static int previousTableWithNoErrorTrue(const QString &fileName, const QString &mode, const unsigned short int table);  //retourne la precedente table reussite
+    static int nextTableWithNoErrorTrue(const QString &fileName, const QString &mode, const operande table);  //retourne la prochaine table reussite
+    static int previousTableWithNoErrorTrue(const QString &fileName, const QString &mode, const operande table);  //retourne la precedente table reussite
 
 private:
     QFile _xmlFile;

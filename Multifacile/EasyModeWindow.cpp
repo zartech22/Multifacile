@@ -16,51 +16,34 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "EasyModeWindow.h"
 
-EasyModeWindow::EasyModeWindow(const unsigned short m_multiplicateur)
+EasyModeWindow::EasyModeWindow(const operande m_multiplicateur) : MediumModeWindow()
 {
-    initStyle();
-    initButtons();
-    initTimer();
-
     _mode = EASY;
     _multiple = m_multiplicateur;
 
-    setWindowFlags(Qt::FramelessWindowHint);
     Shuffle shuffle(false);
     shuffle.getNumbers(_array);
 
     setWindowTitle(tr("Table de ")+QString::number(_multiple));
 
-    initLineEdit();
+    initTipButton();
     initLabels();
-    initNextPrev();
-
-
-    startTime();
-
 }
 
-void EasyModeWindow::initButtons()
+void EasyModeWindow::initTipButton()
 {
-    MediumModeWindow::initButtons();
+    _tip = new QPushButton(tr("Astuce"));
+    _tip->setParent(this);
+    _tip->setFixedSize(70, 40);
+    _tip->move(310, 490);
+    _tip->setObjectName("Astuce");
 
-    _astuces = new QPushButton(tr("Astuce"));
-    _astuces->setParent(this);
-    _astuces->setFixedSize(70, 40);
-    _astuces->move(310, 490);
-    _astuces->setObjectName("Astuce");
-
-    connect(_astuces, SIGNAL(clicked()), this, SLOT(openAstuce()));
+    connect(_tip, SIGNAL(clicked()), this, SLOT(openTip()));
 }
 
-void EasyModeWindow::openAstuce() const
+void EasyModeWindow::openTip() const
 {
-    CustomMessageBox trick (Trick, 0, _multiple);
+    CustomMessageBox trick(Trick, 0, _multiple);
     trick.setObjectName("AstuceFen");
     trick.exec();
-}
-EasyModeWindow::~EasyModeWindow()
-{
-    delete _astuces;
-    _astuces = NULL;
 }

@@ -1,4 +1,4 @@
-/*Copyright (C) <2013> <Plestan> <Kévin>
+/*Copyright (C) <2013> <Plestan> <K?vin>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -16,74 +16,80 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "Correction.h"
 
-Correction::Correction(Mode mode, const unsigned short multiple, int *order, unsigned short int* userAnswers, const unsigned short int time) : _Multiple(multiple), _orderTab(order), _answers(userAnswers), _difficultyMode(mode), _seconds(time), _isHardMode(false) {}
+const QString Correction::_goodAnswer("<span style=\"color: #9FC54D;\">%1 C'est la bonne réponse !</span>");
+const QString Correction::_badAnswer("<span style=\"color: red;\">%1</span><span style=\"color: #9FC54D;\"> La bonne réponse était %2</span>");
 
-Correction::Correction(unsigned short *multiple, int *order, unsigned short int *userAnswers, const unsigned short time) : _multipleTab(multiple), _orderTab(order), _answers(userAnswers), _seconds(time), _isHardMode(true){}
+Correction::Correction(Mode mode, operande multiple, std::array<operande, 10> &order, std::array<operande, 10> &userAnswers, const operande time) :
+    _difficultyMode(mode), _seconds(time), _note(10), _multiple({false, multiple})
+{
+    std::copy(order.begin(), order.end(), _orderTab.begin());
+    std::copy(userAnswers.begin(), userAnswers.end(), _answers.begin());
+}
+
+Correction::Correction(std::array<operande, 10> &multiples, std::array<operande, 10> &order, std::array<operande, 10> &userAnswers, const operande time) :
+    _difficultyMode(HARD), _seconds(time), _note(10)
+{
+    _multiple.isHard = true;
+
+    std::copy(multiples.begin(), multiples.end(), _multiple.multiples.begin());
+    std::copy(order.begin(), order.end(), _orderTab.begin());
+    std::copy(userAnswers.begin(), userAnswers.end(), _answers.begin());
+}
 
 int Correction::getCorrection(QString texte[], bool isGood[])
 {
-    unsigned short int resultat[10];
-    _note = 10;
+    operande resultat[10];
 
-    this->notation(resultat, isGood);
-    this->doCorrection(texte, isGood, resultat);
+    notation(resultat, isGood);
+    doCorrection(texte, isGood, resultat);
 
     if(_seconds != 0)
-        this->manageTime();
+        manageTime();
 
     return _note;
 }
 
-void Correction::notation(unsigned short int resultat[], bool isGood[])
+void Correction::notation(operande resultat[], bool isGood[])
 {
-    if(!_isHardMode)
-    {
-        for(int i = 0; i < 10; ++i)
-        {
-            resultat[i] = _Multiple*_orderTab[i];
-            if(resultat[i] != _answers[i])
-            {
-                isGood[i] = false;
-                --_note;
-            }
-            else
-                isGood[i] = true;
-        }
-    }
-    else
-    {
-        for(int i = 0; i < 10; ++i)
-        {
-            resultat[i] = _multipleTab[i]*_orderTab[i];
-            if(resultat[i] != _answers[i])
-            {
-                isGood[i] = false;
-                --_note;
-            }
-            else
-                isGood[i] = true;
-        }
-    }
+    calculateResult(resultat);
+
+    for(int i = 0; i < 10; i++)
+        if(!(isGood[i] = (resultat[i] == _answers[i]) ))
+            --_note;
 }
 
-void Correction::doCorrection(QString texte[], bool isGood[], unsigned short int resultat[]) const
+void Correction::calculateResult(operande res[])
+{
+    if(!_multiple.isHard)
+        for(int i = 0; i < 10; i++)
+            res[i] = _multiple.multiple * _orderTab[i];
+    else
+        for(int i = 0; i < 10; i++)
+            res[i] = _multiple.multiples[i] * _orderTab[i];
+}
+
+void Correction::doCorrection(QString texte[], bool isGood[], operande resultat[]) const
 {
     for(int i = 0; i < 10; ++i)
-        texte[i] = (isGood[i]) ? QString("<span style=\"color: #9FC54D;\">" + QString::number(resultat[i]) + tr(" C'est la bonne réponse !") + "</span>") : QString("<span style=\"color: red;\">" + QString::number(_answers[i]) +  "</span> <span style=\"color: #9FC54D;\"> " + tr("La bonne réponse était ") + QString::number(resultat[i]));
+    {
+        texte[i] = (isGood[i]) ? Correction::_goodAnswer.arg(resultat[i])
+                               : Correction::_badAnswer.arg(_answers[i]).arg(resultat[i]);
+    }
 }
 
 void Correction::manageTime()
 {
-    _manager = new DataFileMgr("Multifacile.xml");
-    if(_isHardMode)
+    _manager = std::make_unique<DataFileMgr>("Multifacile.xml");
+
+    if(_multiple.isHard)
         _manager->setValue(getModeGroupName(), _seconds);
     else
-        _manager->setValue(getModeGroupName(), _seconds, (_note == 10) , _Multiple);
+        _manager->setValue(getModeGroupName(), _seconds, (_note == 10) , _multiple.multiple);
 }
 
 QString Correction::getModeGroupName() const
 {
-    if(_isHardMode)
+    if(_multiple.isHard)
         return QString("HardMode");
     else if(_difficultyMode == EASY)
         return QString("EasyMode");
@@ -91,12 +97,4 @@ QString Correction::getModeGroupName() const
         return QString("MediumMode");
     else
         return QString();
-}
-
-Correction::~Correction()
-{
-    if(_seconds != 0)
-        delete _manager;
-
-    _manager = NULL;
 }
