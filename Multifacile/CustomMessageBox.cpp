@@ -44,7 +44,6 @@ CustomMessageBox::CustomMessageBox(MessageType msgType, QWidget *parent, const o
         displayTricks(table);
         break;
     case CannotMediumMode:
-
     case CannotHardMode:
         displayCannotAMode();
         break;
@@ -221,7 +220,7 @@ void CustomMessageBox::setSmiley(const operande &note, QPixmap &smiley)
         smiley.load(":/smiley/mauvais.png");
     else if (note < 10)
         smiley.load(":/smiley/bien.png");
-    else if(note < 11)
+    else // note == 10
         smiley.load(":/smiley/excellent.png");
 }
 

@@ -46,20 +46,21 @@ void AbstractModeWindow::initTimer()
 void AbstractModeWindow::initLineEdit()
 {
     _mapper = new QSignalMapper(this);
+    const QRegExp reg(R"(\d{0,3})");
 
-    for(int i = 0; i < _lineEdits.size(); ++i)
+    for(int i = 0; i < 10; ++i) // Currently fixed size
     {
         _lineEdits[i] = new QLineEdit(this);
         _lineEdits[i]->setAttribute(Qt::WA_TranslucentBackground);
         _lineEdits[i]->setFixedSize(302, 69);
         _lineEdits[i]->move(185, (60 + 40 * i));
-        _lineEdits[i]->setValidator(new QRegExpValidator(QRegExp(R"(\d{0,3})"), _lineEdits[i]));
+        _lineEdits[i]->setValidator(new QRegExpValidator(reg, _lineEdits[i]));
 
         connect(_lineEdits[i], SIGNAL(returnPressed()), _mapper, SLOT(map()));
         _mapper->setMapping(_lineEdits[i], (i + 1));
     }
 
-    connect(_mapper, SIGNAL(mapped(int)), this, SLOT(focusNextLine(int)));
+    connect(_mapper, SIGNAL(mapped(int)), this, SLOT(focusNextLine(const int)));
 }
 
 void AbstractModeWindow::showEvent(QShowEvent *event)
@@ -68,7 +69,7 @@ void AbstractModeWindow::showEvent(QShowEvent *event)
     QWidget::showEvent(event);
 }
 
-void AbstractModeWindow::focusNextLine(int lineNumber)
+void AbstractModeWindow::focusNextLine(const int lineNumber)
 {
     if(lineNumber < 10)
     {
@@ -83,10 +84,14 @@ void AbstractModeWindow::initLabels()
 {
     this->initAskLabels();
 
-    for(int i = 0; i < _points.size(); ++i)
+    const QPixmap point(":/image/Point.png");
+    const QPixmap right(":/image/OpacRight.png");
+    const QPixmap wrong(":/image/OpacWrong.png");
+
+    for(int i = 0; i < 10; ++i) // Curently fixed size
     {
         _points[i] = new QLabel(this);
-        _points[i]->setPixmap(QPixmap(":/image/Point.png"));
+        _points[i]->setPixmap(point);
         _points[i]->move(105, (90 + 40 * i));
 
         _labelCorrection[i] = new QLabel(this);
@@ -94,28 +99,32 @@ void AbstractModeWindow::initLabels()
     }
 
     for(int j = 0; j < 2; ++j)
+    {
         for(int i = 0; i < 10; ++i)
         {
             _trueFalse[j][i] = new QLabel(this);
+
             if(j == 0)
             {
-                _trueFalse[j][i]->setPixmap(QPixmap(":/image/OpacRight.png"));
+                _trueFalse[j][i]->setPixmap(right);
                 _trueFalse[j][i]->move(475, (70 + 40 * i));
             }
             else
             {
-                _trueFalse[j][i]->setPixmap(QPixmap(":/image/OpacWrong.png"));
+                _trueFalse[j][i]->setPixmap(wrong);
                 _trueFalse[j][i]->move(525, (75 + 40 * i));
             }
         }
+    }
 }
 
 void AbstractModeWindow::startTime()
 {
     _timer = new QTimer;
-    _timer->start(1000);
     connect(_timer, SIGNAL(timeout()), this, SLOT(newSecondElapsed()));
     connect(this, SIGNAL(timeElapsedUpdated()), this, SLOT(updateTimerLabel()));
+
+    _timer->start(1000);
 }
 
 void AbstractModeWindow::stopTimer()
@@ -148,30 +157,19 @@ void AbstractModeWindow::newSecondElapsed()
 
 void AbstractModeWindow::updateTimerLabel()
 {
-   int minutes = _timeElapsed / 60;
-   int seconds = _timeElapsed % 60;
+   unsigned short minutes = _timeElapsed / 60;
+   unsigned short seconds = _timeElapsed % 60;
 
-    if(minutes < 10)
-    {
-        if(seconds < 10)
-            _timerLabel->setText(QString("Temps : 0%1:0%2").arg(minutes).arg(seconds));
-        else
-            _timerLabel->setText(QString("Temps : 0%1:%2").arg(minutes).arg(seconds));
-    }
-    else
-    {
-        if(seconds < 10)
-            _timerLabel->setText(QString("Temps : %1:0%2").arg(minutes).arg(seconds));
-        else
-            _timerLabel->setText(QString("Temps : %1:%2").arg(minutes).arg(seconds));
-    }
+    _timerLabel->setText(QString("Temps : %1:%2").arg(minutes, 2, 10, QChar('0')).arg(seconds, 2, 10, QChar('0')));
 }
 
 void AbstractModeWindow::paintEvent(QPaintEvent *)
 {
     QStyleOption opt;
     opt.init(this);
+
     QPainter p(this);
+
     this->style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
 }
 

@@ -56,7 +56,6 @@ class MainWindow : public QMainWindow  // Classe representant la fenetre. Contie
 {
     Q_OBJECT
 public :
-
     MainWindow();
     ~MainWindow();
 

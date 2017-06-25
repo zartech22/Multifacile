@@ -23,7 +23,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #define SERVER_ADDR "127.0.0.1"
 
 #include <QDataStream>
-#include <QLibrary>
 #include <QProcessEnvironment>
 #include <QFile>
 

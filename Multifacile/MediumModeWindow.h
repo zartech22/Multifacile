@@ -64,7 +64,7 @@ protected :
 
     QPushButton *_nextPrev[2];
 
-    virtual void initAskLabels();  //initialise le texte des multiplications
+    virtual void initAskLabels() override;  //initialise le texte des multiplications
     void initNextPrev();  //initialise les boutons suivant et precedent
     void closeEvent(QCloseEvent *event);  //reimplementation
     void setNewNumber(const operande newNumber);  //change de table
@@ -72,7 +72,7 @@ protected :
 
 public slots:
 
-    virtual void correct();  //Fait la correction
+    virtual void correct() override;  //Fait la correction
     void Next();  //fait passer à la table suivante
     void Previous();  //fait passer à la table precedente
     virtual void Retry();  //remet tout à zero pour un nouvel essai

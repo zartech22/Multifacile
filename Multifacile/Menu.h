@@ -31,7 +31,7 @@ public:
     {
         if(e->type() == QEvent::ToolTip)
         {
-            QHelpEvent *he = dynamic_cast<QHelpEvent*>(e);
+            const QHelpEvent * const he = dynamic_cast<QHelpEvent*>(e);
             QAction *act = actionAt(he->pos());
 
             if(act)

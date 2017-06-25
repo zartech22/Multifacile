@@ -65,12 +65,13 @@ protected:
     virtual void initLabels() final;
 
     virtual void initAskLabels() = 0;
+
 signals:
     void timeElapsedUpdated();
     void wasClosed();
 
 public slots:
-    void focusNextLine(int);
+    void focusNextLine(const int);
     void newSecondElapsed();
     void updateTimerLabel();
 

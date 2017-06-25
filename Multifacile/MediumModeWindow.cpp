@@ -121,6 +121,7 @@ void MediumModeWindow::correct()
 {
     stopTimer();
     std::array<unsigned short int, 10> rep;
+
     for(int i = 0; i < 10; ++i)
         rep[i] = _lineEdits[i]->text().toInt();
 
