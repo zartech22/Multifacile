@@ -12,15 +12,15 @@ MainWidget::MainWidget(Mode mode) : QWidget()
 
     for(int i = 0; i < 10; ++i)
     {
-        if(mode == EASY || mode == MEDIUM)
-            _bouton[i] = new QPushButton(tr("La table de ")+QString::number(i+1), this);
-        else // _mode == HARD
+        if(mode == HARD)
             _bouton[i] = new QPushButton(tr("La table aléatoire"), this);
+        else // EASY || MEDIUM
+            _bouton[i] = new QPushButton(tr("La table de ") + QString::number(i + 1), this);
 
         _bouton[i]->setFixedSize(302, 75);
 
         connect(_bouton[i], SIGNAL(clicked()), _mapper, SLOT(map()));
-        _mapper->setMapping(_bouton[i], i+1);
+        _mapper->setMapping(_bouton[i], i + 1);
     }
 
     checkSucceedTables(mode);
@@ -75,7 +75,7 @@ void MainWidget::checkSucceedTables(Mode mode)
 
         for(QMap<int, bool>::Iterator it = list->begin(); it != list->end(); ++it)
             if(it.value())
-                _bouton[ (it.key() - 1)]->setStyleSheet("background-image: url(\":/image/TextBoxSuccess.png\");");
+                _bouton[ (it.key() - 1)]->setStyleSheet(R"(background-image: url(":/image/TextBoxSuccess.png");)");
 
         delete list;
     }
@@ -83,17 +83,7 @@ void MainWidget::checkSucceedTables(Mode mode)
 
 void MainWidget::updateButtonsLabels(Mode mode)
 {
-    if(mode == EASY || mode == MEDIUM)
-    {
-        for(int i = 0; i < 10; ++i)
-        {
-            _bouton[i]->setText(tr("La table de ") + QString::number(i+1));
-            _bouton[i]->setStyleSheet("");
-        }
-
-        checkSucceedTables(mode);
-    }
-    else if(mode == HARD)
+    if(mode == HARD)
     {
         for(int i = 0; i < 10; ++i)
         {
@@ -101,22 +91,32 @@ void MainWidget::updateButtonsLabels(Mode mode)
             _bouton[i]->setStyleSheet("");
         }
     }
+    else // mode = (EASY || MEDIUM)
+    {
+        for(int i = 0; i < 10; ++i)
+        {
+            _bouton[i]->setText(tr("La table de ") + QString::number(i + 1));
+            _bouton[i]->setStyleSheet("");
+        }
+
+        checkSucceedTables(mode);
+    }
 }
 
 void MainWidget::updateButtonsLabels(Mode mode, bool isProgressifMode)
 {
     if(mode == MEDIUM && isProgressifMode)
-    {
         for(int i = 0; i < 10; ++i)
             if(!DataFileMgr::hasNoErrorTrue("Multifacile.xml", "EasyMode", (i + 1)))
-                _bouton[i]->setStyleSheet("background-image: url(\":/image/TextBox_inacessible.png\"); color: grey;");
-    }
+                _bouton[i]->setStyleSheet(R"(background-image: url(":/image/TextBox_inacessible.png"); color: grey;)");
     else if(mode == MEDIUM && !isProgressifMode)
+    {
         for(int i = 0; i < 10; ++i)
         {
-            if( !DataFileMgr::hasNoErrorTrue("Multifacile.xml", "MediumMode", (i + 1)))
+            if(!DataFileMgr::hasNoErrorTrue("Multifacile.xml", "MediumMode", (i + 1)))
                 _bouton[i]->setStyleSheet("");
             else
-                _bouton[i]->setStyleSheet("background-image: url(\":/image/TextBoxSuccess.png\");");
+                _bouton[i]->setStyleSheet(R"(background-image: url(":/image/TextBoxSuccess.png");)");
         }
+    }
 }

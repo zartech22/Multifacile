@@ -79,14 +79,14 @@ bool DataFileMgr::setValue(const QString &group, const operande &time, const boo
 
         if(groupElement.elementsByTagName("time").isEmpty())
             groupElement.appendChild(timeElement);
-
         else
         {
             QDomElement actualTime;
 
             bool alreadyExist = false;
+            const int timeElemCount = groupElement.elementsByTagName("time").size();
 
-            for(int i = 0; i < groupElement.elementsByTagName("time").size(); ++i)
+            for(int i = 0; i < timeElemCount; ++i)
             {
                 actualTime = groupElement.elementsByTagName("time").at(i).toElement();
 
@@ -110,6 +110,7 @@ bool DataFileMgr::setValue(const QString &group, const operande &time, const boo
 
     _xmlFile.resize(0);
     _doc.save(out, 4);
+
     return true;
 }
 
@@ -161,16 +162,18 @@ const QString DataFileMgr::value(const QString &group, const operande &table)
     {
         QDomElement time;
 
-        for(int i = 0; i < groupElement.elementsByTagName("time").size(); ++i)
+        const int timeElementsCount = groupElement.elementsByTagName("time").size();
+
+        for(int i = 0; i < timeElementsCount; ++i)
         {
             time = groupElement.elementsByTagName("time").at(i).toElement();
 
             if(time.attribute("table") == QString::number(table))
                 break;
         }
+
         return time.text();
     }
-
 }
 
 const QString DataFileMgr::value(const QString &group, const QString &key)
@@ -199,6 +202,7 @@ bool DataFileMgr::exist(const QString &group)
 
     return !data.elementsByTagName(group).isEmpty();
 }
+
 void DataFileMgr::createGroup(bool createAllGroups, const QString &group)
 {
     _xmlFile.seek(0);
@@ -242,9 +246,7 @@ QMap<int, bool>* DataFileMgr::getNoErrorList(const QString &fileName, const QStr
     file.setFileName(QDir::homePath() + "/.config/Multifacile/" + fileName);
 #endif
 
-    if(!file.open(QIODevice::ReadOnly))
-        return new QMap<int, bool>;
-    else if (file.size() == 0)
+    if(!file.open(QIODevice::ReadOnly) || file.size() == 0)
         return new QMap<int, bool>;
 
     QDomDocument doc;
@@ -253,10 +255,11 @@ QMap<int, bool>* DataFileMgr::getNoErrorList(const QString &fileName, const QStr
         return new QMap<int, bool>;
 
     QDomNodeList childs = doc.elementsByTagName(mode).at(0).childNodes();
+    const int childsCount = childs.size();
 
     QMap<int, bool> *noErrorList = new QMap<int, bool>;
 
-    for(int i = 0; i < childs.size(); ++i)
+    for(int i = 0; i < childsCount; ++i)
     {
         if(childs.at(i).toElement().attribute("noError", "false") == "true")
             noErrorList->insert(childs.at(i).toElement().attribute("table").toInt(), true);
@@ -280,9 +283,7 @@ bool DataFileMgr::hasNoErrorTrue(const QString &fileName, const QString &mode, c
     file.setFileName(QDir::homePath() + "/.config/Multifacile/" + fileName);
 #endif
 
-    if(!file.open(QIODevice::ReadOnly))
-        return false;
-    else if(file.size() == 0)
+    if(!file.open(QIODevice::ReadOnly) || file.size() == 0)
         return false;
 
     QDomDocument doc;
@@ -291,10 +292,12 @@ bool DataFileMgr::hasNoErrorTrue(const QString &fileName, const QString &mode, c
         return false;
 
     QDomNodeList childs = doc.elementsByTagName(mode).at(0).toElement().childNodes();
+    const int childsCount = childs.size();
 
-    for(int i = 0; i < childs.size(); ++i)
+    for(int i = 0; i < childsCount; ++i)
         if(childs.at(i).toElement().attribute("table").toInt() == table)
             return (childs.at(i).toElement().attribute("noError", "false") == "true");
+
     return false;
 }
 
@@ -302,9 +305,14 @@ bool DataFileMgr::isAllTableWithNoErrorTrue(const QString &fileName, const QStri
 {
     bool allWithNoError = true;
 
-    for(int i = 0; i < 10; ++i)
+    uint8_t i = 0;
+
+    while(allWithNoError && (i < 10))
+    {
         if(!hasNoErrorTrue(fileName, mode, (i + 1)))
             allWithNoError = false;
+        ++i;
+    }
 
     return allWithNoError;
 }
@@ -313,9 +321,14 @@ bool DataFileMgr::isAllTableWithNoErrorFalse(const QString &fileName, const QStr
 {
     bool AllWithError = true;
 
-    for(int i = 0; i < 10; ++i)
+    uint8_t i = 0;
+
+    while(AllWithError && (i < 10))
+    {
         if(hasNoErrorTrue(fileName, mode, (i + 1)))
             AllWithError = false;
+        ++i;
+    }
 
     return AllWithError;
 }
@@ -340,17 +353,6 @@ int DataFileMgr::nextTableWithNoErrorTrue(const QString &fileName, const QString
     auto min = std::min_element(test.begin(), test.end(), cmp);
 
     return *min;
-
-    /*int min = 11;
-
-    for(QMap<int, bool>::iterator it = list->begin(); it != list->end(); ++it)
-    {
-        if(it.key() <= table)
-            continue;
-        else if((it.key() < min) && it.value())
-            min = it.key();
-    }
-    return (min != 11) ? min : table;*/
 }
 
 int DataFileMgr::previousTableWithNoErrorTrue(const QString &fileName, const QString &mode, const operande table)
@@ -366,5 +368,6 @@ int DataFileMgr::previousTableWithNoErrorTrue(const QString &fileName, const QSt
         else if((it.key() > min) && it.value())
             min = it.key();
     }
+
     return (min != 0) ? min : table;
 }

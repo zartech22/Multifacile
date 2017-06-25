@@ -24,7 +24,7 @@ EasyModeWindow::EasyModeWindow(const operande m_multiplicateur) : MediumModeWind
     Shuffle shuffle(false);
     shuffle.getNumbers(_array);
 
-    setWindowTitle(tr("Table de ")+QString::number(_multiple));
+    setWindowTitle(tr("Table de ") + QString::number(_multiple));
 
     initTipButton();
     initLabels();

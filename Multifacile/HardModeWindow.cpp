@@ -20,7 +20,6 @@ HardModeWindow::HardModeWindow() : AbstractModeWindow()
 {
     Shuffle shuffle(true);
     shuffle.getNumbers(_array, _multiple);
-    setWindowFlags(Qt::FramelessWindowHint);
 
     initLabels();
 
@@ -31,7 +30,7 @@ void HardModeWindow::initAskLabels()
 {
     for(int i = 0; i < 10; ++i)
     {
-        _label[i] = new QLabel("<span style=\"color: #9FC54D\">"+QString::number(_multiple[i])+"</span> x "+QString::number(_array[i]), this);
+        _label[i] = new QLabel("<span style=\"color: #9FC54D\">" + QString::number(_multiple[i]) + "</span> x " + QString::number(_array[i]), this);
         _label[i]->setFixedSize(100, 30);
         _label[i]->move(120, 78 + i * 40);
     }
@@ -61,6 +60,12 @@ void HardModeWindow::correct()
 
     _timeElapsed = 0;
 
+    const QPixmap right(":/image/Right.png");
+    const QPixmap rightOpac(":/image/OpacRight.png");
+
+    const QPixmap wrong(":/image/Wrong.png");
+    const QPixmap wrongOpac(":/image/OpacWrong.png");
+
     for(int i = 0; i < 10; ++i)
     {
         _lineEdits[i]->setVisible(false);
@@ -71,14 +76,13 @@ void HardModeWindow::correct()
 
         if(isGood[i])
         {
-            _trueFalse[0][i]->setPixmap(QPixmap(":/image/Right.png"));
-            _trueFalse[1][i]->setPixmap(QPixmap(":/image/OpacWrong.png"));
+            _trueFalse[0][i]->setPixmap(right);
+            _trueFalse[1][i]->setPixmap(wrongOpac);
         }
-
         else
         {
-            _trueFalse[0][i]->setPixmap(QPixmap(":/image/OpacRight.png"));
-            _trueFalse[1][i]->setPixmap(QPixmap(":/image/Wrong.png"));
+            _trueFalse[0][i]->setPixmap(rightOpac);
+            _trueFalse[1][i]->setPixmap(wrong);
         }
 
         this->repaint();
@@ -96,14 +100,16 @@ void HardModeWindow::Retry()
     Shuffle shuffle(true);
     shuffle.getNumbers(_array, _multiple);
 
+    const QPixmap rigthOpac(":/image/OpacRight.png");
+    const QPixmap wrongOpac(":/image/OpacWrong.png");
 
     for(int i = 0; i < 10; ++i)
     {
         _labelCorrection[i]->setVisible(false);
 
         _label[i]->setText("<span style=\"color: #9FC54D\">"+QString::number(_multiple[i])+"</span> x "+QString::number(_array[i]));
-        _trueFalse[0][i]->setPixmap(QPixmap(":/image/OpacRight.png"));
-        _trueFalse[1][i]->setPixmap(QPixmap(":/image/OpacWrong.png"));
+        _trueFalse[0][i]->setPixmap(rigthOpac);
+        _trueFalse[1][i]->setPixmap(wrongOpac);
         _lineEdits[i]->clear();
         _lineEdits[i]->setVisible(true);
     }

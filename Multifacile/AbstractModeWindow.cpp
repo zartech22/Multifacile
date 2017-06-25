@@ -143,7 +143,7 @@ void AbstractModeWindow::resetTimer()
 void AbstractModeWindow::restartTimer()
 {
     if(_timer)
-       stopTimer();
+        stopTimer();
 
     resetTimer();
     startTime();
@@ -157,8 +157,8 @@ void AbstractModeWindow::newSecondElapsed()
 
 void AbstractModeWindow::updateTimerLabel()
 {
-   unsigned short minutes = _timeElapsed / 60;
-   unsigned short seconds = _timeElapsed % 60;
+    unsigned short minutes = _timeElapsed / 60;
+    unsigned short seconds = _timeElapsed % 60;
 
     _timerLabel->setText(QString("Temps : %1:%2").arg(minutes, 2, 10, QChar('0')).arg(seconds, 2, 10, QChar('0')));
 }

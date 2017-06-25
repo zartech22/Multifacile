@@ -133,35 +133,28 @@ void MainWindow::checkUpdateReceivedAnswer(UpdateType update)    //slot which is
     {
         if(_check->isUserAction())  //and if it's the user who clicked on "check for updates"
             CustomMessageBox(NoUpdateMsg, this).exec();
-        return;
     }
     else if(update == NormalUpdate) //else if update needed
     {
         _check->disconnectFromHost();
-        CustomMessageBox updateMsgBox(NewUpdate, this);
-        bool userAnswer = updateMsgBox.exec();
+        const bool userAnswer = CustomMessageBox(NewUpdate, this).exec();
 
         if(userAnswer)  //if the user want to update
         {
             _check->runMultifacileUpdate();
             this->close();  //close this window
         }
-        else
-            return;
     }
     else if(update == UpdaterUpdate)
     {
         _check->disconnectFromHost();
-        CustomMessageBox updateMsgBox(NewUpdate, this);
-        bool userAnswer = updateMsgBox.exec();
+        const bool userAnswer = CustomMessageBox(NewUpdate, this).exec();
 
         if(userAnswer)
         {
             _check->runUpdaterUpdate();
             this->close();
         }
-        else
-            return;
     }
 }
 
@@ -185,8 +178,8 @@ void MainWindow::deleteAddIfExist()
 #endif
 #ifdef Q_OS_WIN32
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-    if(QFile::exists(env.value("appdata")+"/Add.exe"))
-        QFile::remove(env.value("appdata")+"/Add.exe");
+    if(QFile::exists(env.value("appdata") + "/Add.exe"))
+        QFile::remove(env.value("appdata") + "/Add.exe");
 #endif
 }
 
@@ -322,6 +315,7 @@ void MainWindow::openWindow(const int nbr)   //open a questionary window with th
         connect(_fen, SIGNAL(wasClosed()), this, SLOT(resetCentralWidget()));
         break;
     }
+
     _actualWindow = SecondWidget;
 }
 
@@ -332,8 +326,6 @@ void MainWindow::updateButtonsLabels()    //change the Buttons's text when chang
        _widget->updateButtonsLabels(_mode);
         checkSucceedTables();
     }
-    else
-        return;
 }
 
 void MainWindow::setMode(QAction *action)   //slot call when user change the mode
@@ -343,12 +335,12 @@ void MainWindow::setMode(QAction *action)   //slot call when user change the mod
         if(_mode == MEDIUM)
             _mediumModeActionText->setStyleSheet("color: white; padding-left: 12px;");
         else
-             _hardModeActionText->setStyleSheet("color: white; padding-left: 12px;");
+            _hardModeActionText->setStyleSheet("color: white; padding-left: 12px;");
 
         _mode = EASY;
 
         if(_actualWindow == SecondWidget)
-                setNewSecondWindow();
+            setNewSecondWindow();
         else
             updateButtonsLabels();
 

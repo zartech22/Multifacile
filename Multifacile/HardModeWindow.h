@@ -29,17 +29,16 @@ class HardModeWindow : public AbstractModeWindow  // Classe representant la fene
 
 public:
     HardModeWindow();
-    ~HardModeWindow() {}
+    ~HardModeWindow() = default;
 
-    operande getMultiple() { return 1; } //reimplementation
+    operande getMultiple() override { return 1; } //reimplementation
 private:
-    //unsigned short int _multiple[10];
     std::array<unsigned short int, 10> _multiple;
-    void correct();  //reimplementation
-    void initAskLabels();
-    void progressifModeHasChanged(const bool) {}
+    void correct() override;  //reimplementation
+    void initAskLabels() override;
+    void progressifModeHasChanged(const bool) override {}
 public slots:
-    void Retry();  //reimplementation
+    void Retry();
 };
 
 #endif // HARDMODEWINDOW_H
