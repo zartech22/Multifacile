@@ -16,9 +16,10 @@
 #include <QTextCodec>
 #include <QDir>
 
-
-#include <QLibrary>
 #include "../libnetwork/Network.h"
+
+static const uint16_t updatePort = 8090;
+static const char* serverName = "multifacile.no-ip.org";
 
 typedef enum QueryState QueryState;
 
@@ -42,7 +43,6 @@ public slots:
 private:
 
     Network *net;
-    QLibrary lib;
 
     quint64 FilesMessageSize;
 

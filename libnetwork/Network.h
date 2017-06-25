@@ -81,10 +81,9 @@ private:
             return;
 
         *paquet = read(msgSize);
+        msgSize = 0;
 
         emit answer(paquet.release());
-
-        msgSize = 0;
     }
 
 public slots:

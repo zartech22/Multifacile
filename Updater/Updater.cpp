@@ -1,18 +1,8 @@
 #include "Updater.h"
 
-Updater::Updater() : QProgressDialog(), lib(NETWORK)
+Updater::Updater() : QProgressDialog(), downloadedFiles(0), FilesMessageSize(0), NamesMessageSize(0), ToDoMessageSize(0),
+    FilesNumber(0), downloaded(false), net(getNetwork())
 {
-    typedef Network* (*NetworkConstructor)();
-    NetworkConstructor constructor = (NetworkConstructor) lib.resolve("getNetwork");
-    if(constructor)
-        net = constructor();
-
-    downloadedFiles = 0;
-    FilesMessageSize = 0;
-    NamesMessageSize = 0;
-    ToDoMessageSize = 0;
-    FilesNumber = 0;
-    downloaded = false;
     this->setLabelText("Téléchargement de la mise à  jour en cours...");
     this->setCancelButtonText("&Annuler");
     this->setAutoClose(false);
@@ -21,25 +11,26 @@ Updater::Updater() : QProgressDialog(), lib(NETWORK)
 
     connect(net, SIGNAL(connected()), this, SLOT(setConnection()));
     connect(this, SIGNAL(canceled()), this, SLOT(stop()));
-    net->tryConnection("multifacile.no-ip.org", 8090);
+    net->tryConnection(serverName, updatePort);
 
 }
 void Updater::ReceiveFilesData(QByteArray *array)
 {
-
     QDataStream in(array, QIODevice::ReadOnly);
+    QFile file;
+    QByteArray data;
 
     in >> FilesNumber;
 
-    for(int i = 0; i < FilesNumber; ++i)
+    for(quint16 i = 0; i < FilesNumber; ++i)
     {
-        QByteArray data;
+        data.clear();
 
         in >> fileSize;
 
         in >> data;
 
-        QFile file(QString("TempFile%1.tmp").arg(i));
+        file.setFileName(QString("TempFile%1.tmp").arg(i));
         file.open(QIODevice::WriteOnly);
         file.write(data);
         file.close();
@@ -70,59 +61,65 @@ void Updater::ToDoProcess()
 {
     QStringList commandList(ToDo.split("\n", QString::SkipEmptyParts));
 
-
-    if(!commandList.isEmpty())
+    for(const QString &commandLine : commandList)
     {
-        for(int i = 0; i < commandList.size(); ++i)
+        QStringList argList(commandLine.split(" ", QString::SkipEmptyParts));
+
+        const QString &command = argList.first();
+        argList.pop_front();
+
+        QDir dir;
+
+        if(command == "mkdir")
         {
-            QStringList argList(commandList.at(i).split(" ", QString::SkipEmptyParts));
-
-            QDir dir;
-
-            if(argList.at(0) == "mkdir")
-                for(int mkDirIndex = 1; mkDirIndex < argList.size(); mkDirIndex++)
-                {
-                    QFileInfo dirInfo(argList.at(mkDirIndex));
-                    dir.mkdir(QDir::toNativeSeparators(dirInfo.absoluteFilePath().simplified()));
-                }
-            else if(argList.at(0) == "rmdir")
-                for(int rmDirIndex = 1; rmDirIndex < argList.size(); rmDirIndex++)
-                {
-                    QDir dirToRemove(argList.at(rmDirIndex).simplified());
-                    QFileInfoList infoList(dirToRemove.entryInfoList(QDir::AllEntries | QDir::NoDotAndDotDot));
-                    for(int j = 0; j < infoList.size(); j++)
-                        QFile::remove(argList.at(rmDirIndex).simplified()+"/"+infoList.at(j).fileName());
-                    dir.rmdir(argList.at(rmDirIndex).simplified());
-                }
-            else if(argList.at(0) == "del")
-                for(int delFileIndex = 1; delFileIndex < argList.size(); delFileIndex++)
-                    QFile::remove(argList.at(delFileIndex).simplified());
-            else if(argList.at(0) == "renameFile")
+            for(const QString &dirName : argList)
             {
-                if(QFile::exists(argList.at(2).simplified()))
-                    QFile::remove(argList.at(2).simplified());
-                QFile::rename(argList.at(1).simplified(), argList.at(2).simplified());
+                QFileInfo dirInfo(dirName);
+                dir.mkdir(QDir::toNativeSeparators(dirInfo.absoluteFilePath().simplified()));
             }
-            else if(argList.at(0) == "renameDir")
-                dir.rename(argList.at(1).simplified(), argList.at(2).simplified());
         }
+        else if(command == "rmdir")
+        {
+            for(const QString &dirName : argList)
+            {
+                const QString simplifiedDirName = dirName.simplified();
+
+                QFileInfoList infoList(QDir(simplifiedDirName).entryInfoList(QDir::AllEntries | QDir::NoDotAndDotDot));
+
+                for(const QFileInfo &file : infoList)
+                    QFile::remove(simplifiedDirName + "/" + file.fileName());
+
+                dir.rmdir(simplifiedDirName);
+            }
+        }
+        else if(command == "del")
+            for(const QString &file : argList)
+                QFile::remove(file.simplified());
+        else if(command == "renameFile")
+        {
+            if(QFile::exists(argList.at(1).simplified()))
+                QFile::remove(argList.at(1).simplified());
+            QFile::rename(argList.at(0).simplified(), argList.at(1).simplified());
+        }
+        else if(command == "renameDir")
+            dir.rename(argList.at(0).simplified(), argList.at(1).simplified());
     }
+
     finish();
 }
 
 void Updater::remplacement()
 {
-    for(int i = 0; i < FilesNumber; ++i)
+    const QStringList listeNames = name.split("\n", QString::SkipEmptyParts);
+
+    quint16 i = 0;
+
+    for(const QString &fileName : listeNames)
     {
-        QFile *file = new QFile(QString("TempFile%1.tmp").arg(i));
-        files << file;
-    }
-    QStringList listeNames = name.split("\n", QString::SkipEmptyParts);
-    for(int i = 0; i < FilesNumber; ++i)
-    {
-        if(QFile::exists(listeNames[i]))
-            QFile::remove(listeNames[i]);
-        QFile::rename(QString("TempFile%1.tmp").arg(i), listeNames[i]);
+        if(QFile::exists(fileName))
+            QFile::remove(fileName);
+
+        QFile::rename(QString("TempFile%1.tmp").arg(++i), fileName);
     }
 }
 void Updater::sendRequest(QueryState state)
@@ -132,8 +129,7 @@ void Updater::sendRequest(QueryState state)
     case FileQuery :
 #ifdef Q_OS_LINUX
         request = "LinuxStartFile";
-#endif
-#ifdef Q_OS_WIN
+#elif defined(Q_OS_WIN)
         request = "WinStartFile";
 #endif
         connect(net, SIGNAL(answer(QByteArray*)), this, SLOT(ReceiveFilesData(QByteArray*)));
