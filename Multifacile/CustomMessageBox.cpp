@@ -1,4 +1,4 @@
-/*Copyright (C) <2013> <Plestan> <Kévin>
+/*Copyright (C) <2013> <Plestan> <KÃ©vin>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -98,17 +98,17 @@ void CustomMessageBox::displayTricks(const operande &table)
 
 void CustomMessageBox::tricksInit(QMap<operande, QString> &tricks)
 {
-    tricks[1] = tr("Pour la table de 1, le résultat sera toujours égal au nombre que multiplie 1.<br /><span style=\"color: #9FC54D\">Ex</span> : 1 x <span style=\"text-decoration: underline;\">7</span> = <span style=\"text-decoration: underline;\">7</span></strong>");
-    tricks[2] = tr("Pour la table de 2, le résultat est toujours un nombre paire et les résultats vont de 2 en 2.<br /><span style=\"color: #9FC54D\">Ex</span> : <strong>2 x 1 = <span style=\"text-decoration: underline;\">2</span><br />2 x 2 = <span style=\"text-decoration: underline;\">4</span></strong>");
-    tricks[5] = tr("Pour la table de 5, le résultat termine soit par 0 soit par 5. Cela dépend du nombre que multiplie 5 : si le nombre est paire, le résultat terminera par 0 sinon, si le nombre est impaire, le résultat terminera par 5. En plus, les résultats vont de 5 en 5 !<br /><span style=\"color: #9FC54D\">Ex</span> : <strong>5 x 2 = <span style=\"text-decoration: underline;\">10</span><br />5 x 3 = <span style=\"text-decoration: underline;\">15</span></strong>");
-    tricks[9] = tr("Pour la table de 9, tu la connais déjà ! Tu as déjà eu à multiplier 9 par les autres chiffres dans les autres tables il te suffit de retenir en plus :<br />9 x 9 = 81<br />9 x 10 = 90");
+    tricks[1] = tr("Pour la table de 1, le rÃ©sultat sera toujours Ã©gal au nombre que multiplie 1.<br /><span style=\"color: #9FC54D\">Ex</span> : 1 x <span style=\"text-decoration: underline;\">7</span> = <span style=\"text-decoration: underline;\">7</span></strong>");
+    tricks[2] = tr("Pour la table de 2, le rÃ©sultat est toujours un nombre paire et les rÃ©sultats vont de 2 en 2.<br /><span style=\"color: #9FC54D\">Ex</span> : <strong>2 x 1 = <span style=\"text-decoration: underline;\">2</span><br />2 x 2 = <span style=\"text-decoration: underline;\">4</span></strong>");
+    tricks[5] = tr("Pour la table de 5, le rÃ©sultat termine soit par 0 soit par 5. Cela dÃ©pend du nombre que multiplie 5 : si le nombre est paire, le rÃ©sultat terminera par 0 sinon, si le nombre est impaire, le rÃ©sultat terminera par 5. En plus, les rÃ©sultats vont de 5 en 5 !<br /><span style=\"color: #9FC54D\">Ex</span> : <strong>5 x 2 = <span style=\"text-decoration: underline;\">10</span><br />5 x 3 = <span style=\"text-decoration: underline;\">15</span></strong>");
+    tricks[9] = tr("Pour la table de 9, tu la connais dÃ©jÃ  ! Tu as dÃ©jÃ  eu Ã  multiplier 9 par les autres chiffres dans les autres tables il te suffit de retenir en plus :<br />9 x 9 = 81<br />9 x 10 = 90");
     tricks[10] = tr("Pour la table de 10, on rajoute un 0 au chiffre que multiplie 10.<br /><span style=\"color: #9FC54D\">Ex</span> : <strong><span style=\"text-decoration: underline;\">5</span> x 10 = <span style=\"text-decoration: underline;\">50</span></strong>");
 }
 
 void CustomMessageBox::displayConnectionError()
 {
     setFixedSize(434, 179);
-    _label->setText(tr("Impossible de vérifier les mise à jours"));
+    _label->setText(tr("Impossible de vÃ©rifier les mise Ã  jours"));
     _label->move(45, 65);
 
     _menu->move(376, 0);
@@ -149,7 +149,7 @@ void CustomMessageBox::displayNoUpdate()
 {
     setFixedSize(434, 179);
 
-    _label->setText("Il n'y a aucune mise à jour disponible pour le moment.");
+    _label->setText("Il n'y a aucune mise Ã  jour disponible pour le moment.");
     _label->setWordWrap(true);
     _label->move(45, 50);
 
@@ -161,7 +161,7 @@ void CustomMessageBox::displayNewUpdate()
 {
     setFixedSize(434, 179);
 
-    _label->setText("Une version plus récente de Multifacile est disponible, veux-tu la télécharger ?");
+    _label->setText("Une version plus rÃ©cente de Multifacile est disponible, veux-tu la tÃ©lÃ©charger ?");
     _label->setWordWrap(true);
     _label->move(45, 50);
 
@@ -187,8 +187,8 @@ void CustomMessageBox::displayCannotAMode()
 {
     setFixedSize(434, 179);
 
-    (_type == CannotMediumMode) ? _label->setText("Réussis au moins une table du mode Facile sans faire de faute pour accéder au mode Moyen.")
-                                : _label->setText("Réussis toutes les tables du mode Moyen et du mode Facile sans faire de faute pour accéder au mode Difficile.");
+    (_type == CannotMediumMode) ? _label->setText("RÃ©ussis au moins une table du mode Facile sans faire de faute pour accÃ©der au mode Moyen.")
+                                : _label->setText("RÃ©ussis toutes les tables du mode Moyen et du mode Facile sans faire de faute pour accÃ©der au mode Difficile.");
     _label->setWordWrap(true);
     _label->move(45, 50);
 
@@ -200,7 +200,7 @@ void CustomMessageBox::displayCannotDoATable(const operande &table)
 {
     setFixedSize(434, 179);
 
-    _label->setText("Réussis d'abords à faire la table de " + QString::number(table) + " sans faute en mode Facile pour la faire en mode Moyen.");
+    _label->setText("RÃ©ussis d'abords Ã  faire la table de " + QString::number(table) + " sans faute en mode Facile pour la faire en mode Moyen.");
     _label->setWordWrap(true);
     _label->move(45, 50);
 

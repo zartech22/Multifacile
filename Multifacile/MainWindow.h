@@ -1,4 +1,4 @@
-/*Copyright (C) <2013> <Plestan> <Kévin>
+/*Copyright (C) <2013> <Plestan> <KÃ©vin>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -125,7 +125,7 @@ private :
 public slots :
 
     void changeProgressifMode(QAction*);  //traitement du changement de mode progressif
-    void checkUpdateReceivedAnswer(UpdateType update);  //reception de la reponse du serveur de mise à jour et traitement
+    void checkUpdateReceivedAnswer(UpdateType update);  //reception de la reponse du serveur de mise Ã  jour et traitement
     void socketError();  //indique une erreur de connection
     void openWindow(const int nbr);  //ouvre une fenetre de table dans le mode adequat
     void resetCentralWidget() { createCentralWidget(); this->setCentralWidget(_widget); }  //recreer et reeafiche la fenetre de presentationd de table

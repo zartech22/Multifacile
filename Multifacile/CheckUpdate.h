@@ -1,4 +1,4 @@
-/*Copyright (C) <2013> <Plestan> <Kévin>
+/*Copyright (C) <2013> <Plestan> <KÃ©vin>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -53,7 +53,7 @@ enum UpdateType
 
 typedef enum UpdateType UpdateType;
 
-class CheckUpdate : public QObject  // Classe gérant la mise à jour de Multifacile
+class CheckUpdate : public QObject  // Classe gÃ©rant la mise Ã  jour de Multifacile
 {
     Q_OBJECT
 
@@ -75,7 +75,7 @@ public slots:
     void Connected() { _net->sendVersion(_actualVersion); }  //Lorsque connecte au serveur, envoyer la version actuel
 
 signals:
-    void checkUpdateAnswer(UpdateType);  //Envoie de la reponse : mise a jour disponoble pour multifacile ou pour l'updater, pas de mise à jour
+    void checkUpdateAnswer(UpdateType);  //Envoie de la reponse : mise a jour disponible pour multifacile ou pour l'updater, pas de mise Ã  jour
     void error();
 };
 

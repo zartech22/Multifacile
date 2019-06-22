@@ -6,7 +6,7 @@
 
 QT += network
 
-QT -= gui
+QT -= widgets
 
 BUILD_PATH = ../build
 BIN_PATH = ../bin

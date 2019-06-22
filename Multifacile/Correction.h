@@ -1,4 +1,4 @@
-/*Copyright (C) <2013> <Plestan> <Kévin>
+/*Copyright (C) <2013> <Plestan> <KÃ©vin>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ enum RecordState
 
 typedef enum RecordState RecordState;
 
-class Correction : public QObject  // Classe donnant la correction pour une classe : Le texte à affciher pour la correction, la note
+class Correction : public QObject  // Classe donnant la correction pour une classe : Le texte Ã  affciher pour la correction, la note
 {
     Q_OBJECT
 

@@ -1,4 +1,4 @@
-/*Copyright (C) <2013> <Plestan> <Kévin>
+/*Copyright (C) <2013> <Plestan> <KÃ©vin>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ enum MessageType
 
 typedef enum MessageType MessageType;
 
-/* Message Box personnalisé utilisé pour toutes interaction avec l'utilisateur
+/* Message Box personnalisÃ© utilisÃ© pour toutes interaction avec l'utilisateur
      -Astuce
      -Resultats
      -Erreur de connection
